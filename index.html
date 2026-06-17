@@ -1627,16 +1627,19 @@ function sendToSheet(answers, correctCount, band){
 
   const finalUrl = `${GAS_URL}?${queryParams.toString()}`;
 
-  try {
-    const img = new Image();
-    img.src = finalUrl;
-  } catch (e) {
-    console.error("Lỗi Image Beacon:", e);
-  }
-
+  // Chỉ dùng một phương thức để tránh ghi 2 lần lên sheet
   fetch(finalUrl, { method: 'GET', mode: 'no-cors' })
     .then(() => console.log("Đã gửi dữ liệu qua Fetch GET"))
-    .catch((err) => console.error("Lỗi Fetch GET:", err));
+    .catch((err) => {
+      console.error("Lỗi Fetch GET, dùng Image Beacon:", err);
+      // Fallback: chỉ kích hoạt khi Fetch thất bại
+      try {
+        const img = new Image();
+        img.src = finalUrl;
+      } catch (e2) {
+        console.error("Lỗi Image Beacon:", e2);
+      }
+    });
 }
 
 /* ================== REVIEW MODE ================== */
