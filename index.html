@@ -2,1692 +2,1758 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>G.EDU - IELTS Reading Test 3</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>G.EDU — IELTS Reading Test 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --navy:#1a1a2e;
-  --navy-light:#2a2a45;
-  --gold:#c9a84c;
-  --gold-light:#e0c878;
-  --cream:#f8f5ef;
-  --white:#ffffff;
-  --red:#c0392b;
-  --green:#2e7d4f;
-  --gray:#9a9a9a;
-  --border:#e2dccd;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-  font-family:'Be Vietnam Pro',sans-serif;
-  background:var(--cream);
-  color:var(--navy);
-  height:100vh;
-  overflow:hidden;
-}
-#testScreen{
-  display:flex;flex-direction:column;height:100vh;overflow:hidden;
-}
-.hidden{display:none !important;}
+/* ============================================================
+   G.EDU — IELTS READING TEST — UX/UI TEMPLATE
+   ------------------------------------------------------------
+   Cách dùng: phần nội dung đề (passages, questions, đáp án) do
+   AI Studio xử lý và chèn vào các vùng [PLACEHOLDER]. File này
+   chịu trách nhiệm toàn bộ khung UX/UI + logic vận hành.
+   ============================================================ */
 
-/* ===== LOGIN SCREEN ===== */
-#loginScreen{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:linear-gradient(135deg,var(--navy) 0%,#0f0f1e 100%);
-  display:flex;align-items:center;justify-content:center;
-  z-index:1000;
+:root{
+  --navy: #1a1208;
+  --navy-deep: #0f0a05;
+  --gold: #D4AF37;
+  --gold-soft: #e8cf7a;
+  --cream: #fdfcfb;
+  --ink: #2d3436;
+  --ink-soft: #6b6560;
+  --line: #e8e2d8;
+  --flag: #e17055;
+  --danger: #c0392b;
+  --success: #2e7d4f;
+
+  --hl-yellow: #fff176;
+  --hl-green: #a5d6a7;
+  --hl-blue: #90caf9;
+  --hl-pink: #f48fb1;
+
+  --sidebar-w: 280px;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Be Vietnam Pro', sans-serif;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--ink);
+  overflow:hidden;
+  -webkit-font-smoothing: antialiased;
+}
+::selection{ background: var(--gold-soft); color: var(--navy); }
+button{ font-family: inherit; cursor:pointer; border:none; background:none; }
+input, select, textarea{ font-family: inherit; }
+::-webkit-scrollbar{ width:9px; height:9px; }
+::-webkit-scrollbar-track{ background: transparent; }
+::-webkit-scrollbar-thumb{ background: #c9c0ad; border-radius:10px; }
+::-webkit-scrollbar-thumb:hover{ background: var(--gold); }
+
+.screen{ display:none; width:100%; height:100%; }
+.screen.active{ display:flex; }
+
+/* ============================================================
+   1. LOGIN SCREEN
+   ============================================================ */
+#screen-login{
+  align-items:center; justify-content:center;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(212,175,55,0.08), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(212,175,55,0.06), transparent 45%),
+    var(--navy-deep);
+  position:relative;
+}
+#screen-login::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image: linear-gradient(rgba(212,175,55,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.04) 1px, transparent 1px);
+  background-size: 42px 42px;
+  pointer-events:none;
 }
 .login-card{
-  background:var(--white);
-  border-radius:12px;
-  padding:48px 44px;
-  width:90%;max-width:420px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  position:relative;
+  width:min(440px, 92vw);
+  background: var(--cream);
+  border-radius:18px;
+  padding:44px 40px 36px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.45);
   text-align:center;
+  animation: cardIn .6s cubic-bezier(.22,1,.36,1);
 }
+@keyframes cardIn{ from{ opacity:0; transform:translateY(18px) scale(.98);} to{opacity:1; transform:none;} }
 .login-logo{
-  font-family:'Playfair Display',serif;
-  font-size:36px;font-weight:800;
-  color:var(--navy);
-  letter-spacing:2px;
-  margin-bottom:4px;
+  font-family: var(--font-display);
+  font-weight:700; font-size:30px; letter-spacing:2px;
+  color: var(--navy); margin-bottom:2px;
 }
-.login-logo span{color:var(--gold);}
+.login-logo span{ color: var(--gold); }
 .login-sub{
-  font-size:13px;color:#888;letter-spacing:1px;margin-bottom:32px;
-  text-transform:uppercase;
+  font-size:12.5px; letter-spacing:3px; text-transform:uppercase;
+  color: var(--ink-soft); margin-bottom:6px; font-weight:600;
 }
-.login-field{margin-bottom:20px;text-align:left;}
+.login-test-name{
+  font-family: var(--font-display);
+  font-size:17px; color: var(--gold); font-style:italic; margin-bottom:26px;
+}
+.login-divider{
+  width:46px; height:2px; background:var(--gold); margin:0 auto 26px; border-radius:2px;
+}
+.login-field{ text-align:left; margin-bottom:16px; }
 .login-field label{
-  display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--navy);
+  display:block; font-size:11.5px; font-weight:700; letter-spacing:1px;
+  text-transform:uppercase; color: var(--ink-soft); margin-bottom:7px;
 }
 .login-field input{
-  width:100%;padding:12px 14px;border:1.5px solid var(--border);
-  border-radius:8px;font-size:15px;font-family:'Be Vietnam Pro',sans-serif;
-  transition:border-color 0.2s;
+  width:100%; padding:13px 14px; border:1.5px solid var(--line); border-radius:9px;
+  font-size:15px; font-weight:600; letter-spacing:0.5px; color:var(--navy);
+  background:#fff; transition: border-color .2s, box-shadow .2s;
+  text-transform:uppercase;
 }
-.login-field input:focus{outline:none;border-color:var(--gold);}
-#startBtn{
-  width:100%;padding:14px;margin-top:8px;
-  background:var(--gray);color:white;border:none;border-radius:8px;
-  font-size:16px;font-weight:600;cursor:not-allowed;
-  font-family:'Be Vietnam Pro',sans-serif;
-  transition:background 0.2s;
+.login-field input::placeholder{ text-transform:none; font-weight:400; color:#b6afa2; font-size:13px; }
+.login-field input:focus{ outline:none; border-color: var(--gold); box-shadow:0 0 0 3px rgba(212,175,55,0.18); }
+.login-note{
+  font-size:12px; line-height:1.6; color: var(--ink-soft); background:#f6f2e9;
+  border-radius:9px; padding:12px 13px; margin: 18px 0 22px; text-align:left;
+  border-left:3px solid var(--gold);
 }
-#startBtn.active{
-  background:var(--navy);cursor:pointer;
+.login-btn{
+  width:100%; padding:14px; border-radius:9px; background: var(--navy);
+  color: var(--gold); font-weight:700; font-size:14.5px; letter-spacing:1.5px;
+  text-transform:uppercase; transition: transform .15s, box-shadow .15s, background .2s;
 }
-#startBtn.active:hover{background:var(--gold);color:var(--navy);}
+.login-btn:hover{ background: var(--navy-deep); box-shadow:0 8px 22px rgba(0,0,0,0.25); transform:translateY(-1px); }
+.login-btn:active{ transform:translateY(0); }
+.login-error{
+  display:none; color: var(--danger); font-size:12.5px; font-weight:600;
+  margin-top:12px; text-align:left;
+}
 
-/* ===== HEADER ===== */
-#header{
-  height:64px;background:var(--navy);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 28px;flex-shrink:0;
-  border-bottom:3px solid var(--gold);
+/* ============================================================
+   2. EXAM SCREEN — LAYOUT
+   ============================================================ */
+#screen-exam{ display:none; height:100%; width:100%; }
+#screen-exam.active{ display:flex; }
+
+.exam-shell{
+  display:flex; width:100%; height:100%;
 }
-.logo{
-  font-family:'Playfair Display',serif;
-  font-size:24px;font-weight:800;color:var(--white);letter-spacing:2px;
+
+/* ---- Sidebar ---- */
+.sidebar{
+  width: var(--sidebar-w); min-width:var(--sidebar-w);
+  background: var(--navy); color:#fff;
+  display:flex; flex-direction:column;
+  height:100%;
 }
-.logo span{color:var(--gold);}
-.header-center{
-  display:flex;gap:6px;
+.sb-brand{
+  padding:22px 22px 16px; border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.sb-brand-logo{
+  font-family: var(--font-display); font-weight:700; font-size:21px; color: var(--gold); letter-spacing:1.5px;
+}
+.sb-brand-sub{ font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-top:3px; }
+
+.sb-student{
+  padding:14px 22px; border-bottom:1px solid rgba(255,255,255,0.08);
+  font-size:12.5px; color:rgba(255,255,255,0.75); line-height:1.7;
+}
+.sb-student b{ color:#fff; font-weight:600; }
+
+.sb-timer-wrap{ padding:16px 22px; border-bottom:1px solid rgba(255,255,255,0.08); }
+.sb-timer-label{ font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:6px; }
+.sb-timer{
+  font-family: var(--font-display); font-weight:700; font-size:30px; color:#fff; letter-spacing:1px;
+  font-variant-numeric: tabular-nums;
+}
+.sb-timer.warn{ color: var(--flag); animation: pulseWarn 1s infinite; }
+@keyframes pulseWarn{ 0%,100%{opacity:1;} 50%{opacity:.55;} }
+
+.sb-map-wrap{ flex:1; overflow-y:auto; padding:16px 22px; }
+.sb-map-label{
+  font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.45);
+  margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;
+}
+.qmap{
+  display:grid; grid-template-columns: repeat(5, 1fr); gap:7px;
+}
+.qmap-cell{
+  aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+  border-radius:6px; border:1.5px solid rgba(255,255,255,0.18);
+  font-size:12px; font-weight:600; color:rgba(255,255,255,0.55);
+  background:rgba(255,255,255,0.03);
+  transition: all .15s;
+}
+.qmap-cell:hover{ border-color: var(--gold); color:#fff; }
+.qmap-cell.answered{ background: var(--gold); border-color:var(--gold); color: var(--navy); }
+.qmap-cell.flagged{ border-color: var(--flag); color: var(--flag); }
+.qmap-cell.answered.flagged{ background: var(--gold); border-color: var(--flag); color: var(--navy); position:relative; }
+.qmap-cell.answered.flagged::after{
+  content:""; position:absolute; top:-3px; right:-3px; width:8px; height:8px;
+  border-radius:50%; background: var(--flag); border:1.5px solid var(--navy);
+}
+.qmap-cell.current{ outline:2px solid #fff; outline-offset:1px; }
+
+.sb-actions{ padding:16px 22px 20px; border-top:1px solid rgba(255,255,255,0.08); display:flex; flex-direction:column; gap:9px; }
+.sb-btn{
+  width:100%; padding:11px; border-radius:8px; font-size:12.5px; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase; transition: all .15s; text-align:center;
+}
+.sb-btn-flag{
+  background:transparent; border:1.5px solid var(--flag); color: var(--flag);
+}
+.sb-btn-flag:hover{ background: rgba(225,112,85,0.12); }
+.sb-btn-submit{
+  background: transparent; border:1.5px solid var(--gold); color: var(--gold);
+}
+.sb-btn-submit:hover{ background: var(--gold); color: var(--navy); }
+
+/* ---- Main exam area ---- */
+.exam-main{ flex:1; display:flex; flex-direction:column; height:100%; min-width:0; }
+
+.tabs-bar{
+  display:flex; gap:4px; padding:0 18px; background:#fff; border-bottom:2px solid var(--navy);
+  flex-shrink:0;
 }
 .tab-btn{
-  background:transparent;border:1.5px solid var(--gold);
-  color:var(--gold-light);padding:8px 22px;border-radius:6px;
-  font-family:'Be Vietnam Pro',sans-serif;font-weight:600;font-size:14px;
-  cursor:pointer;transition:all 0.2s;
+  padding:13px 22px; font-size:13.5px; font-weight:600; color: var(--ink-soft);
+  border-radius:8px 8px 0 0; transition:all .15s; position:relative; top:1px;
 }
-.tab-btn.active{background:var(--gold);color:var(--navy);}
-.tab-btn:hover{background:var(--gold);color:var(--navy);}
-.header-right{
-  display:flex;align-items:center;gap:18px;
-  color:var(--cream);font-size:14px;
-}
-#timer{
-  font-family:'DM Mono',monospace;font-size:16px;font-weight:500;
-  background:rgba(255,255,255,0.08);padding:6px 14px;border-radius:6px;
-  border:1px solid rgba(201,168,76,0.4);
-}
-#timer.warning{color:#ff9b9b;border-color:#ff9b9b;}
-#timer.submitted{color:#8fd6a8;border-color:#8fd6a8;}
-.student-info{text-align:right;line-height:1.4;}
-.student-info .name{font-weight:600;color:var(--gold-light);}
-.student-info .class{font-size:12px;color:#bbb;}
+.tab-btn:hover{ color: var(--navy); background:#f6f2e9; }
+.tab-btn.active{ color: var(--navy); background: var(--cream); border:2px solid var(--navy); border-bottom:2px solid var(--cream); }
 
-/* ===== MAIN LAYOUT ===== */
-#mainArea{
-  display:flex;flex:1;min-height:0;
-  overflow:hidden;
+.split-container{
+  flex:1; display:flex; min-height:0; position:relative;
+  user-select:text;
 }
-.col-left, .col-right{
-  height:100%;overflow-y:auto;
-  scroll-behavior:smooth;
+.split-container.locked-select{ user-select:none; }
+
+.panel{
+  height:100%; overflow-y:auto; background:#fff;
 }
-.col-left{
-  flex:1.15;
-  background:var(--white);
-  border-right:1px solid var(--border);
-  padding:32px 36px;
+.panel-left{ width:50%; padding:34px 38px; border-right:1px solid var(--line); }
+.panel-right{ width:50%; padding:34px 38px; background: var(--cream); }
+
+.resizer{
+  width:7px; cursor:col-resize; background: var(--line); flex-shrink:0;
+  transition: background .15s; position:relative;
 }
-.col-right{
-  flex:1;
-  background:var(--cream);
-  padding:28px 32px;
+.resizer:hover, .resizer.active{ background: var(--gold); }
+.resizer::after{
+  content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:3px; height:34px; border-radius:3px; background:rgba(0,0,0,0.15);
 }
 
-/* Passage styling */
-.passage{display:none;}
-.passage.active{display:block;}
-.passage-questions{display:none;}
-.passage-questions.active{display:block;}
-.passage h1{
-  font-family:'Playfair Display',serif;font-size:14px;
-  color:var(--gold);letter-spacing:3px;text-transform:uppercase;
+.passage-title{
+  font-family: var(--font-display); font-weight:700; font-size:21px; color: var(--navy);
   margin-bottom:4px;
 }
-.passage .ptitle{
-  font-family:'Playfair Display',serif;font-size:24px;font-weight:700;
-  text-align:center;margin:8px 0 20px;color:var(--navy);
+.passage-meta{ font-size:11.5px; color: var(--ink-soft); text-transform:uppercase; letter-spacing:1px; margin-bottom:22px; }
+.passage-body{ font-size:15px; line-height:1.85; color:#33302b; }
+.passage-body p{ margin-bottom:16px; text-align:justify; }
+.passage-body strong{ color: var(--navy); }
+
+.qgroup{ margin-bottom:32px; }
+.qgroup-instructions{
+  background:#fff; border:1px solid var(--line); border-left:3px solid var(--gold);
+  border-radius:8px; padding:14px 16px; margin-bottom:16px; font-size:13.5px; line-height:1.6; color: var(--ink);
 }
-.passage .instructions{
-  font-style:italic;font-size:13px;color:#777;margin-bottom:18px;
+.qgroup-instructions b{ color:var(--navy); }
+
+.qitem{
+  display:flex; gap:12px; padding:14px 14px 14px 10px; border-radius:10px;
+  margin-bottom:8px; background:#fff; border:1px solid var(--line);
+  scroll-margin-top: 24px; transition: border-color .2s, box-shadow .2s;
 }
-.passage p{
-  font-size:15px;line-height:1.85;margin-bottom:16px;text-align:justify;
-  color:#2b2b3d;
+.qitem:hover{ border-color:#d8cfba; }
+.qitem.answered{ border-left:3px solid var(--gold); }
+.qitem.flagged{ box-shadow: inset 3px 0 0 var(--flag); }
+
+.qnum{
+  flex-shrink:0; width:30px; height:30px; border-radius:50%;
+  background: var(--navy); color: var(--gold); font-weight:700; font-size:13px;
+  display:flex; align-items:center; justify-content:center;
 }
-.passage .para-label{
-  font-weight:700;color:var(--gold);margin-right:6px;
+.qbody{ flex:1; min-width:0; }
+.qtext{ font-size:14.5px; line-height:1.6; margin-bottom:10px; color: var(--ink); }
+
+.qflag-btn{
+  flex-shrink:0; width:22px; height:22px; border-radius:6px; border:1.5px solid var(--line);
+  display:flex; align-items:center; justify-content:center; font-size:12px;
+  color:#c9c0ad; transition: all .15s; align-self:flex-start;
+}
+.qflag-btn:hover{ border-color: var(--flag); }
+.qflag-btn.on{ background: var(--flag); border-color: var(--flag); color:#fff; }
+
+/* answer inputs */
+.ans-text{
+  width:100%; max-width:260px; padding:9px 11px; border:1.5px solid var(--line);
+  border-radius:7px; font-size:14px; font-weight:500; color: var(--navy); background:#fff;
+}
+.ans-text:focus{ outline:none; border-color: var(--gold); box-shadow:0 0 0 3px rgba(212,175,55,0.15); }
+
+.ans-select{
+  padding:9px 11px; border:1.5px solid var(--line); border-radius:7px; font-size:14px;
+  background:#fff; color: var(--navy); font-weight:500; min-width:90px;
+}
+.ans-select:focus{ outline:none; border-color: var(--gold); }
+
+.ans-options{ display:flex; flex-direction:column; gap:8px; }
+.ans-opt{
+  display:flex; align-items:flex-start; gap:9px; padding:9px 11px; border-radius:7px;
+  border:1.5px solid var(--line); cursor:pointer; transition: all .15s; background:#fff;
+}
+.ans-opt:hover{ border-color: var(--gold-soft); background:#fdfaf0; }
+.ans-opt input{ margin-top:2px; accent-color: var(--gold); flex-shrink:0; }
+.ans-opt span{ font-size:13.5px; line-height:1.5; }
+.ans-opt.checked{ border-color: var(--gold); background:#fdfaf0; }
+
+/* highlight marks */
+.hl-yellow{ background: var(--hl-yellow); border-radius:2px; }
+.hl-green{ background: var(--hl-green); border-radius:2px; }
+.hl-blue{ background: var(--hl-blue); border-radius:2px; }
+.hl-pink{ background: var(--hl-pink); border-radius:2px; }
+
+/* highlight floating toolbar */
+.hl-toolbar{
+  position:fixed; display:none; gap:6px; background: var(--navy); padding:7px 8px;
+  border-radius:10px; box-shadow:0 10px 28px rgba(0,0,0,0.3); z-index:500;
+  align-items:center;
+}
+.hl-toolbar.show{ display:flex; }
+.hl-swatch{
+  width:24px; height:24px; border-radius:50%; border:2px solid rgba(255,255,255,0.5);
+  transition: transform .12s;
+}
+.hl-swatch:hover{ transform:scale(1.15); }
+.hl-swatch[data-c="yellow"]{ background: var(--hl-yellow); }
+.hl-swatch[data-c="green"]{ background: var(--hl-green); }
+.hl-swatch[data-c="blue"]{ background: var(--hl-blue); }
+.hl-swatch[data-c="pink"]{ background: var(--hl-pink); }
+.hl-swatch-erase{
+  width:24px; height:24px; border-radius:50%; border:2px solid rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.08); color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center;
 }
 
-/* Highlight system */
-.hl-yellow{background:#fff3b0;}
-.hl-blue{background:#bfe3ff;}
-.hl-green{background:#c8f0d4;}
-.hl-pink{background:#ffd6e7;}
+/* ============================================================
+   3. MODALS / OVERLAYS
+   ============================================================ */
+.overlay{
+  position:fixed; inset:0; background:rgba(15,10,5,0.55); backdrop-filter:blur(2px);
+  display:none; align-items:center; justify-content:center; z-index:1000; padding:20px;
+}
+.overlay.show{ display:flex; }
+.modal{
+  background:#fff; border-radius:16px; max-width:460px; width:100%;
+  padding:32px 30px 26px; box-shadow:0 30px 70px rgba(0,0,0,0.4);
+  animation: cardIn .35s cubic-bezier(.22,1,.36,1);
+}
+.modal-title{ font-family: var(--font-display); font-weight:700; font-size:21px; color: var(--navy); margin-bottom:10px; }
+.modal-text{ font-size:14px; line-height:1.65; color: var(--ink-soft); margin-bottom:22px; }
+.modal-text b{ color: var(--danger); }
+.modal-actions{ display:flex; gap:10px; }
+.modal-btn{
+  flex:1; padding:12px; border-radius:9px; font-size:13.5px; font-weight:700;
+  letter-spacing:0.5px; transition: all .15s;
+}
+.modal-btn-secondary{ background:#f1ede4; color: var(--ink); }
+.modal-btn-secondary:hover{ background:#e8e2d4; }
+.modal-btn-primary{ background: var(--navy); color: var(--gold); }
+.modal-btn-primary:hover{ background: var(--navy-deep); }
 
-#hlPopup{
-  position:absolute;display:none;
-  background:var(--navy);border-radius:8px;
-  padding:6px;box-shadow:0 6px 20px rgba(0,0,0,0.25);
-  z-index:500;gap:5px;
-  display:flex;
+/* Flagged questions panel */
+.flagpanel{
+  background:#fff; border-radius:16px; max-width:560px; width:100%; max-height:80vh;
+  display:flex; flex-direction:column; box-shadow:0 30px 70px rgba(0,0,0,0.4);
+  animation: cardIn .35s cubic-bezier(.22,1,.36,1);
 }
-#hlPopup button{
-  width:26px;height:26px;border:none;border-radius:50%;cursor:pointer;
-  border:2px solid transparent;transition:transform 0.15s;
+.flagpanel-head{ padding:22px 26px 16px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
+.flagpanel-head h3{ font-family: var(--font-display); font-size:19px; color: var(--navy); }
+.flagpanel-close{ font-size:20px; color: var(--ink-soft); width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.flagpanel-close:hover{ background:#f1ede4; }
+.flagpanel-body{ padding:14px 26px 22px; overflow-y:auto; }
+.flagpanel-empty{ text-align:center; padding:40px 0; color: var(--ink-soft); font-size:13.5px; }
+.flagitem{
+  display:flex; justify-content:space-between; align-items:center; padding:12px 14px;
+  border:1px solid var(--line); border-radius:9px; margin-bottom:8px; transition: all .15s;
 }
-#hlPopup button:hover{transform:scale(1.15);}
-#hlPopup .hb-yellow{background:#fff3b0;}
-#hlPopup .hb-blue{background:#bfe3ff;}
-#hlPopup .hb-green{background:#c8f0d4;}
-#hlPopup .hb-pink{background:#ffd6e7;}
-#hlPopup .hb-clear{background:#3a3a52;color:#fff;font-size:12px;width:auto;padding:0 8px;border-radius:13px;}
+.flagitem:hover{ border-color: var(--gold); background:#fdfaf0; }
+.flagitem-left{ display:flex; align-items:center; gap:10px; }
+.flagitem-num{ width:26px; height:26px; border-radius:50%; background: var(--navy); color: var(--gold); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+.flagitem-ans{ font-size:12.5px; color: var(--ink-soft); }
+.flagitem-ans.empty{ color: var(--flag); font-style:italic; }
+.flagitem-go{ font-size:11.5px; font-weight:700; color: var(--gold); text-transform:uppercase; letter-spacing:0.5px; }
 
-/* Question styling */
-.q-section{margin-bottom:28px;}
-.q-section-title{
-  font-family:'Playfair Display',serif;font-weight:700;font-size:16px;
-  color:var(--navy);margin-bottom:6px;
-  border-bottom:2px solid var(--gold);padding-bottom:6px;
+/* ============================================================
+   4. RESULT SCREEN
+   ============================================================ */
+#screen-result{
+  align-items:center; justify-content:center; overflow-y:auto;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(212,175,55,0.07), transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(212,175,55,0.05), transparent 45%),
+    var(--navy-deep);
+  padding:40px 20px;
 }
-.q-instructions{
-  font-size:13px;color:#666;margin-bottom:14px;font-style:italic;
-  line-height:1.6;
-}
-.q-block{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:10px;padding:16px 18px;margin-bottom:12px;
-  position:relative;transition:box-shadow 0.2s;
-}
-.q-block:target, .q-block.highlighted-q{
-  box-shadow:0 0 0 3px var(--gold-light);
-}
-.q-num{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:26px;height:26px;background:var(--navy);color:var(--gold);
-  border-radius:50%;font-weight:700;font-size:13px;margin-right:8px;
-  font-family:'DM Mono',monospace;
-}
-.q-text{font-size:14.5px;line-height:1.6;margin-bottom:10px;}
-.q-flag{
-  position:absolute;top:12px;right:14px;
-  background:none;border:none;cursor:pointer;font-size:18px;
-  opacity:0.35;transition:opacity 0.2s,transform 0.2s;
-}
-.q-flag:hover{opacity:0.8;transform:scale(1.15);}
-.q-flag.flagged{opacity:1;}
-
-/* Inputs */
-.text-input{
-  width:120px;padding:7px 10px;border:1.5px solid var(--border);
-  border-radius:6px;font-size:14px;font-family:'DM Mono',monospace;
-  transition:border-color 0.2s;
-}
-.text-input:focus{outline:none;border-color:var(--gold);}
-.text-input:disabled{background:#f0f0f0;cursor:not-allowed;}
-.heading-select{width:100%;max-width:420px;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;}
-
-.radio-group, .tf-group{display:flex;flex-direction:column;gap:8px;margin-top:6px;}
-.radio-option{
-  display:flex;align-items:flex-start;gap:8px;padding:8px 10px;
-  border-radius:6px;cursor:pointer;transition:background 0.15s;
-  font-size:14px;line-height:1.5;
-}
-.radio-option:hover{background:#f5f0e6;}
-.radio-option input{margin-top:3px;cursor:pointer;accent-color:var(--gold);}
-
-/* Answer badges (review mode) */
-.ans-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  margin-top:10px;padding:6px 12px;border-radius:6px;
-  font-size:13px;font-weight:600;font-family:'Be Vietnam Pro',sans-serif;
-}
-.ans-correct{background:#e6f5ec;color:var(--green);border:1px solid #b8e3c9;}
-.ans-wrong{background:#fbe9e7;color:var(--red);border:1px solid #f3c5be;}
-.ans-blank{background:#f0f0f0;color:#888;border:1px solid #ddd;}
-
-/* ===== SIDEBAR right side (nav grid) ===== */
-#sidebarFloat{
-  width:280px;background:var(--white);
-  border-left:1px solid var(--border);
-  padding:20px;overflow-y:auto;height:100%;
-  flex-shrink:0;
-}
-.sidebar-header{
-  font-family:'Playfair Display',serif;font-weight:700;font-size:15px;
-  color:var(--navy);margin-bottom:14px;text-align:center;
-  letter-spacing:1px;
-}
-.sidebar-section-label{
-  font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;
-  text-transform:uppercase;margin:14px 0 8px;
-}
-.sidebar-group{display:none;}
-.sidebar-group.active{display:block;}
-.qgrid{
-  display:grid;grid-template-columns:repeat(8,1fr);gap:5px;
-}
-.qgrid button{
-  aspect-ratio:1;border:1px solid var(--border);border-radius:5px;
-  background:#fafafa;font-family:'DM Mono',monospace;font-size:11px;
-  font-weight:600;cursor:pointer;color:#999;position:relative;
-  transition:all 0.15s;
-}
-.qgrid button:hover{border-color:var(--gold);}
-.qgrid button.answered{background:var(--gold-light);color:var(--navy);border-color:var(--gold);}
-.qgrid button.flagged{background:#ffb070;color:var(--navy);border-color:#e8843d;}
-.qgrid button.flagged.answered{
-  background:var(--gold-light);
-  box-shadow:inset 0 0 0 2px #e8843d;
-}
-.qgrid button.flagged.answered::after{
-  content:'';position:absolute;top:2px;right:2px;width:6px;height:6px;
-  border-radius:50%;background:#d32f2f;
-}
-.sidebar-footer{margin-top:18px;}
-#flagListBtn{
-  width:100%;padding:9px;background:var(--cream);border:1.5px solid var(--gold);
-  border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;
-  color:var(--navy);font-family:'Be Vietnam Pro',sans-serif;
-}
-#flagListBtn:hover{background:var(--gold);}
-.legend{font-size:11px;color:#999;margin-top:14px;line-height:1.8;}
-.legend-dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle;}
-
-/* Flag panel modal */
-.modal-overlay{
-  position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);
-  display:none;align-items:center;justify-content:center;z-index:1100;
-  pointer-events:auto;
-}
-.modal-overlay.show{display:flex;}
-.modal-box{
-  background:var(--white);border-radius:12px;padding:28px 30px;
-  max-width:420px;width:90%;box-shadow:0 20px 50px rgba(0,0,0,0.3);
-  max-height:80vh;overflow-y:auto;
-}
-.modal-box h3{
-  font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:14px;
-  font-size:18px;
-}
-.modal-box .flag-item{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:10px 12px;border:1px solid var(--border);border-radius:6px;
-  margin-bottom:8px;cursor:pointer;font-size:13px;
-}
-.modal-box .flag-item:hover{background:var(--cream);}
-.modal-box .empty{color:#999;font-size:13px;text-align:center;padding:20px;}
-.modal-close{
-  margin-top:10px;width:100%;padding:10px;background:var(--navy);color:white;
-  border:none;border-radius:6px;cursor:pointer;font-weight:600;
-  font-family:'Be Vietnam Pro',sans-serif;
-}
-
-/* ===== FOOTER ===== */
-#footer{
-  height:56px;background:var(--white);border-top:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 28px;flex-shrink:0;
-}
-.progress-info{font-size:13px;color:#888;}
-.progress-info b{color:var(--navy);}
-#submitBtn, #reviewBackBtn{
-  background:var(--navy);color:var(--gold-light);border:none;
-  padding:11px 28px;border-radius:6px;font-weight:600;font-size:14px;
-  cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;
-  transition:background 0.2s;
-}
-#submitBtn:hover, #reviewBackBtn:hover{background:var(--gold);color:var(--navy);}
-
-/* Review banner */
-#reviewBanner{
-  background:#e6f5ec;color:var(--green);text-align:center;
-  padding:8px;font-size:13px;font-weight:600;border-bottom:1px solid #b8e3c9;
-  flex-shrink:0;
-}
-
-/* ===== RESULT SCREEN ===== */
-#resultScreen{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:linear-gradient(135deg,var(--navy) 0%,#0f0f1e 100%);
-  display:flex;align-items:center;justify-content:center;z-index:1000;
-}
+.result-wrap{ width:min(560px, 100%); }
 .result-card{
-  background:var(--white);border-radius:14px;padding:50px 48px;
-  text-align:center;width:90%;max-width:460px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.35);
+  background:#fff; border-radius:22px; padding:46px 42px 38px; text-align:center;
+  box-shadow:0 30px 80px rgba(0,0,0,0.45);
+  animation: cardIn .6s cubic-bezier(.22,1,.36,1);
 }
-.result-card .check-icon{
-  width:64px;height:64px;border-radius:50%;background:var(--gold);
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 18px;font-size:32px;color:var(--navy);
+.result-check{
+  width:74px; height:74px; border-radius:50%; background: var(--gold);
+  display:flex; align-items:center; justify-content:center; margin:0 auto 22px;
+  box-shadow:0 10px 26px rgba(212,175,55,0.35);
 }
-.result-card h2{
-  font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);
-  margin-bottom:6px;
+.result-check svg{ width:32px; height:32px; }
+.result-title{
+  font-family: var(--font-display); font-weight:700; font-size:25px; color: var(--navy);
+  line-height:1.35;
 }
-.result-card .name-highlight{color:var(--gold);font-weight:700;}
-.result-card .sub{font-size:13px;color:#888;margin-bottom:28px;}
+.result-title .name-hl{ color: var(--gold); }
+.result-sub{
+  font-size:12.5px; letter-spacing:1.5px; text-transform:uppercase; color: var(--ink-soft);
+  font-weight:600; margin:10px 0 28px;
+}
 .result-stats{
-  display:flex;justify-content:center;gap:32px;margin-bottom:28px;
+  display:flex; align-items:stretch; justify-content:center; gap:0; margin-bottom:30px;
 }
-.result-stat .num{
-  font-family:'DM Mono',monospace;font-size:34px;font-weight:700;color:var(--navy);
+.result-stat{ flex:1; padding:0 18px; }
+.result-stat-divider{ width:1px; background: var(--line); }
+.result-stat-num{
+  font-family: var(--font-display); font-weight:700; font-size:36px; color: var(--navy);
 }
-.result-stat .label{font-size:12px;color:#999;text-transform:uppercase;letter-spacing:1px;margin-top:4px;}
-.result-stat.band .num{color:var(--gold);}
-#reviewBtn{
-  width:100%;padding:13px;background:var(--navy);color:var(--gold-light);
-  border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;
-  font-family:'Be Vietnam Pro',sans-serif;transition:background 0.2s;
+.result-stat-num.gold{ color: var(--gold); }
+.result-stat-label{
+  font-size:11px; letter-spacing:1px; text-transform:uppercase; color: var(--ink-soft);
+  font-weight:600; margin-top:4px;
 }
-#reviewBtn:hover{background:var(--gold);color:var(--navy);}
-#answerSheetBtn:hover{background:var(--gold);color:var(--navy);}
+.result-cta-row{ display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+.result-cta{
+  padding:14px; border-radius:11px; font-size:14.5px; font-weight:700;
+  letter-spacing:0.3px; transition: all .15s; display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.result-cta-primary{ background: var(--navy); color: var(--gold); }
+.result-cta-primary:hover{ background: var(--navy-deep); transform:translateY(-1px); }
+.result-cta-secondary{ background:#fdfaf0; border:1.5px solid var(--gold-soft); color: var(--navy); }
+.result-cta-secondary:hover{ background:#fbf3da; }
 
-/* Answer Sheet Panel */
-.answer-sheet-overlay{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:var(--cream);
-  display:none;flex-direction:column;
-  z-index:1200;
+/* ============================================================
+   5. ANSWER SHEET SCREEN (screenshot-friendly grid)
+   ============================================================ */
+#screen-sheet{
+  align-items:flex-start; justify-content:center; overflow-y:auto;
+  background: var(--cream); padding:36px 20px;
 }
-.answer-sheet-overlay.show{display:flex;}
-.answer-sheet-box{
-  background:var(--white);border-radius:0;
-  width:100%;max-width:none;height:100%;max-height:none;
-  display:flex;flex-direction:column;
-  box-shadow:none;
-  overflow:hidden;
+.sheet-wrap{ width:min(980px, 100%); }
+.sheet-card{
+  background:#fff; border-radius:18px; padding:32px 34px; box-shadow:0 20px 50px rgba(0,0,0,0.1);
+  border:1px solid var(--line);
 }
-.as-header{
-  display:flex;justify-content:space-between;align-items:flex-start;
-  padding:24px 36px 16px;border-bottom:2px solid var(--gold);
-  flex-shrink:0;
+.sheet-head{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; flex-wrap:wrap; gap:10px; }
+.sheet-title{ font-family: var(--font-display); font-weight:700; font-size:22px; color: var(--navy); }
+.sheet-meta{ font-size:12.5px; color: var(--ink-soft); text-align:right; line-height:1.6; }
+.sheet-warn{
+  background:#fff0e9; border:1.5px solid #f3c4a8; border-left:4px solid var(--flag);
+  border-radius:10px; padding:13px 16px; font-size:13px; line-height:1.6; color:#8a3d22;
+  margin:18px 0 22px; font-weight:600;
 }
-.as-title{
-  font-family:'Playfair Display',serif;font-weight:800;font-size:22px;
-  color:var(--navy);letter-spacing:1px;
+.sheet-grid{
+  display:grid; grid-template-columns: repeat(10, 1fr); gap:8px;
 }
-.as-sub{font-size:13px;color:#999;margin-top:6px;font-family:'Be Vietnam Pro',sans-serif;}
-.as-close{
-  background:none;border:none;font-size:26px;cursor:pointer;color:#999;
-  line-height:1;padding:4px 10px;border-radius:6px;transition:background 0.15s;
+.sheet-cell{
+  border:1.5px solid var(--line); border-radius:8px; padding:8px 6px; text-align:center;
 }
-.as-close:hover{background:#f0ece0;color:var(--navy);}
-.as-summary{
-  display:flex;gap:32px;padding:16px 36px;font-size:16px;color:var(--navy);
-  font-family:'Be Vietnam Pro',sans-serif;background:var(--cream);
-  flex-shrink:0;border-bottom:1px solid var(--border);
+.sheet-cell .n{ font-size:10.5px; color: var(--ink-soft); font-weight:700; margin-bottom:3px; }
+.sheet-cell .v{ font-size:13px; font-weight:700; color: var(--navy); word-break:break-word; }
+.sheet-cell .v.empty{ color:#c9c0ad; font-weight:500; font-style:italic; font-size:11px; }
+.sheet-footer{ display:flex; justify-content:center; margin-top:26px; }
+
+/* ============================================================
+   6. REVIEW MODE BANNER
+   ============================================================ */
+.review-banner{
+  display:none; background: var(--navy); color:#fff; padding:11px 22px;
+  align-items:center; justify-content:space-between; flex-shrink:0;
+  font-size:12.5px;
 }
-.as-summary b{font-family:'DM Mono',monospace;color:var(--gold);font-size:18px;}
-.as-table-wrap{
-  flex:1;overflow-y:auto;padding:24px 36px;
-  display:grid;grid-template-columns:repeat(4, 1fr);
-  gap:0 28px;align-content:start;
+.review-banner.show{ display:flex; }
+.review-banner b{ color: var(--gold); }
+.review-banner-btn{
+  background: var(--gold); color: var(--navy); padding:8px 16px; border-radius:7px;
+  font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
 }
-.as-col-table{width:100%;border-collapse:collapse;font-size:13px;}
-.as-col-table thead th{
-  position:sticky;top:0;background:var(--white);
-  text-align:left;padding:10px 8px;border-bottom:2px solid var(--border);
-  font-weight:700;color:var(--navy);font-family:'Be Vietnam Pro',sans-serif;
-  font-size:13px;
+.review-banner-btn:hover{ opacity:0.88; }
+
+/* ============================================================
+   7. LOADING / TOAST
+   ============================================================ */
+.toast{
+  position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
+  background: var(--navy); color:#fff; padding:13px 22px; border-radius:10px;
+  font-size:13px; box-shadow:0 12px 30px rgba(0,0,0,0.3); z-index:2000;
+  opacity:0; pointer-events:none; transition: all .3s;
 }
-.as-col-table tbody td{
-  padding:9px 8px;border-bottom:1px solid #f0ece0;
-  font-family:'Be Vietnam Pro',sans-serif;font-size:13px;color:var(--navy);
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+.spinner{
+  width:16px; height:16px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff;
+  border-radius:50%; animation: spin .7s linear infinite; display:inline-block; vertical-align:middle; margin-right:8px;
 }
-.as-col-table tbody td:first-child{
-  font-family:'DM Mono',monospace;font-weight:600;color:#888;font-size:12px;width:36px;
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+/* ============================================================
+   8. RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px){
+  .sidebar{ width:230px; min-width:230px; }
+  .panel-left, .panel-right{ padding:24px 22px; }
 }
-.as-col-table tbody tr:nth-child(even){background:#fbf9f4;}
-.as-note{
-  padding:14px 36px 20px;font-size:13px;color:#888;text-align:center;
-  border-top:1px solid var(--border);flex-shrink:0;
-  font-family:'Be Vietnam Pro',sans-serif;
+@media (max-width: 860px){
+  .exam-shell{ flex-direction:column; }
+  .sidebar{ width:100%; min-width:0; flex-direction:row; flex-wrap:wrap; height:auto; }
+  .split-container{ flex-direction:column; }
+  .resizer{ display:none; }
+  .panel-left, .panel-right{ width:100% !important; height:50%; }
+  .sheet-grid{ grid-template-columns: repeat(5,1fr); }
 }
 
-@media (max-width:900px){
-  .as-table-wrap{grid-template-columns:repeat(2, 1fr);gap:0 18px;padding:18px 16px;}
-  .as-header, .as-summary{padding-left:16px;padding-right:16px;}
-}
-@media (max-width:520px){
-  .as-table-wrap{grid-template-columns:1fr;}
-}
-
-/* misc */
-.bold-blank{font-weight:700;letter-spacing:1px;color:var(--gold);}
-::-webkit-scrollbar{width:8px;}
-::-webkit-scrollbar-thumb{background:#d9d2c0;border-radius:4px;}
-::-webkit-scrollbar-track{background:transparent;}
-
-@media (max-width:900px){
-  #mainArea{flex-direction:column;height:auto;overflow:auto;}
-  .col-left,.col-right{height:auto;}
-  #sidebarFloat{display:none;}
+/* fit-to-screen safeguard: shrink sidebar font/padding on short viewports */
+@media (max-height: 720px){
+  .sb-brand{ padding:14px 22px 10px; }
+  .sb-student{ padding:8px 22px; }
+  .sb-timer-wrap{ padding:10px 22px; }
+  .sb-timer{ font-size:24px; }
+  .sb-actions{ padding:10px 22px 14px; }
 }
 </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
-<!-- ============ LOGIN SCREEN ============ -->
-<div id="loginScreen">
+<!-- ================= 1. LOGIN SCREEN ================= -->
+<div class="screen active" id="screen-login">
   <div class="login-card">
-    <div class="login-logo">G.<span>EDU</span></div>
-    <div class="login-sub">IELTS Reading Practice — Test 3</div>
+    <div class="login-logo">G<span>.</span>EDU</div>
+    <div class="login-sub">IELTS Academic Reading</div>
+    <div class="login-test-name" id="login-test-name">[TÊN BÀI TEST — VD: Reading Test 7]</div>
+    <div class="login-divider"></div>
+
     <div class="login-field">
-      <label>Họ và tên</label>
-      <input type="text" id="studentName" placeholder="Nhập họ tên đầy đủ" autocomplete="off">
+      <label>Họ và tên học sinh</label>
+      <input type="text" id="input-name" placeholder="VIẾT IN HOA" autocomplete="off">
     </div>
     <div class="login-field">
-      <label>Lớp</label>
-      <input type="text" id="studentClass" placeholder="Nhập tên lớp / mã lớp" autocomplete="off">
+      <label>Lớp học</label>
+      <input type="text" id="input-class" placeholder="VIẾT IN HOA" autocomplete="off">
     </div>
-    <p style="font-size:12px;color:var(--red);background:#fbe9e7;padding:8px 10px;border-radius:6px;line-height:1.5;margin-bottom:16px;text-align:left;">
-      ⚠️ Vui lòng nhập <b>Họ tên</b> và <b>Lớp</b> bằng <b>CHỮ IN HOA</b> (ví dụ: NGUYEN VAN A).
-      Thông tin chính xác sẽ giúp hệ thống ghi nhận và khôi phục bài làm nếu bạn thoát hoặc tải lại trang.
-    </p>
-    <button type="button" id="startBtn">🚀 Bắt đầu làm bài</button>
+
+    <div class="login-note" data-locked-id="login-note"><!-- nội dung được khóa, JS sẽ tự bơm vào lúc tải trang --></div>
+
+    <button class="login-btn" id="btn-start">Bắt đầu làm bài</button>
+    <div class="login-error" id="login-error"></div>
   </div>
 </div>
 
-<!-- ============ TEST SCREEN ============ -->
-<div id="testScreen" class="hidden">
-  <div id="reviewBanner" class="hidden">📋 Chế độ xem lại — không thể chỉnh sửa</div>
-  <div id="header">
-    <div class="logo">G.<span>EDU</span></div>
-    <div class="header-center">
-      <button type="button" class="tab-btn active" data-tab="1">Passage 1</button>
-      <button type="button" class="tab-btn" data-tab="2">Passage 2</button>
-      <button type="button" class="tab-btn" data-tab="3">Passage 3</button>
-    </div>
-    <div class="header-right">
-      <div id="timer">60:00</div>
-      <div class="student-info">
-        <div class="name" id="hdrName">—</div>
-        <div class="class" id="hdrClass">—</div>
-      </div>
-    </div>
-  </div>
+<!-- ================= 2. EXAM SCREEN ================= -->
+<div class="screen" id="screen-exam">
+  <div class="exam-shell">
 
-  <div id="mainArea">
-    <div class="col-left" id="passageCol">
-
-      <!-- PASSAGE 1 -->
-      <div class="passage active" data-passage="1">
-        <h1>Passage 1</h1>
-        <div class="instructions">Read the text and answer questions 1–13</div>
-        <div class="ptitle">THE DEVELOPMENT OF PLASTICS</div>
-
-        <p><span class="para-label"></span>The first plastics were developed as a substitute for natural rubber. Chemically, rubber is a polymer—a compound containing large molecules that are formed by the bonding of many smaller, simpler units, repeated over and over again. The same bonding principle—polymerization—is the basis of the creation of a huge range of plastics by the chemical industry.</p>
-
-        <p>The first plastic was developed as a result of a competition in the USA. In the 1860s, $10,000 was offered to anybody who could replace ivory—supplies of which were declining—with something equally good as a material for making billiard balls. The prize was won by John Wesley Hyatt, with a material called celluloid. Celluloid was made by dissolving cellulose, a carbohydrate obtained from plants, in a solution of camphor dissolved in ethanol. This new material rapidly found other applications in the manufacture of everyday products such as knife handles and detachable collars and cuffs. But perhaps the best-known celluloid product was photographic film, without which the film industry could never have taken off at the end of the 19th century.</p>
-
-        <p>Celluloid can be repeatedly softened and reshaped by heat, and is known as a thermoplastic. In 1907, Leo Baekeland (1863–1944), a Belgian chemist working in the USA, invented a different kind of plastic, by causing phenol and formaldehyde to react together. Baekeland called it Bakelite, and it was the first of the thermosets—plastic that can be cast and moulded while hot, but cannot be softened by heat and reshaped once they have set. Bakelite was a good insulator, and was resistant to water and acid. With these properties it was soon being used in the manufacture of electrical switches as well as a variety of domestic items.</p>
-
-        <p>As the century went on, the range of newly developed plastic increased. Chemists began looking for other small molecules that could be strung together to make polymers. In the 1930s, chemists in Britain discovered that the gas ethylene would polymerize under heat and pressure to form a thermoplastic they called polythene. Polypropylene followed in the 1950s. Both are used to make bottles, pipes and plastic bags. A small change in the starting material—replacing a hydrogen atom in ethylene with a chlorine atom—produced rigid PVC (polyvinyl chloride), a fireproof plastic suitable for drains and gutters. By adding certain chemicals, a soft form of PVC can be produced, suitable as a substitute for rubber in items such as waterproof clothing. A closely related plastic is Teflon or PTFE (polytetrafluoroethylene). It produces very little friction, making it ideal for products such as non-stick frying pans.</p>
-
-        <p>Polystyrene, a hard, clear material like glass, was developed during the 1930s in Germany, and its applications included food containers and toys. Expanded polystyrene is rigid and is widely used in packaging and insulation. Polyurethane, developed in the same country, was commonly produced as a foam which was very useful in the production of insulating materials.</p>
-
-        <p>In the 1930s, the first of the man-made fibres was created—nylon. Its inventor was a chemist called Wallace Carothers (1896–1937), who worked for the Du Pont company in the USA. He found that under the right conditions two particular chemicals would form a polymer that could be pumped out through holes and then stretched to form long glossy threads that could be woven like silk. Its first use was to make parachutes for the US armed forces in World War II. In the postwar years, it completely replaced silk in the manufacture of stockings.</p>
-
-        <p>Many other synthetic fibres joined nylon, including Orion, Acrilan, and Terylene. Today most garments are made of a blend of natural fibres, such as cotton and wool, and man-made fibres that make fabrics easier to look after.</p>
-
-        <p>Despite its enormous usefulness, plastic has its drawbacks. In fact one of its great strengths—its indestructibility—is its greatest disadvantage. Beaches all over the world, even on the remotest island, are littered with plastic bottles that nothing can destroy. Nor is it very easy to recycle plastics, as different types of plastic are often found in the same items and call for different treatments.</p>
-
-        <p>Plastics can be made biodegradable by incorporating into their structure a material such as starch, which is attacked by bacteria and causes the plastic to fall apart. Other materials can be incorporated that gradually decay in sunlight—although bottles made of such materials have to be stored in the dark, to ensure they do not disintegrate before they have been used.</p>
+    <!-- ---- Sidebar ---- -->
+    <aside class="sidebar">
+      <div class="sb-brand">
+        <div class="sb-brand-logo">G<span style="color:var(--gold)">.</span>EDU</div>
+        <div class="sb-brand-sub" id="sb-test-name">[TÊN BÀI TEST]</div>
       </div>
 
-      <!-- PASSAGE 2 -->
-      <div class="passage" data-passage="2">
-        <h1>Passage 2</h1>
-        <div class="instructions">Read the text and answer questions 14–26</div>
-        <div class="ptitle">LEAN PRODUCTION INNOVATION —<br>IN MANUFACTURING SYSTEMS</div>
-
-        <p><b>14</b> After the First World War, car makers Henry Ford and Arthur Sloan of General Motors moved world manufacturing from centuries of craft production into the age of mass production. Largely as a result of this, the United States soon dominated the world economy. After the Second World War, and approximately a hundred years after Japan opened up to the modern world, Eiji Toyoda and Taiichi Ohno pioneered the concept of lean production at the Toyota car company. And now, although superimposing the method on existing mass production systems causes pain and upheaval, manufacturers around the world are trying to embrace this innovative system.</p>
-
-        <p><b>15</b> Perhaps the best way to describe lean production is to compare it with the two other major manufacturing systems: craft production and mass production. The craft producer uses highly skilled workers and simple but flexible tools to make exactly what the customer asks for – one item at a time. A present day example of this method is the customised production of a few exotic sports cars. The concept of craft production remains very popular, but the problem with it is obvious. Goods produced by the craft method – as cars once exclusively were – cost too much for most of us to afford. So at the beginning of the twentieth century, mass production was developed as an alternative method. The mass producer uses narrowly skilled professionals to design products which are then made by unskilled or semi-skilled workers, using expensive, single-purpose machines. These churn out standardised products in very high volumes. Because the machinery costs so much, and is so intolerant of disruption, the mass producer keeps standard designs in production for as long as possible. The result is that the customer gets lower costs, but at the expense of variety, and by means of work methods which most employees find boring and dispiriting. By contrast, the lean production system combines the advantages of craft and mass production, while avoiding the high cost of the former and the rigidity of the latter. Towards this end, companies appoint teams of multi-skilled workers to all levels of the organisation, and use highly flexible and increasingly automated machines to produce goods in enormous volume and variety.</p>
-
-        <p><b>16</b> Lean production is so called because, compared with mass production, it uses less of everything – half the human effort in the factory, half the manufacturing space, half the investment in tools, and half the engineering hours to develop the new product. It also results in far fewer defects.</p>
-
-        <p><b>17</b> Perhaps the most striking contrast between mass and lean production systems lies in their production standards. Mass producers set a limited goal for themselves: 'good enough', which translates into an acceptable number of defects, a maximum acceptable number of inventories, and a narrow range of standardised products. Lean producers, on the other hand, are unwilling to compromise standards in any of these areas.</p>
-
-        <p><b>18</b> Although cost reduction is the primary objective of the lean production system, it must meet three other intermediate objectives in order to achieve this: quantity control, quality assurance and respect for humanity. Firstly, the system must be able to adapt to daily and monthly fluctuations in demand. Secondly, each separate process must supply only good units to the subsequent process. Thirdly, in as far as the system uses human resources to attain its cost objectives, respect for human needs must be cultivated. It should be emphasised that none of these three objectives can be achieved separately.</p>
-
-        <p><b>19</b> The continuous flow of lean manufacturing production relies on two practical mechanisms: just-in-time and autonamation. Just-in-time means, for example, that in the process of assembling the parts to build a car, components from the preceding process should arrive at the next part of the line at exactly the right time and in the correct quantities. If just-in-time is fully realised throughout the company, then superfluous inventories are completely eliminated from the factory, making stores or warehouses unnecessary. However, relying solely on a central planning approach to control schedules for all stages of the production process simultaneously is very difficult in the case of cars, which consist of thousands of parts. So the lean system looks at the production flow in reverse; in other words, employees go to the preceding process to withdraw the necessary quantity of units at the appropriate time. The preceding process must produce only sufficient quantities of units to replace those that have been withdrawn, and in turn withdraws the requisite number of components from the process that precedes it.</p>
-
-        <p><b>20</b> Autonamation is the automatic checking for abnormalities in the production process. In order to realise just-in-time perfectly, only units which are in perfect condition must be allowed to flow to the next process, and this flow must be regular and uninterrupted. In other words, quality control must coexist with just-in-time procedures throughout the system. Autonamation involves building in a mechanism to prevent the multiplication of defects in machines or product lines. For example, in Toyota factories almost all the machines have been fitted with stopping devices, and the concept of autonamation has been extended to manual production lines. If something abnormal happens there, the worker pushes a button to stop the whole line, and lights, which are hung so high in the factory that they are visible to everyone, indicate the position of the problem.</p>
+      <div class="sb-student">
+        <b id="sb-student-name">—</b><br>
+        Lớp: <span id="sb-student-class">—</span>
       </div>
 
-      <!-- PASSAGE 3 -->
-      <div class="passage" data-passage="3">
-        <h1>Passage 3</h1>
-        <div class="instructions">Read the text and answer questions 27–40</div>
-        <div class="ptitle">HOW DOES WATCHING SPORT INFLUENCE THE BRAIN?</div>
-
-        <p><span class="para-label">A</span> During the epoch when the poet Homer unveiled his grand epic, the ancient Greeks initiated a festival where men contended in a race of roughly 200 metres. The victor would be rewarded with a symbolic olive branch. This event, known as the Olympics, has transcended its humble origins to embody the human quest for progress. The captivating nature of these games raises an intriguing question: what exactly draws us in as spectators? Is it the thrill of competition, the beauty of human movement, or something happening within our brains?</p>
-
-        <p><span class="para-label">B</span> In 1996, three Italian neuroscientists—Giacomo Rizzolatti, Leonardo Fogassi, and Vittorio Gallese—conducted research on the premotor cortex of monkeys and made a groundbreaking discovery. They revealed a cluster of cells that act as a repository for motor actions, similar to 'grammar of movement'. These cellular networks represent the 'sentences' of full-body motions that our brains meticulously retain and refine. Take the art of swinging a golf club as an example. For those who only watch the Masters Tournament on television, playing golf may appear deceptively effortless. However, for novices, smoothly manoeuvring the asymmetrical metal club presents a nearly impossible challenge. This is because novices rely on conscious effort, utilising brain regions adjacent to the premotor cortex. Experts, by contrast, instinctively execute perfectly balanced movements, as their actions are deeply ingrained and intertwined with neurons in the premotor cortex. Their swing occurs with the serenity of a refined autopilot, requiring no conscious control. This neural distinction between novices and experts provides insight into how long-term training can physically reshape the brain.</p>
-
-        <p><span class="para-label">C</span> These neurons in the premotor cortex not only help explain why some athletes seem to have exceptional skills, but they also exhibit a wondrous characteristic that prompted Rizzolatti, Fogassi, and Gallese to bestow upon them the exalted label of 'mirror neuron'. They point out that mirror neurons are activated when a primate performs a particular action, such as grasping or holding an object, or when it witnesses another individual performing a comparable action. Humans possess an even more intricate motor neuron system that reflects the external world in our brains, enabling us to internalise the behaviours of others. Nonetheless, these cells necessitate what scientists refer to as 'goal-orientated movements' to activate. If we stare at a photograph, a static image of a runner striding ahead, our mirror neurons remain utterly silent. It is solely when the runner is in action, be it in running, moving, or sprinting, that they are ignited. Movement, not stillness, is what speaks to our brains.</p>
-
-        <p><span class="para-label">D</span> Electrophysiological studies have shown that when we observe a golfer or a runner in action, our own premotor cortex mirror neurons respond as if we were participating in the activity. This neural mirroring was initially identified in 1954 by French physiologists Gastaut and Bert, who noticed specific alpha and mu brain wave patterns in humans. The mu signal plays a role in neural mirroring, remaining active during periods of bodily stillness but dissipating when we undertake active pursuits like playing a sport or changing TV channels. Notably, the mu signal also remains subdued while we observe someone else in action, such as on television, which alludes to the influence of mirror neurons. This suggests that our brains do not simply passively register what we see, but actively simulate it, engaging systems normally reserved for action.</p>
-
-        <p><span class="para-label">E</span> Rizzolatti, Fogassi, and Gallese have coined the term 'direct matching hypothesis' to delineate the concept of mirror neurons. They asserted that to comprehend the movements of sports stars, we need to align the visual representation of the observed action with our own motor representation of the same action. According to this theory, watching an Olympic athlete can evoke a resonance in the observer's motor system. The observer's 'motor knowledge' is harnessed to decipher the observed action. However, mirror neurons extend beyond being merely neural foundations for our sporting inclinations. They also enable observers to enhance their athletic abilities through the process of observation. It turns out that watching a remarkable golfer improves our own golfing skills, and witnessing a skilled sprinter actually bolsters our running speed. This ability to learn through observation is a vital skill. From language acquisition in infancy to understanding facial expressions, mimicking plays a fundamental role in our consciousness. The most accomplished athletes possess a premotor cortex capable of envisioning victorious movements, supplemented by the physical attributes required to translate those movements into reality. In this way, action and imagination coalesce to drive performance.</p>
-
-        <p><span class="para-label">F</span> However, how many among us watch sport in order to enhance our athletic abilities? Most spectators tune in for the emotional roller coaster, the human drama it encompasses. This emotional connection finds its roots in mirror neurons, which allow spectators to perceive athletes' victorious movements and to share in the emotion of their triumphs. This is because they are directly associated with the amygdala, a key area of the brain responsible for emotional processing. During the Olympics, mirror neurons in individuals around the world resonate in unison, and watching sport unifies people. The majority of us may never run a mile in under four minutes or hit a home run. Yet, as we gather around our televisions, we all briefly get a taste of the feeling of executing something flawlessly. In those fleeting moments, sport becomes more than entertainment—it becomes a shared human experience.</p>
+      <div class="sb-timer-wrap">
+        <div class="sb-timer-label">Thời gian còn lại</div>
+        <div class="sb-timer" id="sb-timer">60:00</div>
       </div>
 
-    </div>
+      <div class="sb-map-wrap">
+        <div class="sb-map-label">
+          <span>Question Map</span>
+          <span id="sb-map-progress">0/40</span>
+        </div>
+        <div class="qmap" id="qmap"><!-- [JS GENERATED: 40 ô qmap-cell] --></div>
+      </div>
 
-    <!-- QUESTIONS COLUMN -->
-    <div class="col-right" id="questionCol">
+      <div class="sb-actions">
+        <button class="sb-btn sb-btn-flag" id="btn-open-flags">🚩 Xem câu đánh dấu</button>
+        <button class="sb-btn sb-btn-submit" id="btn-submit">Nộp bài</button>
+      </div>
+    </aside>
 
-      <!-- ===== PASSAGE 1 QUESTIONS ===== -->
-      <div class="passage-questions active" data-passage="1">
+    <!-- ---- Main ---- -->
+    <main class="exam-main">
+      <div class="review-banner" id="review-banner">
+        <span data-locked-id="review-banner-text"><!-- khóa, JS bơm --></span>
+        <button class="review-banner-btn" id="btn-back-to-result">Quay lại kết quả</button>
+      </div>
 
-        <div class="q-section">
-          <div class="q-section-title">Questions 1–7</div>
-          <div class="q-instructions">Complete the table below.<br>Write <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.</div>
+      <div class="tabs-bar" id="tabs-bar"><!-- [JS GENERATED: passage tab buttons] --></div>
 
-          <div class="q-block" id="qb-1" data-qnum="1">
-            <button type="button" class="q-flag" data-flag="1">🚩</button>
-            <div class="q-text"><span class="q-num">1</span>Celluloid (1860s, USA) — Can be softened and reshaped by heat. Common uses: billiard balls (original use); cutlery; clothing; <input type="text" class="text-input ans-input" data-q="1"></div>
-          </div>
-
-          <div class="q-block" id="qb-2" data-qnum="2">
-            <button type="button" class="q-flag" data-flag="2">🚩</button>
-            <div class="q-text"><span class="q-num">2</span><input type="text" class="text-input ans-input" data-q="2"> (1907, USA) — Can't be softened after setting; good insulator; resistant to water and acid.</div>
-          </div>
-
-          <div class="q-block" id="qb-3" data-qnum="3">
-            <button type="button" class="q-flag" data-flag="3">🚩</button>
-            <div class="q-text"><span class="q-num">3</span>Common use of the material in Q2: <input type="text" class="text-input ans-input" data-q="3"> household objects.</div>
-          </div>
-
-          <div class="q-block" id="qb-4" data-qnum="4">
-            <button type="button" class="q-flag" data-flag="4">🚩</button>
-            <div class="q-text"><span class="q-num">4</span>Polythene (1930s, <input type="text" class="text-input ans-input" data-q="4">) — Can be softened and reshaped by heat. Common uses: bottles; pipes; plastic bags.</div>
-          </div>
-
-          <div class="q-block" id="qb-5" data-qnum="5">
-            <button type="button" class="q-flag" data-flag="5">🚩</button>
-            <div class="q-text"><span class="q-num">5</span>Rigid PVC — Is <input type="text" class="text-input ans-input" data-q="5">. Common use: external piping.</div>
-          </div>
-
-          <div class="q-block" id="qb-6" data-qnum="6">
-            <button type="button" class="q-flag" data-flag="6">🚩</button>
-            <div class="q-text"><span class="q-num">6</span>Polystyrene (1930s, Germany) — Resembles <input type="text" class="text-input ans-input" data-q="6">. Common uses: food containers; toys.</div>
-          </div>
-
-          <div class="q-block" id="qb-7" data-qnum="7">
-            <button type="button" class="q-flag" data-flag="7">🚩</button>
-            <div class="q-text"><span class="q-num">7</span>Polyurethane (Germany) — Usually manufactured as a <input type="text" class="text-input ans-input" data-q="7">. Common use: insulation.</div>
+      <div class="split-container" id="split-container">
+        <div class="panel panel-left" id="panel-passage">
+          <!-- [PLACEHOLDER: PASSAGE CONTENT — AI Studio chèn vào đây cho từng tab/passage] -->
+          <div class="passage-title">[Tiêu đề bài đọc]</div>
+          <div class="passage-meta">Passage 1</div>
+          <div class="passage-body">
+            <p>[Nội dung đoạn văn...]</p>
           </div>
         </div>
 
-        <div class="q-section">
-          <div class="q-section-title">Questions 8–13</div>
-          <div class="q-instructions">Choose <b>TRUE</b> if the statement agrees with the information given in the text, choose <b>FALSE</b> if the statement contradicts the information, or choose <b>NOT GIVEN</b> if there is no information on this.</div>
+        <div class="resizer" id="resizer"></div>
 
-          <div class="q-block" id="qb-8" data-qnum="8">
-            <button type="button" class="q-flag" data-flag="8">🚩</button>
-            <div class="q-text"><span class="q-num">8</span>The chemical structure of rubber is very different to that of plastics.</div>
-            <div class="tf-group">
-              <label class="radio-option"><input type="radio" name="q8" value="TRUE" class="ans-input" data-q="8"> TRUE</label>
-              <label class="radio-option"><input type="radio" name="q8" value="FALSE" class="ans-input" data-q="8"> FALSE</label>
-              <label class="radio-option"><input type="radio" name="q8" value="NOT GIVEN" class="ans-input" data-q="8"> NOT GIVEN</label>
-            </div>
-          </div>
-
-          <div class="q-block" id="qb-9" data-qnum="9">
-            <button type="button" class="q-flag" data-flag="9">🚩</button>
-            <div class="q-text"><span class="q-num">9</span>John Wesley Hyatt was an industrial chemist.</div>
-            <div class="tf-group">
-              <label class="radio-option"><input type="radio" name="q9" value="TRUE" class="ans-input" data-q="9"> TRUE</label>
-              <label class="radio-option"><input type="radio" name="q9" value="FALSE" class="ans-input" data-q="9"> FALSE</label>
-              <label class="radio-option"><input type="radio" name="q9" value="NOT GIVEN" class="ans-input" data-q="9"> NOT GIVEN</label>
-            </div>
-          </div>
-
-          <div class="q-block" id="qb-10" data-qnum="10">
-            <button type="button" class="q-flag" data-flag="10">🚩</button>
-            <div class="q-text"><span class="q-num">10</span>Celluloid and Bakelite react in the same way to heat.</div>
-            <div class="tf-group">
-              <label class="radio-option"><input type="radio" name="q10" value="TRUE" class="ans-input" data-q="10"> TRUE</label>
-              <label class="radio-option"><input type="radio" name="q10" value="FALSE" class="ans-input" data-q="10"> FALSE</label>
-              <label class="radio-option"><input type="radio" name="q10" value="NOT GIVEN" class="ans-input" data-q="10"> NOT GIVEN</label>
-            </div>
-          </div>
-
-          <div class="q-block" id="qb-11" data-qnum="11">
-            <button type="button" class="q-flag" data-flag="11">🚩</button>
-            <div class="q-text"><span class="q-num">11</span>If an object is made of several plastics, these prove hard to break down and reuse.</div>
-            <div class="tf-group">
-              <label class="radio-option"><input type="radio" name="q11" value="TRUE" class="ans-input" data-q="11"> TRUE</label>
-              <label class="radio-option"><input type="radio" name="q11" value="FALSE" class="ans-input" data-q="11"> FALSE</label>
-              <label class="radio-option"><input type="radio" name="q11" value="NOT GIVEN" class="ans-input" data-q="11"> NOT GIVEN</label>
-            </div>
-          </div>
-
-          <div class="q-block" id="qb-12" data-qnum="12">
-            <button type="button" class="q-flag" data-flag="12">🚩</button>
-            <div class="q-text"><span class="q-num">12</span>Adding starch to plastic makes it more durable.</div>
-            <div class="tf-group">
-              <label class="radio-option"><input type="radio" name="q12" value="TRUE" class="ans-input" data-q="12"> TRUE</label>
-              <label class="radio-option"><input type="radio" name="q12" value="FALSE" class="ans-input" data-q="12"> FALSE</label>
-              <label class="radio-option"><input type="radio" name="q12" value="NOT GIVEN" class="ans-input" data-q="12"> NOT GIVEN</label>
-            </div>
-          </div>
-
-          <div class="q-block" id="qb-13" data-qnum="13">
-            <button type="button" class="q-flag" data-flag="13">🚩</button>
-            <div class="q-text"><span class="q-num">13</span>Containers which are designed to decompose need particular storage conditions.</div>
-            <div class="tf-group">
-              <label class="radio-option"><input type="radio" name="q13" value="TRUE" class="ans-input" data-q="13"> TRUE</label>
-              <label class="radio-option"><input type="radio" name="q13" value="FALSE" class="ans-input" data-q="13"> FALSE</label>
-              <label class="radio-option"><input type="radio" name="q13" value="NOT GIVEN" class="ans-input" data-q="13"> NOT GIVEN</label>
-            </div>
+        <div class="panel panel-right" id="panel-questions">
+          <!-- [PLACEHOLDER: QUESTION GROUPS — AI Studio chèn .qgroup theo từng passage] -->
+          <div class="qgroup">
+            <div class="qgroup-instructions"><b>Questions 1–5</b><br>[Hướng dẫn câu hỏi...]</div>
+            <!-- mỗi câu hỏi: .qitem có qnum / qtext / input đáp án / qflag-btn -->
           </div>
         </div>
       </div>
-
-      <!-- ===== PASSAGE 2 QUESTIONS ===== -->
-      <div class="passage-questions" data-passage="2">
-
-        <div class="q-section">
-          <div class="q-section-title">Questions 14–20</div>
-          <div class="q-instructions">Reading Passage 2 has seven paragraphs. Choose the correct heading for each paragraph from the list of headings below. Write the correct number, <b>i–x</b>.<br><br>
-            <b>List of Headings</b><br>
-            i &nbsp;Global resistance to lean manufacturing<br>
-            ii &nbsp;The historical context<br>
-            iii &nbsp;Procedures for controlling quality<br>
-            iv &nbsp;The pros and cons of different production systems<br>
-            v &nbsp;The impact on profits<br>
-            vi &nbsp;Procedures for controlling supply<br>
-            vii &nbsp;The origin of the term<br>
-            viii &nbsp;A crucial difference in levels of quality<br>
-            ix &nbsp;Working conditions<br>
-            x &nbsp;Interdependent strategies for controlling expenditure
-          </div>
-
-          <div class="q-block" id="qb-14" data-qnum="14">
-            <button type="button" class="q-flag" data-flag="14">🚩</button>
-            <div class="q-text"><span class="q-num">14</span>Paragraph 14</div>
-            <select class="text-input ans-input heading-select" data-q="14"></select>
-          </div>
-          <div class="q-block" id="qb-15" data-qnum="15">
-            <button type="button" class="q-flag" data-flag="15">🚩</button>
-            <div class="q-text"><span class="q-num">15</span>Paragraph 15</div>
-            <select class="text-input ans-input heading-select" data-q="15"></select>
-          </div>
-          <div class="q-block" id="qb-16" data-qnum="16">
-            <button type="button" class="q-flag" data-flag="16">🚩</button>
-            <div class="q-text"><span class="q-num">16</span>Paragraph 16</div>
-            <select class="text-input ans-input heading-select" data-q="16"></select>
-          </div>
-          <div class="q-block" id="qb-17" data-qnum="17">
-            <button type="button" class="q-flag" data-flag="17">🚩</button>
-            <div class="q-text"><span class="q-num">17</span>Paragraph 17</div>
-            <select class="text-input ans-input heading-select" data-q="17"></select>
-          </div>
-          <div class="q-block" id="qb-18" data-qnum="18">
-            <button type="button" class="q-flag" data-flag="18">🚩</button>
-            <div class="q-text"><span class="q-num">18</span>Paragraph 18</div>
-            <select class="text-input ans-input heading-select" data-q="18"></select>
-          </div>
-          <div class="q-block" id="qb-19" data-qnum="19">
-            <button type="button" class="q-flag" data-flag="19">🚩</button>
-            <div class="q-text"><span class="q-num">19</span>Paragraph 19</div>
-            <select class="text-input ans-input heading-select" data-q="19"></select>
-          </div>
-          <div class="q-block" id="qb-20" data-qnum="20">
-            <button type="button" class="q-flag" data-flag="20">🚩</button>
-            <div class="q-text"><span class="q-num">20</span>Paragraph 20</div>
-            <select class="text-input ans-input heading-select" data-q="20"></select>
-          </div>
-        </div>
-
-        <div class="q-section">
-          <div class="q-section-title">Questions 21–26</div>
-          <div class="q-instructions">Complete the sentences below. Write <b>NO MORE THAN THREE WORDS</b> from the passage for each answer.</div>
-
-          <div class="q-block" id="qb-21" data-qnum="21">
-            <button type="button" class="q-flag" data-flag="21">🚩</button>
-            <div class="q-text"><span class="q-num">21</span>A small number of unusual cars are still produced by the <input type="text" class="text-input ans-input" data-q="21"> method.</div>
-          </div>
-          <div class="q-block" id="qb-22" data-qnum="22">
-            <button type="button" class="q-flag" data-flag="22">🚩</button>
-            <div class="q-text"><span class="q-num">22</span>Lean production requires staff who are <input type="text" class="text-input ans-input" data-q="22">.</div>
-          </div>
-          <div class="q-block" id="qb-23" data-qnum="23">
-            <button type="button" class="q-flag" data-flag="23">🚩</button>
-            <div class="q-text"><span class="q-num">23</span>Lean production employs fewer people, and uses less <input type="text" class="text-input ans-input" data-q="23">, equipment and time.</div>
-          </div>
-          <div class="q-block" id="qb-24" data-qnum="24">
-            <button type="button" class="q-flag" data-flag="24">🚩</button>
-            <div class="q-text"><span class="q-num">24</span>Storage facilities are not needed if a procedure known as <input type="text" class="text-input ans-input" data-q="24"> is implemented in the lean production method.</div>
-          </div>
-          <div class="q-block" id="qb-25" data-qnum="25">
-            <button type="button" class="q-flag" data-flag="25">🚩</button>
-            <div class="q-text"><span class="q-num">25</span>Autonamation is a procedure for spotting any <input type="text" class="text-input ans-input" data-q="25"> in the products on a production line.</div>
-          </div>
-          <div class="q-block" id="qb-26" data-qnum="26">
-            <button type="button" class="q-flag" data-flag="26">🚩</button>
-            <div class="q-text"><span class="q-num">26</span>At Toyota factories, <input type="text" class="text-input ans-input" data-q="26"> are suspended above manual production lines in order to show where production has to be halted.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== PASSAGE 3 QUESTIONS ===== -->
-      <div class="passage-questions" data-passage="3">
-
-        <div class="q-section">
-          <div class="q-section-title">Questions 27–32</div>
-          <div class="q-instructions">Reading Passage 3 has six paragraphs, A–F. Which paragraph contains the following information? Write the correct letter, <b>A–F</b>. <i>NB You may use any letter more than once.</i></div>
-
-          <div class="q-block" id="qb-27" data-qnum="27">
-            <button type="button" class="q-flag" data-flag="27">🚩</button>
-            <div class="q-text"><span class="q-num">27</span>reasons why watching sport can bring emotional satisfaction</div>
-            <input type="text" class="text-input ans-input" data-q="27" placeholder="A–F" style="width:80px;">
-          </div>
-          <div class="q-block" id="qb-28" data-qnum="28">
-            <button type="button" class="q-flag" data-flag="28">🚩</button>
-            <div class="q-text"><span class="q-num">28</span>an explanation of why beginners struggle with sports tasks</div>
-            <input type="text" class="text-input ans-input" data-q="28" placeholder="A–F" style="width:80px;">
-          </div>
-          <div class="q-block" id="qb-29" data-qnum="29">
-            <button type="button" class="q-flag" data-flag="29">🚩</button>
-            <div class="q-text"><span class="q-num">29</span>a factor that can work alongside mirroring in sports competitions to maintain peak performance</div>
-            <input type="text" class="text-input ans-input" data-q="29" placeholder="A–F" style="width:80px;">
-          </div>
-          <div class="q-block" id="qb-30" data-qnum="30">
-            <button type="button" class="q-flag" data-flag="30">🚩</button>
-            <div class="q-text"><span class="q-num">30</span>a comparison between the mirror neurons of human beings and primates</div>
-            <input type="text" class="text-input ans-input" data-q="30" placeholder="A–F" style="width:80px;">
-          </div>
-          <div class="q-block" id="qb-31" data-qnum="31">
-            <button type="button" class="q-flag" data-flag="31">🚩</button>
-            <div class="q-text"><span class="q-num">31</span>mention of integrating visual and motor processes to understand athletic movements</div>
-            <input type="text" class="text-input ans-input" data-q="31" placeholder="A–F" style="width:80px;">
-          </div>
-          <div class="q-block" id="qb-32" data-qnum="32">
-            <button type="button" class="q-flag" data-flag="32">🚩</button>
-            <div class="q-text"><span class="q-num">32</span>reference to the first discovery of brain activity associated with mirror neurons</div>
-            <input type="text" class="text-input ans-input" data-q="32" placeholder="A–F" style="width:80px;">
-          </div>
-        </div>
-
-        <div class="q-section">
-          <div class="q-section-title">Questions 33–35</div>
-          <div class="q-instructions">Choose the correct answer.</div>
-
-          <div class="q-block" id="qb-33" data-qnum="33">
-            <button type="button" class="q-flag" data-flag="33">🚩</button>
-            <div class="q-text"><span class="q-num">33</span>What point does the writer make about professional athletes in Paragraph B?</div>
-            <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="q33" value="A" class="ans-input" data-q="33"> A. They meticulously plan each phase of their movements.</label>
-              <label class="radio-option"><input type="radio" name="q33" value="B" class="ans-input" data-q="33"> B. They engage in regular practice to retain and refine their skills.</label>
-              <label class="radio-option"><input type="radio" name="q33" value="C" class="ans-input" data-q="33"> C. They actively consider and analyse the actions of their peers.</label>
-              <label class="radio-option"><input type="radio" name="q33" value="D" class="ans-input" data-q="33"> D. They perform their actions without conscious contemplation.</label>
-            </div>
-          </div>
-
-          <div class="q-block" id="qb-34" data-qnum="34">
-            <button type="button" class="q-flag" data-flag="34">🚩</button>
-            <div class="q-text"><span class="q-num">34</span>In this passage, the writer mentions the example of a remarkable golfer to illustrate</div>
-            <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="q34" value="A" class="ans-input" data-q="34"> A. the critical role of imitation in the formation of consciousness.</label>
-              <label class="radio-option"><input type="radio" name="q34" value="B" class="ans-input" data-q="34"> B. the improvement of sporting ability through watching sport.</label>
-              <label class="radio-option"><input type="radio" name="q34" value="C" class="ans-input" data-q="34"> C. the stimulation of a resonance in the observer's motor system.</label>
-              <label class="radio-option"><input type="radio" name="q34" value="D" class="ans-input" data-q="34"> D. the motivation of the observer's interest and love for golf.</label>
-            </div>
-          </div>
-
-          <div class="q-block" id="qb-35" data-qnum="35">
-            <button type="button" class="q-flag" data-flag="35">🚩</button>
-            <div class="q-text"><span class="q-num">35</span>The principal motivation for watching sport mentioned by the writer is</div>
-            <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="q35" value="A" class="ans-input" data-q="35"> A. to improve our physical ability by analyzing the athletes' technical strategies</label>
-              <label class="radio-option"><input type="radio" name="q35" value="B" class="ans-input" data-q="35"> B. to unite viewers from different nations.</label>
-              <label class="radio-option"><input type="radio" name="q35" value="C" class="ans-input" data-q="35"> C. to experience intense positive emotions by immersing oneself in sport.</label>
-              <label class="radio-option"><input type="radio" name="q35" value="D" class="ans-input" data-q="35"> D. to become a sports professional.</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="q-section">
-          <div class="q-section-title">Questions 36–40</div>
-          <div class="q-instructions">Choose <b>YES</b> if the statement agrees with the claims of the writer, choose <b>NO</b> if the statement contradicts the claims of the writer, or choose <b>NOT GIVEN</b> if it is impossible to say what the writer thinks about this.</div>
-
-          <div class="q-block" id="qb-36" data-qnum="36">
-            <button type="button" class="q-flag" data-flag="36">🚩</button>
-            <div class="q-text"><span class="q-num">36</span>The emergence of Homer's epic poetry occurred in the same historical period as the beginning of the Olympic Games.</div>
-            <div class="tf-group">
-              <label class="radio-option"><input type="radio" name="q36" value="YES" class="ans-input" data-q="36"> YES</label>
-              <label class="radio-option"><input type="radio" name="q36" value="NO" class="ans-input" data-q="36"> NO</label>
-              <label class="radio-option"><input type="radio" name="q36" value="NOT GIVEN" class="ans-input" data-q="36"> NOT GIVEN</label>
-            </div>
-          </div>
-
-          <div class="q-block" id="qb-37" data-qnum="37">
-            <button type="button" class="q-flag" data-flag="37">🚩</button>
-            <div class="q-text"><span class="q-num">37</span>The Italian scientists concluded that the motor actions encoded within the premotor cortex have no discernible link to unrelated collections of neurons.</div>
-            <div class="tf-group">
-              <label class="radio-option"><input type="radio" name="q37" value="YES" class="ans-input" data-q="37"> YES</label>
-              <label class="radio-option"><input type="radio" name="q37" value="NO" class="ans-input" data-q="37"> NO</label>
-              <label class="radio-option"><input type="radio" name="q37" value="NOT GIVEN" class="ans-input" data-q="37"> NOT GIVEN</label>
-            </div>
-          </div>
-
-          <div class="q-block" id="qb-38" data-qnum="38">
-            <button type="button" class="q-flag" data-flag="38">🚩</button>
-            <div class="q-text"><span class="q-num">38</span>Spectators can achieve flawless golf swings merely by watching the Masters Tournament without physical practice.</div>
-            <div class="tf-group">
-              <label class="radio-option"><input type="radio" name="q38" value="YES" class="ans-input" data-q="38"> YES</label>
-              <label class="radio-option"><input type="radio" name="q38" value="NO" class="ans-input" data-q="38"> NO</label>
-              <label class="radio-option"><input type="radio" name="q38" value="NOT GIVEN" class="ans-input" data-q="38"> NOT GIVEN</label>
-            </div>
-          </div>
-
-          <div class="q-block" id="qb-39" data-qnum="39">
-            <button type="button" class="q-flag" data-flag="39">🚩</button>
-            <div class="q-text"><span class="q-num">39</span>Some neuroscientists believe that certain types of still images might activate mirror neurons under specific experimental conditions.</div>
-            <div class="tf-group">
-              <label class="radio-option"><input type="radio" name="q39" value="YES" class="ans-input" data-q="39"> YES</label>
-              <label class="radio-option"><input type="radio" name="q39" value="NO" class="ans-input" data-q="39"> NO</label>
-              <label class="radio-option"><input type="radio" name="q39" value="NOT GIVEN" class="ans-input" data-q="39"> NOT GIVEN</label>
-            </div>
-          </div>
-
-          <div class="q-block" id="qb-40" data-qnum="40">
-            <button type="button" class="q-flag" data-flag="40">🚩</button>
-            <div class="q-text"><span class="q-num">40</span>The mu system is suppressed while we are dynamically involved in a particular activity.</div>
-            <div class="tf-group">
-              <label class="radio-option"><input type="radio" name="q40" value="YES" class="ans-input" data-q="40"> YES</label>
-              <label class="radio-option"><input type="radio" name="q40" value="NO" class="ans-input" data-q="40"> NO</label>
-              <label class="radio-option"><input type="radio" name="q40" value="NOT GIVEN" class="ans-input" data-q="40"> NOT GIVEN</label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- SIDEBAR -->
-    <div id="sidebarFloat">
-      <div class="sidebar-header">G.<span style="color:var(--gold)">EDU</span> — Bảng câu hỏi</div>
-      <div class="sidebar-group active" data-sgroup="all">
-        <div class="sidebar-section-label">Passage 1 (1–13)</div>
-        <div class="qgrid" id="grid-p1"></div>
-        <div class="sidebar-section-label">Passage 2 (14–26)</div>
-        <div class="qgrid" id="grid-p2"></div>
-        <div class="sidebar-section-label">Passage 3 (27–40)</div>
-        <div class="qgrid" id="grid-p3"></div>
-      </div>
-
-      <div class="sidebar-footer">
-        <button type="button" id="flagListBtn">🚩 Danh sách câu đã đánh dấu</button>
-      </div>
-
-      <div class="legend">
-        <div><span class="legend-dot" style="background:#fafafa;border:1px solid #ddd;"></span>Chưa làm</div>
-        <div><span class="legend-dot" style="background:var(--gold-light);"></span>Đã làm</div>
-        <div><span class="legend-dot" style="background:#ffb070;"></span>Đã flag</div>
-        <div><span class="legend-dot" style="background:var(--gold-light);box-shadow:inset 0 0 0 2px #e8843d;"></span>Flag + có đáp án</div>
-      </div>
-    </div>
-  </div>
-
-  <div id="footer">
-    <div class="progress-info">Đã trả lời: <b id="answeredCount">0</b> / 40</div>
-    <button type="button" id="submitBtn">Nộp bài</button>
-    <button type="button" id="reviewBackBtn" class="hidden">← Về kết quả</button>
+    </main>
   </div>
 </div>
 
-<!-- HIGHLIGHT POPUP -->
-<div id="hlPopup">
-  <button type="button" class="hb-yellow" onclick="applyHighlight('hl-yellow')" title="Vàng"></button>
-  <button type="button" class="hb-blue" onclick="applyHighlight('hl-blue')" title="Xanh dương"></button>
-  <button type="button" class="hb-green" onclick="applyHighlight('hl-green')" title="Xanh lá"></button>
-  <button type="button" class="hb-pink" onclick="applyHighlight('hl-pink')" title="Hồng"></button>
-  <button type="button" class="hb-clear" onclick="clearHighlightAtSelection()">Xóa</button>
+<!-- Floating highlight toolbar -->
+<div class="hl-toolbar" id="hl-toolbar">
+  <div class="hl-swatch" data-c="yellow"></div>
+  <div class="hl-swatch" data-c="green"></div>
+  <div class="hl-swatch" data-c="blue"></div>
+  <div class="hl-swatch" data-c="pink"></div>
+  <div class="hl-swatch-erase" id="hl-erase">✕</div>
 </div>
 
-<!-- FLAG LIST MODAL -->
-<div class="modal-overlay" id="flagModal">
-  <div class="modal-box">
-    <h3>🚩 Câu đã đánh dấu</h3>
-    <div id="flagListContent"></div>
-    <button type="button" class="modal-close" onclick="closeFlagModal()">Đóng</button>
-  </div>
-</div>
+<!-- ================= MODALS ================= -->
 
-<!-- CONFIRM SUBMIT MODAL -->
-<div class="modal-overlay" id="confirmModal">
-  <div class="modal-box" style="text-align:center;">
-    <h3>Xác nhận nộp bài</h3>
-    <p style="font-size:14px;color:#666;margin-bottom:18px;">Bạn có chắc chắn muốn nộp bài? Sau khi nộp, bạn không thể thay đổi đáp án.</p>
-    <div style="display:flex;gap:10px;">
-      <button type="button" class="modal-close" style="background:#ccc;color:#333;" onclick="closeConfirmModal()">Hủy</button>
-      <button type="button" class="modal-close" onclick="doSubmit()">Nộp bài</button>
+<!-- Submit confirm modal -->
+<div class="overlay" id="overlay-submit">
+  <div class="modal">
+    <div class="modal-title" data-locked-id="submit-modal-title"><!-- khóa, JS bơm --></div>
+    <div class="modal-text">
+      <span data-locked-id="submit-modal-prefix"><!-- khóa --></span> <b id="modal-answered-count">0</b><span data-locked-id="submit-modal-suffix"><!-- khóa --></span>
+      <span id="modal-unanswered-warn"></span><br><br>
+      <span data-locked-id="submit-modal-footer"><!-- khóa --></span>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-secondary" id="btn-cancel-submit">Làm tiếp</button>
+      <button class="modal-btn modal-btn-primary" id="btn-confirm-submit">Nộp bài</button>
     </div>
   </div>
 </div>
 
-<!-- ============ RESULT SCREEN ============ -->
-<div id="resultScreen" class="hidden">
-  <div class="result-card" id="resultCard">
-    <div class="check-icon">✓</div>
-    <h2>Chúc mừng <span class="name-highlight" id="resultName">—</span><br>đã hoàn thành bài thi!</h2>
-    <div class="sub">G.EDU — IELTS Reading Test 3</div>
-    <div class="result-stats">
-      <div class="result-stat">
-        <div class="num" id="resultScore">0/40</div>
-        <div class="label">Số câu đúng</div>
-      </div>
-      <div class="result-stat band">
-        <div class="num" id="resultBand">0.0</div>
-        <div class="label">Band Score</div>
-      </div>
+<!-- Flagged questions panel -->
+<div class="overlay" id="overlay-flags">
+  <div class="flagpanel">
+    <div class="flagpanel-head">
+      <h3>🚩 Câu đã đánh dấu</h3>
+      <button class="flagpanel-close" id="btn-close-flags">✕</button>
     </div>
-    <button type="button" id="reviewBtn">👁 Xem lại bài làm</button>
-    <button type="button" id="answerSheetBtn" style="width:100%;padding:13px;margin-top:10px;background:var(--cream);color:var(--navy);border:1.5px solid var(--gold);border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:background 0.2s;">📋 Xem Bảng Tổng Hợp Đáp Án</button>
-  </div>
-
-  <!-- ANSWER SHEET PANEL -->
-  <div class="answer-sheet-overlay" id="answerSheetOverlay">
-    <div class="answer-sheet-box">
-      <div class="as-header">
-        <div>
-          <div class="as-title">PHIẾU TRẢ LỜI — ANSWER SHEET</div>
-          <div class="as-sub" id="asSub">—</div>
-        </div>
-        <button type="button" class="as-close" id="answerSheetCloseBtn">✕</button>
-      </div>
-      <div class="as-summary">
-        <span>Số câu đã trả lời: <b id="asScore">0/40</b></span>
-      </div>
-      <div class="as-table-wrap" id="asTableWrap">
-        <table class="as-col-table"><thead><tr><th>Câu</th><th>Đáp án của bạn</th></tr></thead><tbody id="asCol1"></tbody></table>
-        <table class="as-col-table"><thead><tr><th>Câu</th><th>Đáp án của bạn</th></tr></thead><tbody id="asCol2"></tbody></table>
-        <table class="as-col-table"><thead><tr><th>Câu</th><th>Đáp án của bạn</th></tr></thead><tbody id="asCol3"></tbody></table>
-        <table class="as-col-table"><thead><tr><th>Câu</th><th>Đáp án của bạn</th></tr></thead><tbody id="asCol4"></tbody></table>
-      </div>
-      <div class="as-note">📷 Chụp ảnh màn hình bảng này để lưu lại kết quả của bạn.</div>
+    <div class="flagpanel-body" id="flagpanel-body">
+      <div class="flagpanel-empty" data-locked-id="flagpanel-empty"><!-- khóa, JS bơm --></div>
     </div>
   </div>
 </div>
+
+<!-- ================= 3. RESULT SCREEN ================= -->
+<div class="screen" id="screen-result">
+  <div class="result-wrap">
+    <div class="result-card">
+      <div class="result-check">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 13l4 4L19 7" stroke="#1a1208" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="result-title">
+        Chúc mừng <span class="name-hl" id="result-name">—</span><br>đã hoàn thành bài thi!
+      </div>
+      <div class="result-sub">G.EDU — <span id="result-test-name">[Tên bài test]</span></div>
+
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="result-stat-num" id="result-score">0/40</div>
+          <div class="result-stat-label">Số câu đúng</div>
+        </div>
+        <div class="result-stat-divider"></div>
+        <div class="result-stat">
+          <div class="result-stat-num gold" id="result-band">—</div>
+          <div class="result-stat-label">Band Score</div>
+        </div>
+      </div>
+
+      <div class="result-cta-row">
+        <button class="result-cta result-cta-primary" id="btn-go-sheet">📋 Xem Bảng Tổng Hợp Đáp Án</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 4. ANSWER SHEET SCREEN ================= -->
+<div class="screen" id="screen-sheet">
+  <div class="sheet-wrap">
+    <div class="sheet-card">
+      <div class="sheet-head">
+        <div class="sheet-title">Answer Sheet</div>
+        <div class="sheet-meta">
+          <span id="sheet-name">—</span> · Lớp <span id="sheet-class">—</span><br>
+          <span id="sheet-test-name">[TÊN BÀI TEST]</span>
+        </div>
+      </div>
+      <div class="sheet-warn" data-locked-id="sheet-warn"><!-- khóa, JS bơm --></div>
+      <div class="sheet-grid" id="sheet-grid"><!-- [JS GENERATED: 40 sheet-cell] --></div>
+      <div class="sheet-footer">
+        <button class="result-cta result-cta-primary" id="btn-go-review">Đã lưu — Xem lại bài làm →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
 <script>
-/* ================== CONFIG ================== */
-const GAS_URL = "https://script.google.com/macros/s/AKfycbze-ULqfpnB5IcJxAvg2m7IfSqkoUY4JmoHnjvpuGvxodzmLbhHHlcqxfcnha2aahY/exec";
-const TEST_NAME = "reading_test3";
-const TOTAL_TIME = 60 * 60;
+/* ============================================================
+   G.EDU IELTS READING — CORE LOGIC
+   ------------------------------------------------------------
+   AI STUDIO HƯỚNG DẪN CHÈN DATA: tìm các khối đánh dấu
+   "// ===== TODO[AI STUDIO]" bên dưới — đó là toàn bộ chỗ cần
+   nhét nội dung đề + đáp án. Phần còn lại là logic UX/UI dùng
+   chung, không cần đụng vào.
+   ============================================================ */
 
-const _k = atob("eyIxIjoicGhvdG9ncmFwaGljIGZpbG0iLCIyIjoiYmFrZWxpdGUiLCIzIjoiZWxlY3RyaWNhbCBzd2l0Y2hlcyIsIjQiOiJicml0YWluIiwiNSI6ImZpcmVwcm9vZiIsIjYiOiJnbGFzcyIsIjciOiJmb2FtIiwiOCI6IkZBTFNFIiwiOSI6Ik5PVCBHSVZFTiIsIjEwIjoiRkFMU0UiLCIxMSI6IlRSVUUiLCIxMiI6IkZBTFNFIiwiMTMiOiJUUlVFIiwiMTQiOiJpaSIsIjE1IjoiaXYiLCIxNiI6InZpaSIsIjE3IjoidmlpaSIsIjE4IjoieCIsIjE5IjoidmkiLCIyMCI6ImlpaSIsIjIxIjoiY3JhZnQiLCIyMiI6Im11bHRpLXNraWxsZWQiLCIyMyI6Im1hbnVmYWN0dXJpbmcgc3BhY2UiLCIyNCI6Imp1c3QtaW4tdGltZSIsIjI1IjoiYWJub3JtYWxpdGllcyIsIjI2IjoibGlnaHRzIiwiMjciOiJmIiwiMjgiOiJiIiwiMjkiOiJlIiwiMzAiOiJjIiwiMzEiOiJlIiwiMzIiOiJkIiwiMzMiOiJEIiwiMzQiOiJCIiwiMzUiOiJDIiwiMzYiOiJZRVMiLCIzNyI6Ik5PIiwiMzgiOiJOTyIsIjM5IjoiTk9UIEdJVkVOIiwiNDAiOiJZRVMifQ==");
-const ANSWER_KEY = JSON.parse(_k);
+/* ---------- 0. CONFIG — TODO[AI STUDIO]: điền các giá trị này ---------- */
+const TEST_NAME   = 'reading_test3';        // TODO: vd 'reading_test7' — dùng để route sheet tab + localStorage prefix
+const TEST_LABEL  = 'Reading Test 3';       // TODO: tên hiển thị, vd 'Reading Test 7'
+const GAS_URL     = 'https://script.google.com/macros/s/AKfycbze-ULqfpnB5IcJxAvg2m7IfSqkoUY4JmoHnjvpuGvxodzmLbhHHlcqxfcnha2aahY/exec';
+const DURATION_MIN = 60;                    // phút làm bài
+const TOTAL_QUESTIONS = 40;
+const LS_PREFIX = TEST_NAME.replace('reading_','rt_') + '_'; // vd rt_testX_ -> tuỳ chỉnh nếu muốn ngắn hơn (rt7_)
 
-/* ================== STATE ================== */
-let studentInfo = {name:'', class:''};
-let timerInterval = null;
-let timeLeft = TOTAL_TIME;
-let isSubmitted = false;
-let flaggedQuestions = new Set();
+document.getElementById('login-test-name').textContent = TEST_LABEL;
+document.getElementById('sb-test-name').textContent = TEST_LABEL;
+document.getElementById('sheet-test-name').textContent = TEST_LABEL;
 
-/* ================== LOGIN ================== */
-const nameInput = document.getElementById('studentName');
-const classInput = document.getElementById('studentClass');
-const startBtn = document.getElementById('startBtn');
+/* ============================================================
+   ⚠️ KHÓA NỘI DUNG NOTICE / CẢNH BÁO — KHÔNG ĐƯỢC SỬA, KHÔNG ĐƯỢC
+   VIẾT LẠI, KHÔNG ĐƯỢC DIỄN GIẢI LẠI BẰNG AI KHI MERGE DATA.
+   ------------------------------------------------------------
+   AI STUDIO / BẤT KỲ CÔNG CỤ MERGE NÀO: đây là các đoạn văn bản
+   pháp lý/vận hành cố định của G.EDU (cảnh báo nộp bài, lưu ý
+   chụp Answer Sheet, banner review mode...). TUYỆT ĐỐI không
+   được tự ý đổi câu chữ, rút gọn, dịch lại, hay "cải thiện văn
+   phong" các giá trị bên dưới khi xử lý/merge nội dung đề thi.
+   Nếu cần thay đổi nội dung đề thi, chỉ được sửa các biến ở mục
+   "0. CONFIG", "1. PASSAGES & QUESTIONS DATA" và "2. ĐÁP ÁN ĐÚNG"
+   phía trên — KHÔNG đụng vào khối LOCKED_NOTICES này.
 
-function checkLoginFields(){
-  if(nameInput.value.trim() && classInput.value.trim()){
-    startBtn.classList.add('active');
-  } else {
-    startBtn.classList.remove('active');
-  }
-}
-nameInput.addEventListener('input', () => {
-  nameInput.value = nameInput.value.toUpperCase();
-  checkLoginFields();
+   Cơ chế bảo vệ: toàn bộ text bên dưới được JS bơm vào DOM lúc
+   khởi động (không hard-code sẵn trong HTML) + có hàm
+   verifyLockedNotices() kiểm tra lại sau khi DOM sẵn sàng, nếu
+   phát hiện bị ghi đè sai lệch sẽ tự động phục hồi đúng bản gốc.
+   ============================================================ */
+const LOCKED_NOTICES = Object.freeze({
+  'login-note': 'Vui lòng nhập Họ tên và Lớp bằng <b>CHỮ IN HOA</b>. Thông tin chính xác sẽ giúp hệ thống ghi nhận và khôi phục bài làm nếu bạn thoát hoặc tải lại trang.',
+  'review-banner-text': '📖 Đang xem lại bài làm — <b>chế độ chỉ xem, không thể chỉnh sửa</b>',
+  'sheet-warn': '📸 Vui lòng chụp lại Answer Sheet để lưu bài làm — phòng trường hợp thoát trang hoặc đổi thiết bị làm mất kết quả.',
+  'submit-modal-title': 'Xác nhận nộp bài?',
+  'submit-modal-prefix': 'Bạn đã trả lời',
+  'submit-modal-suffix': '/40 câu.',
+  'submit-modal-footer': 'Sau khi nộp, bạn sẽ không thể chỉnh sửa đáp án.',
+  'flagpanel-empty': 'Chưa có câu nào được đánh dấu.'
 });
-classInput.addEventListener('input', () => {
-  classInput.value = classInput.value.toUpperCase();
-  checkLoginFields();
-});
 
-startBtn.addEventListener('click', () => {
-  if(!startBtn.classList.contains('active')) return;
-  studentInfo.name = nameInput.value.trim();
-  studentInfo.class = classInput.value.trim();
-  document.getElementById('hdrName').textContent = studentInfo.name;
-  document.getElementById('hdrClass').textContent = studentInfo.class;
-  document.getElementById('loginScreen').classList.add('hidden');
-  document.getElementById('testScreen').classList.remove('hidden');
-
-  const wasSubmitted = loadProgress();
-  buildGrids();
-
-  if(wasSubmitted){
-    isSubmitted = true;
-    const answers = getAnswers();
-    let correctCount = 0;
-    const details = {};
-    for(let i=1;i<=40;i++){
-      const studentAns = (answers[i]||"").toString().trim();
-      const correctAns = (ANSWER_KEY[i]||"").toString().trim();
-      const isCorrect = studentAns.toLowerCase() === correctAns.toLowerCase() && studentAns !== "";
-      if(isCorrect) correctCount++;
-      details[i] = {
-        student: studentAns,
-        correct: correctAns,
-        status: studentAns === "" ? "blank" : (isCorrect ? "correct" : "wrong")
-      };
+function applyLockedNotices(){
+  document.querySelectorAll('[data-locked-id]').forEach(el=>{
+    const key = el.getAttribute('data-locked-id');
+    if(LOCKED_NOTICES.hasOwnProperty(key)){
+      el.innerHTML = LOCKED_NOTICES[key];
     }
-    const band = scoreToBand(correctCount);
-    computedResult = {correctCount, band, details};
-    showResultScreen(correctCount, band);
-  } else {
-    startTimer();
-  }
-});
-
-/* ================== TAB SWITCHING ================== */
-let currentTab = 1;
-let preserveScroll = false;
-
-document.querySelectorAll('.tab-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    switchTab(btn.dataset.tab);
   });
-});
+}
 
-function switchTab(tabNum, scrollToQ=null){
-  currentTab = parseInt(tabNum);
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===String(tabNum)));
-  document.querySelectorAll('.passage').forEach(p=>p.classList.toggle('active', p.dataset.passage===String(tabNum)));
-  document.querySelectorAll('.passage-questions').forEach(p=>p.classList.toggle('active', p.dataset.passage===String(tabNum)));
-
-  const qCol = document.getElementById('questionCol');
-  const pCol = document.getElementById('passageCol');
-  if(!preserveScroll){
-    qCol.scrollTop = 0;
-    pCol.scrollTop = 0;
-  }
-  preserveScroll = false;
-
-  if(scrollToQ){
-    setTimeout(()=>{
-      const el = document.getElementById('qb-'+scrollToQ);
-      if(el){
-        el.scrollIntoView({behavior:'smooth', block:'center'});
-        el.classList.add('highlighted-q');
-        setTimeout(()=>el.classList.remove('highlighted-q'), 1500);
-      }
-    }, 60);
+/* Tự kiểm tra & tự chữa lành: chạy lại sau khi toàn bộ app khởi tạo,
+   phòng trường hợp công cụ merge bên ngoài (AI Studio) đã ghi đè
+   trực tiếp innerHTML của các phần tử data-locked-id bằng nội dung
+   khác trước khi/khi nạp trang. */
+let _isFixingLockedNotices = false;
+function verifyLockedNotices(){
+  if(_isFixingLockedNotices) return; // tránh vòng lặp với MutationObserver
+  let fixedCount = 0;
+  document.querySelectorAll('[data-locked-id]').forEach(el=>{
+    const key = el.getAttribute('data-locked-id');
+    const expected = LOCKED_NOTICES[key];
+    if(expected !== undefined && el.innerHTML.trim() !== expected.trim()){
+      _isFixingLockedNotices = true;
+      el.innerHTML = expected;
+      _isFixingLockedNotices = false;
+      fixedCount++;
+    }
+  });
+  if(fixedCount > 0){
+    console.warn('[G.EDU LOCK] Phát hiện ' + fixedCount + ' đoạn notice bị thay đổi sai lệch — đã tự động khôi phục về bản gốc.');
   }
 }
 
-/* ================== TIMER ================== */
-function startTimer(){
-  timerInterval = setInterval(()=>{
-    timeLeft--;
-    updateTimerDisplay();
-    if(timeLeft <= 300) document.getElementById('timer').classList.add('warning');
-    if(timeLeft <= 0){
-      clearInterval(timerInterval);
-      autoSubmit();
+applyLockedNotices();
+verifyLockedNotices();
+/* Lớp bảo vệ bổ sung: theo dõi DOM thời gian thực, nếu bất kỳ phần tử
+   data-locked-id nào bị thay đổi nội dung sau khi trang đã chạy (vd do
+   script merge bên ngoài chèn lại) thì tự động phục hồi ngay lập tức. */
+const lockedNoticeObserver = new MutationObserver(()=> verifyLockedNotices());
+document.querySelectorAll('[data-locked-id]').forEach(el=>{
+  lockedNoticeObserver.observe(el, { childList:true, characterData:true, subtree:true });
+});
+
+/* ---------- 1. PASSAGES & QUESTIONS DATA — TODO[AI STUDIO] ----------
+   Khai báo toàn bộ nội dung đề tại đây. Cấu trúc mẫu bên dưới.
+   QUESTION_DEFS: mảng mô tả từng câu hỏi để hệ thống tự sinh
+   qmap, sheet, flag, validate — không cần viết tay HTML câu hỏi
+   trong panel-questions (nhưng nếu AI Studio muốn viết tay HTML
+   trực tiếp thay vì dùng renderer, vẫn được — chỉ cần đảm bảo
+   mỗi qitem có id="anchor-{n}", input có atribute data-q="{n}",
+   và nút flag có class qflag-btn data-q="{n}").
+
+   type hỗ trợ: 'text' (fill-in/short answer), 'select' (dropdown,
+   dùng cho matching/letter bank), 'radio' (MCQ chọn 1),
+   'checkbox-pair' (MCQ chọn 2, vd Q19-20 dùng chung 1 group key)
+
+   PASSAGES: mảng 3 phần tử {title, meta, html} cho 3 tab.
+------------------------------------------------------------- */
+const PASSAGES = [
+  { title: 'THE DEVELOPMENT OF PLASTICS', meta: 'Passage 1', html: `
+      <p>The first plastics were developed as a substitute for natural rubber. Chemically, rubber is a polymer-a compound containing large molecules that are formed by the bonding of many smaller, simpler units, repeated over and over again. The same bonding principle-polymerization-is the basis of the creation of a huge range of plastics by the chemical industry.</p>
+      <p>The first plastic was developed as a result of a competition in the USA. In the 1860s, $10,000 was offered to anybody who could replace ivory-supplies of which were declining-with something equally good as a material for making billiard balls. The prize was won by John Wesley Hyatt, with a material called celluloid. Celluloid was made by dissolving cellulose, a carbohydrate obtained from plants, in a solution of camphor dissolved in ethanol. This new material rapidly found other applications in the manufacture of everyday products such as knife handles and detachable collars and cuffs. But perhaps the best-known celluloid product was photographic film, without which the film industry could never have taken off at the end of the 19th century.</p>
+      <p>Celluloid can be repeatedly softened and reshaped by heat, and is known as a thermoplastic. In 1907, Leo Baekeland (1863-1944), a Belgian chemist working in the USA, invented a different kind of plastic, by causing phenol and formaldehyde to react together. Baekeland called it Bakelite, and it was the first of the thermosets-plastic that can be cast and moulded while hot, but cannot be softened by heat and reshaped once they have set. Bakelite was a good insulator, and was resistant to water and acid. With these properties it was soon being used in the manufacture of electrical switches as well as a variety of domestic items.</p>
+      <p>As the century went on, the range of newly developed plastic increased. Chemists began looking for other small molecules that could be strung together to make polymers. In the 1930s, chemists in Britain discovered that the gas ethylene would polymerize under heat and pressure to form a thermoplastic they called polythene. Polypropylene followed in the 1950s. Both are used to make bottles, pipes and plastic bags. A small change in the starting material-replacing a hydrogen atom in ethylene with a chlorine atom-produced rigid PVC (polyvinyl chloride), a fireproof plastic suitable for drains and gutters. By adding certain chemicals, a soft form of PVC can be produced, suitable as a substitute for rubber in items such as waterproof clothing. A closely related plastic is Teflon or PTFE (polytetrafluoroethylene). It produces very little friction, making it ideal for products such as non-stick frying pans.</p>
+      <p>Polystyrene, a hard, clear material like glass, was developed during the 1930s in Germany, and its applications included food containers and toys. Expanded polystyrene is rigid and is widely used in packaging and insulation. Polyurethane, developed in the same country, was commonly produced as a foam which was very useful in the production of insulating materials.</p>
+      <p>In the 1930s, the first of the man-made fibres was created-nylon. Its inventor was a chemist called Wallace Carothers (1896-1937), who worked for the Du Pont company in the USA. He found that under the right conditions two particular chemicals would form a polymer that could be pumped out through holes and then stretched to form long glossy threads that could be woven like silk. Its first use was to make parachutes for the US armed forces in World War II. In the postwar years, it completely replaced silk in the manufacture of stockings.</p>
+      <p>Many other synthetic fibres joined nylon, including Orion, Acrilan, and Terylene. Today most garments are made of a blend of natural fibres, such as cotton and wool, and man-made fibres that make fabrics easier to look after.</p>
+      <p>Despite its enormous usefulness, plastic has its drawbacks. In fact one of its great strengths-its indestructibility- is its greatest disadvantage. Beaches all over the world, even on the remotest island, are littered with plastic bottles that nothing can destroy. Nor is it very easy to recycle plastics, as different types of plastics, as different types of plastic are often found in the same items and call for different treatments.</p>
+      <p>Plastics can be made biodegradable by incorporating into their structure a material such as starch, which is attacked by bacteria and causes the plastic to fall apart. Other materials can be incorporated that gradually decay in sunlight-although bottles made of such materials have to be stored in the dark, to ensure they do not disintegrate before they have been used.</p>
+    ` },
+  { title: 'LEAN PRODUCTION INNOVATION – IN MANUFACTURING SYSTEMS', meta: 'Passage 2', html: `
+      <p>14 ___________________________</p>
+      <p>After the First World War, car makers Henry Ford and Arthur Sloan of General Motors moved world manufacturing from centuries of craft production into the age of mass production. Largely as a result of this, the United States soon dominated the world economy. After the Second World War, and approximately a hundred years after Japan opened up to the modern world, Eiji Toyoda and Taiichi Ohno pioneered the concept of lean production at the Toyota car company. And now, although superimposing the method on existing mass production systems causes pain and upheaval, manufacturers around the world are trying to embrace this innovative system.</p>
+      <p>15 ___________________________</p>
+      <p>Perhaps the best way to describe lean production is to compare it with the two other major manufacturing systems: craft production and mass production. The craft producer uses highly skilled workers and simple but flexible tools to make exactly what the customer asks for – one item at a time. A present day example of this method is the customised production of a few exotic sports cars. The concept of craft production remains very popular, but the problem with it is obvious. Goods produced by the craft method – as cars once exclusively were – cost too much for most of us to afford. So at the beginning of the twentieth century, mass production was developed as an alternative method. The mass producer uses narrowly skilled professionals to design products which are then made by unskilled or semi-skilled workers, using expensive, single-purpose machines. These churn out standardised products in very high volumes. Because the machinery costs so much, and is so intolerant of disruption, the mass producer keeps standard designs in production for as long as possible. The result is that the customer gets lower costs, but at the expense of variety, and by means of work methods which most employees find boring and dispiriting. By contrast, the lean production system combines the advantages of craft and mass production, while avoiding the high cost of the former and the rigidity of the latter. Towards this end, companies appoint teams of multi-skilled workers to all levels of the organisation , and use highly flexible and increasingly automated machines to produce goods in enormous volume and variety.</p>
+      <p>16 ___________________________</p>
+      <p>Lean production is so called because, compared with mass production, it uses less of everything – half the human effort in the factory, half the manufacturing space, half the investment in tools, and half the engineering hours to develop the new product. It also results in far fewer defects.</p>
+      <p>17 ___________________________</p>
+      <p>Perhaps the most striking contrast between mass and lean production systems lies in their production standards. Mass producers set a limited goal for themselves: 'good enough', which translates into an acceptable number of defects, a maximum acceptable number of inventories, and a narrow range of standardised products. Lean producers, on the other hand, are unwilling to compromise standards in any of these areas.</p>
+      <p>18 ___________________________</p>
+      <p>Although cost reduction is the primary objective of the lean production system, it must meet three other intermediate objectives in order to achieve this: quantity control, quality assurance and respect for humanity. Firstly, the system must be able to adapt to daily and monthly fluctuations in demand. Secondly, each separate process must supply only good units to the subsequent process. Thirdly, in as far as the system uses human resources to attain its cost objectives, respect for human needs must be cultivated. It should be emphasised that none of these three objectives can be achieved separately.</p>
+      <p>19 ___________________________</p>
+      <p>The continuous flow of lean manufacturing production relies on two practical mechanisms: just-in-time and autonomation. Just-in-time means, for example, that in the process of assembling the parts to build a car, components from the preceding process should arrive at the next part of the line at exactly the right time and in the correct quantities. If just-in-time is fully realised throughout the company, then superfluous inventories are completely eliminated from the factory, making stores or warehouses unnecessary. However, relying solely on a central planning approach to control schedules for all stages of the production process simultaneously is very difficult in the case of cars, which consist of thousands of parts. So the lean system looks at the production flow in reverse; in other words, employees go to the preceding process to withdraw the necessary quantity of units at the appropriate time. The preceding process must produce only sufficient quantities of units to replace those that have been withdrawn, and in turn withdraws the requisite number of components from the process that precedes it.</p>
+      <p>20 ___________________________</p>
+      <p>Autonomation is the automatic checking for abnormalities in the production process. In order to realise just-in-time perfectly, only units which are in perfect condition must be allowed to flow to the next process, and this flow must be regular and uninterrupted. In other words, quality control must coexist with just-in-time procedures throughout the system. Autonomation involves building in a mechanism to prevent the multiplication of defects in machines or product lines. For example, in Toyota factories almost all the machines have been fitted with stopping devices, and the concept of autonomation has been extended to manual production lines. If something abnormal happens there, the worker pushes a button to stop the whole line, and lights, which are hung so high in the factory that they are visible to everyone, indicate the position of the problem.</p>
+    ` },
+  { title: 'HOW DOES WATCHING SPORT INFLUENCE THE BRAIN?', meta: 'Passage 3', html: `
+      <p>[A] During the epoch when the poet Homer unveiled his grand epic, the ancient Greeks initiated a festival where men contended in a race of roughly 200 metres. The victor would be rewarded with a symbolic olive branch. This event, known as the Olympics, has transcended its humble origins to embody the human quest for progress. The captivating nature of these games raises an intriguing question: what exactly draws us in as spectators? Is it the thrill of competition, the beauty of human movement, or something happening within our brains?</p>
+      <p>[B] In 1996, three Italian neuroscientists-Giacomo Rizzolatti, Leonardo Fogassi, and Vittorio Gallese conducted research on the premotor cortex of monkeys and made a groundbreaking discovery. They revealed a cluster of cells that act as a repository for motor actions, similar to 'grammar of movement'. These cellular networks represent the 'sentences' of full-body motions that our brains meticulously retain and refine. Take the art of swinging a golf club as an example. For those who only watch the Masters Tournament on television, playing golf may appear deceptively effortless. However, for novices, smoothly manoeuvring the asymmetrical metal club presents a nearly impossible challenge. This is because novices rely on conscious effort, utilising brain regions adjacent to the premotor cortex. Experts, by contrast, instinctively execute perfectly balanced movements, as their actions are deeply ingrained and intertwined with neurons in the premotor cortex. Their swing occurs with the serenity of a refined autopilot, requiring no conscious control. This neural distinction between novices and experts provides insight into how long-term training can physically reshape the brain.</p>
+      <p>[C] These neurons in the premotor cortex not only help explain why some athletes seem to have exceptional skills, but they also exhibit a wondrous characteristic that prompted Rizzolatti, Fogassi, and Gallese to bestow upon them the exalted label of 'mirror neuron'. They point out that mirror neurons are activated when a primate performs a particular action, such as grasping or holding an object, or when it witnesses another individual performing a comparable action. Humans possess an even more intricate motor neuron system that reflects the external world in our brains, enabling us to internalise the behaviours of others. Nonetheless, these cells necessitate what scientists refer to as 'goal-orientated movements' to activate. If we stare at a photograph, a static image of a runner striding ahead, our mirror neurons remain utterly silent. It is solely when the runner is in action, be it in running, moving, or sprinting, that they are ignited. Movement, not stillness, is what speaks to our brains.</p>
+      <p>[D] Electrophysiological studies have shown that when we observe a golfer or a runner in action, our own premotor cortex mirror neurons respond as if we were participating in the activity. This neural mirroring was initially identified in 1954 by French physiologists Gastaut and Bert, who noticed specific alpha and mu brain wave patterns in humans. The mu signal plays a role in neural mirroring, remaining active during periods of bodily stillness but dissipating when we undertake active pursuits like playing a sport or changing TV channels. Notably, the mu signal also remains subdued while we observe someone else in action, such as on television, which alludes to the influence of mirror neurons. This suggests that our brains do not simply passively register what we see, but actively simulate it, engaging systems normally reserved for action.</p>
+      <p>[E] Rizzolatti, Fogassi, and Gallese have coined the term 'direct matching hypothesis' to delineate the concept of mirror neurons. They asserted that to comprehend the movements of sports stars, we need to align the visual representation of the observed action with our own motor representation of the same action. According to this theory, watching an Olympic athlete can evoke a resonance in the observer's motor system. The observer's 'motor knowledge' is harnessed to decipher the observed action. However, mirror neurons extend beyond being merely neural foundations for our sporting inclinations. They also enable observers to enhance their athletic abilities through the process of observation. It turns out that watching a remarkable golfer improves our own golfing skills, and witnessing a skilled sprinter actually bolsters our running speed. This ability to learn through observation is a vital skill. From language acquisition in infancy to understanding facial expressions, mimicking plays a fundamental role in our consciousness. The most accomplished athletes possess a premotor cortex capable of envisioning victorious movements, supplemented by the physical attributes required to translate those movements into reality. In this way, action and imagination coalesce to drive performance.</p>
+      <p>[F] However, how many among us watch sport in order to enhance our athletic abilities? Most spectators tune in for the emotional roller coaster, the human drama it encompasses. This emotional connection finds its roots in mirror neurons, which allow spectators to perceive athletes' victorious movements and to share in the emotion of their triumphs. This is because they are directly associated with the amygdala, a key area of the brain responsible for emotional processing. During the Olympics, mirror neurons in individuals around the world resonate in unison, and watching sport unifies people. The majority of us may never run a mile in under four minutes or hit a home run. Yet, as we gather around our televisions, we all briefly get a taste of the feeling of executing something flawlessly. In those fleeting moments, sport becomes more than entertainment—it becomes a shared human experience.</p>
+    ` }
+];
+
+
+const QUESTION_GROUPS = [
+  {
+    passageIndex: 0,
+    instructionsHtml: '<b>Questions 1–7</b><br>Complete the notes below. Write <b>ONE WORD ONLY</b> for each answer.',
+    questions: [
+      { n:1, type:'text', text:'Celluloid Common uses: billiard balls (original use); cutlery; clothing; [1]' },
+      { n:2, type:'text', text:'Name of plastic (1907, USA): [2]' },
+      { n:3, type:'text', text:'Common uses of Bakelite: [3] Household object' },
+      { n:4, type:'text', text:'Country of origin of Polythene (1930s): [4]' },
+      { n:5, type:'text', text:'Property of Rigid PVC: Is [5]' },
+      { n:6, type:'text', text:'Property of Polystyrene: Resembles [6]' },
+      { n:7, type:'text', text:'Property of Polyurethane: Usually manufactured as a [7]' }
+    ]
+  },
+  {
+    passageIndex: 0,
+    instructionsHtml: '<b>Questions 8–13</b><br>Do the following statements agree with the information given in the passage? Write <b>TRUE</b> if the statement agrees with the information, <b>FALSE</b> if the statement contradicts the information, or <b>NOT GIVEN</b> if there is no information on this.',
+    questions: [
+      { n:8, type:'radio', text:'The chemical structure of rubber is very different to that of plastics.', options:[{key:'TRUE', label:''}, {key:'FALSE', label:''}, {key:'NOT GIVEN', label:''}] },
+      { n:9, type:'radio', text:'John Wesley Hyatt was an industrial chemist.', options:[{key:'TRUE', label:''}, {key:'FALSE', label:''}, {key:'NOT GIVEN', label:''}] },
+      { n:10, type:'radio', text:'Celluloid and Bakelite react in the same way to heat.', options:[{key:'TRUE', label:''}, {key:'FALSE', label:''}, {key:'NOT GIVEN', label:''}] },
+      { n:11, type:'radio', text:'If an object is made of several plastics, these prove hard to break down and reuse.', options:[{key:'TRUE', label:''}, {key:'FALSE', label:''}, {key:'NOT GIVEN', label:''}] },
+      { n:12, type:'radio', text:'Adding starch to plastic makes it more durable.', options:[{key:'TRUE', label:''}, {key:'FALSE', label:''}, {key:'NOT GIVEN', label:''}] },
+      { n:13, type:'radio', text:'Containers which are designed to decompose need particular storage conditions.', options:[{key:'TRUE', label:''}, {key:'FALSE', label:''}, {key:'NOT GIVEN', label:''}] }
+    ]
+  },
+  {
+    passageIndex: 1,
+    instructionsHtml: '<b>Questions 14–20</b><br>The passage has seven paragraphs, numbered 14–20. Choose the correct heading for each paragraph from the list of headings below.',
+    questions: [
+      { n:14, type:'select', text:'Choose the correct heading for paragraph 14', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] },
+      { n:15, type:'select', text:'Choose the correct heading for paragraph 15', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] },
+      { n:16, type:'select', text:'Choose the correct heading for paragraph 16', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] },
+      { n:17, type:'select', text:'Choose the correct heading for paragraph 17', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] },
+      { n:18, type:'select', text:'Choose the correct heading for paragraph 18', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] },
+      { n:19, type:'select', text:'Choose the correct heading for paragraph 19', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] },
+      { n:20, type:'select', text:'Choose the correct heading for paragraph 20', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] }
+    ]
+  },
+  {
+    passageIndex: 1,
+    instructionsHtml: '<b>Questions 21–26</b><br>Complete the sentences below. Write <b>ONE WORD ONLY</b> for each answer.',
+    questions: [
+      { n:21, type:'text', text:'A small number of unusual cars are still produced by the [21] method.' },
+      { n:22, type:'text', text:'Lean production requires staff who are [22]' },
+      { n:23, type:'text', text:'Lean production employs fewer people, and uses less [23], equipment and time.' },
+      { n:24, type:'text', text:'Storage facilities are not needed if a procedure known as [24] is implemented in the lean production method.' },
+      { n:25, type:'text', text:'Autonomation is a procedure for spotting any [25] in the products on a production line.' },
+      { n:26, type:'text', text:'At Toyota factories, [26] are suspended above manual production lines in order to show where production has to be halted.' }
+    ]
+  },
+  {
+    passageIndex: 2,
+    instructionsHtml: '<b>Questions 27–32</b><br>The passage has six paragraphs, A–F. Which paragraph contains the following information? Choose the correct letter, A–F.',
+    questions: [
+      { n:27, type:'select', text:'reasons why watching sport can bring emotional satisfaction', options:[{key:'A', label:''}, {key:'B', label:''}, {key:'C', label:''}, {key:'D', label:''}, {key:'E', label:''}, {key:'F', label:''}] },
+      { n:28, type:'select', text:'an explanation of why beginners struggle with sports tasks', options:[{key:'A', label:''}, {key:'B', label:''}, {key:'C', label:''}, {key:'D', label:''}, {key:'E', label:''}, {key:'F', label:''}] },
+      { n:29, type:'select', text:'a factor that can work alongside mirroring in sports competitions to maintain peak performance', options:[{key:'A', label:''}, {key:'B', label:''}, {key:'C', label:''}, {key:'D', label:''}, {key:'E', label:''}, {key:'F', label:''}] },
+      { n:30, type:'select', text:'a comparison between the mirror neurons of human beings and primates', options:[{key:'A', label:''}, {key:'B', label:''}, {key:'C', label:''}, {key:'D', label:''}, {key:'E', label:''}, {key:'F', label:''}] },
+      { n:31, type:'select', text:'mention of integrating visual and motor processes to understand athletic movements', options:[{key:'A', label:''}, {key:'B', label:''}, {key:'C', label:''}, {key:'D', label:''}, {key:'E', label:''}, {key:'F', label:''}] },
+      { n:32, type:'select', text:'reference to the first discovery of brain activity associated with mirror neurons', options:[{key:'A', label:''}, {key:'B', label:''}, {key:'C', label:''}, {key:'D', label:''}, {key:'E', label:''}, {key:'F', label:''}] }
+    ]
+  },
+  {
+    passageIndex: 2,
+    instructionsHtml: '<b>Questions 33–35</b><br>Choose the correct letter, A, B, C or D.',
+    questions: [
+      { n:33, type:'radio', text:'What point does the writer make about professional athletes in Paragraph B?', options:[{key:'A', label:'They meticulously plan each phase of their movements.'}, {key:'B', label:'They engage in regular practice to retain and refine their skills.'}, {key:'C', label:'They actively consider and analyse the actions of their peers.'}, {key:'D', label:'They perform their actions without conscious contemplation.'}] },
+      { n:34, type:'radio', text:'In this passage, the writer mentions the example of a remarkable golfer to illustrate', options:[{key:'A', label:'the critical role of imitation in the formation of consciousness.'}, {key:'B', label:'the improvement of sporting ability through watching sport.'}, {key:'C', label:'the stimulation of a resonance in the observer\'s motor system.'}, {key:'D', label:'the motivation of the observer\'s interest and love for golf.'}] },
+      { n:35, type:'radio', text:'The principal motivation for watching sport mentioned by the writer is', options:[{key:'A', label:'to improve our physical ability by analyzing the athletes\' technical strategies'}, {key:'B', label:'to unite viewers from different nations.'}, {key:'C', label:'to experience intense positive emotions by immersing oneself in sport.'}, {key:'D', label:'to become a sports professional.'}] }
+    ]
+  },
+  {
+    passageIndex: 2,
+    instructionsHtml: '<b>Questions 36–40</b><br>Do the following statements agree with the claims of the writer? Write <b>YES</b> if the statement agrees with the claims of the writer, <b>NO</b> if the statement contradicts the claims of the writer, or <b>NOT GIVEN</b> if it is impossible to say what the writer thinks about this.',
+    questions: [
+      { n:36, type:'radio', text:'The emergence of Homer\'s epic poetry occurred in the same historical period as the beginning of the Olympic Games.', options:[{key:'YES', label:''}, {key:'NO', label:''}, {key:'NOT GIVEN', label:''}] },
+      { n:37, type:'radio', text:'The Italian scientists concluded that the motor actions encoded within the premotor cortex have no discernible link to unrelated collections of neurons.', options:[{key:'YES', label:''}, {key:'NO', label:''}, {key:'NOT GIVEN', label:''}] },
+      { n:38, type:'radio', text:'Spectators can achieve flawless golf swings merely by watching the Masters Tournament without physical practice.', options:[{key:'YES', label:''}, {key:'NO', label:''}, {key:'NOT GIVEN', label:''}] },
+      { n:39, type:'radio', text:'Some neuroscientists believe that certain types of still images might activate mirror neurons under specific experimental conditions.', options:[{key:'YES', label:''}, {key:'NO', label:''}, {key:'NOT GIVEN', label:''}] },
+      { n:40, type:'radio', text:'The mu system is suppressed while we are dynamically involved in a particular activity.', options:[{key:'YES', label:''}, {key:'NO', label:''}, {key:'NOT GIVEN', label:''}] }
+    ]
+  }
+];
+
+/* ---------- 2. ĐÁP ÁN ĐÚNG — TODO[AI STUDIO] ----------
+   key: số câu (string) -> đáp án đúng (string, lowercase trim sẽ
+   được so khi chấm). Với câu pair (vd 19-20): để 2 key riêng "19"
+   và "20", mỗi key là 1 trong 2 đáp án đúng của cặp đó. */
+const CORRECT_ANSWERS = {
+  "1": "Photographic film",
+  "2": "Bakelite",
+  "3": "Electrical switches",
+  "4": "Britain",
+  "5": "Fireproof",
+  "6": "Glass",
+  "7": "Foam",
+  "8": "FALSE",
+  "9": "NOT GIVEN",
+  "10": "FALSE",
+  "11": "TRUE",
+  "12": "FALSE",
+  "13": "TRUE",
+  "14": "ii",
+  "15": "iv",
+  "16": "vii",
+  "17": "viii",
+  "18": "x",
+  "19": "vi",
+  "20": "iii",
+  "21": "Craft",
+  "22": "Multi-skilled",
+  "23": "Manufacturing space",
+  "24": "Just-in-time",
+  "25": "Abnormalities",
+  "26": "Lights",
+  "27": "F",
+  "28": "B",
+  "29": "E",
+  "30": "C",
+  "31": "E",
+  "32": "D",
+  "33": "D",
+  "34": "B",
+  "35": "C",
+  "36": "YES",
+  "37": "NO",
+  "38": "NO",
+  "39": "NOT GIVEN",
+  "40": "YES"
+};
+
+/* ============================================================
+   3. RENDER ENGINE (dùng chung — không cần sửa)
+   ============================================================ */
+let currentTab = 0;
+let answers = {};       // { "1": "value", "19": "A", ... }
+let flags = {};         // { "1": true }
+let remainingSeconds = DURATION_MIN * 60;
+let timerInterval = null;
+let studentInfo = { name:'', class:'' };
+let isSubmitted = false;
+let isReviewMode = false;
+let lastPayload = null; // lưu payload đã nộp để khôi phục màn result/sheet khi reload
+
+function renderTabs(){
+  const bar = document.getElementById('tabs-bar');
+  bar.innerHTML = '';
+  PASSAGES.forEach((p, i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i===currentTab ? ' active' : '');
+    btn.textContent = 'Passage ' + (i+1);
+    btn.addEventListener('click', ()=> switchTab(i));
+    bar.appendChild(btn);
+  });
+}
+
+function switchTab(i){
+  currentTab = i;
+  renderTabs();
+  renderPassage();
+  renderQuestions();
+  initCopyProtection();
+}
+
+function renderPassage(){
+  const p = PASSAGES[currentTab];
+  const panel = document.getElementById('panel-passage');
+  panel.innerHTML = `
+    <div class="passage-title">${p.title}</div>
+    <div class="passage-meta">${p.meta}</div>
+    <div class="passage-body">${p.html}</div>
+  `;
+}
+
+function renderQuestions(){
+  const panel = document.getElementById('panel-questions');
+  panel.innerHTML = '';
+  const groups = QUESTION_GROUPS.filter(g => g.passageIndex === currentTab);
+
+  groups.forEach(group=>{
+    const gEl = document.createElement('div');
+    gEl.className = 'qgroup';
+    const instr = document.createElement('div');
+    instr.className = 'qgroup-instructions';
+    instr.innerHTML = group.instructionsHtml;
+    gEl.appendChild(instr);
+
+    group.questions.forEach(q=>{
+      gEl.appendChild(renderQuestionItem(q));
+    });
+    panel.appendChild(gEl);
+  });
+}
+
+function renderQuestionItem(q){
+  const item = document.createElement('div');
+  item.className = 'qitem';
+  item.id = 'anchor-' + q.n;
+
+  const num = document.createElement('div');
+  num.className = 'qnum';
+  num.textContent = q.n;
+
+  const body = document.createElement('div');
+  body.className = 'qbody';
+
+  const textEl = document.createElement('div');
+  textEl.className = 'qtext';
+  textEl.textContent = q.n + '. ' + q.text;
+  body.appendChild(textEl);
+
+  body.appendChild(renderAnswerInput(q));
+
+  const flagBtn = document.createElement('button');
+  flagBtn.className = 'qflag-btn';
+  flagBtn.dataset.q = q.n;
+  flagBtn.textContent = '🚩';
+  flagBtn.addEventListener('click', ()=> toggleFlag(q.n));
+
+  item.appendChild(num);
+  item.appendChild(body);
+  item.appendChild(flagBtn);
+
+  refreshQItemState(item, q.n);
+  return item;
+}
+
+function renderAnswerInput(q){
+  if(q.type === 'text'){
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'ans-text';
+    inp.dataset.q = q.n;
+    inp.placeholder = 'Câu trả lời...';
+    inp.value = answers[q.n] || '';
+    inp.disabled = isReviewMode;
+    inp.addEventListener('input', ()=> setAnswer(q.n, inp.value.trim()));
+    return inp;
+  }
+  if(q.type === 'select'){
+    const sel = document.createElement('select');
+    sel.className = 'ans-select';
+    sel.dataset.q = q.n;
+    sel.disabled = isReviewMode;
+    const blank = document.createElement('option');
+    blank.value = ''; blank.textContent = '—';
+    sel.appendChild(blank);
+    (q.options||[]).forEach(o=>{
+      const opt = document.createElement('option');
+      opt.value = o.key; opt.textContent = o.key + (o.label ? ' — '+o.label : '');
+      sel.appendChild(opt);
+    });
+    sel.value = answers[q.n] || '';
+    sel.addEventListener('change', ()=> setAnswer(q.n, sel.value));
+    return sel;
+  }
+  if(q.type === 'radio'){
+    const wrap = document.createElement('div');
+    wrap.className = 'ans-options';
+    (q.options||[]).forEach(o=>{
+      const lbl = document.createElement('label');
+      lbl.className = 'ans-opt' + (answers[q.n]===o.key ? ' checked' : '');
+      const inp = document.createElement('input');
+      inp.type = 'radio'; inp.name = 'q'+q.n; inp.value = o.key;
+      inp.checked = answers[q.n]===o.key;
+      inp.disabled = isReviewMode;
+      inp.addEventListener('change', ()=>{
+        setAnswer(q.n, o.key);
+        wrap.querySelectorAll('.ans-opt').forEach(el=>el.classList.remove('checked'));
+        lbl.classList.add('checked');
+      });
+      const span = document.createElement('span');
+      span.textContent = o.key + '. ' + o.label;
+      lbl.appendChild(inp); lbl.appendChild(span);
+      wrap.appendChild(lbl);
+    });
+    return wrap;
+  }
+  if(q.type === 'checkbox-pair'){
+    const wrap = document.createElement('div');
+    wrap.className = 'ans-options';
+    const pairKey = q.pairKey;
+    (q.options||[]).forEach(o=>{
+      const lbl = document.createElement('label');
+      const checkedNow = pairValueIncludes(pairKey, o.key);
+      lbl.className = 'ans-opt' + (checkedNow ? ' checked' : '');
+      const inp = document.createElement('input');
+      inp.type = 'checkbox'; inp.value = o.key;
+      inp.checked = checkedNow;
+      inp.disabled = isReviewMode;
+      inp.addEventListener('change', ()=> handlePairToggle(pairKey, q, wrap));
+      const span = document.createElement('span');
+      span.textContent = o.key + '. ' + o.label;
+      lbl.appendChild(inp); lbl.appendChild(span);
+      wrap.appendChild(lbl);
+    });
+    return wrap;
+  }
+  return document.createElement('div');
+}
+
+/* checkbox-pair helpers: lưu vào answers[firstNOfPair] dạng array, đồng bộ cả 2 số câu trong pairKey */
+function pairQuestionNs(pairKey){
+  return pairKey.split('-').map(s=>s.trim());
+}
+function pairValueIncludes(pairKey, key){
+  const ns = pairQuestionNs(pairKey);
+  const arr = answers[ns[0]+'-'+ns[1]] || [];
+  return arr.includes(key);
+}
+function handlePairToggle(pairKey, q, wrapEl){
+  const ns = pairQuestionNs(pairKey);
+  const storeKey = ns[0]+'-'+ns[1];
+  let arr = answers[storeKey] || [];
+  const checks = Array.from(wrapEl.querySelectorAll('input[type=checkbox]'));
+  const checked = checks.filter(c=>c.checked).map(c=>c.value);
+  if(checked.length > 2){
+    // giới hạn tối đa 2 — bỏ lựa chọn cũ nhất (lựa chọn đầu tiên trong arr không còn trong checked mới sẽ giữ, ta revert lựa chọn vừa thêm)
+    const lastChecked = checks.find(c => c.checked && !arr.includes(c.value));
+    if(lastChecked) lastChecked.checked = false;
+    arr = arr; // giữ nguyên
+  } else {
+    arr = checked;
+  }
+  answers[storeKey] = arr;
+  wrapEl.querySelectorAll('.ans-opt').forEach(el=>{
+    const cb = el.querySelector('input');
+    el.classList.toggle('checked', cb.checked);
+  });
+  // map cả 2 số câu n riêng lẻ cho qmap/flag hiển thị tiến độ
+  ns.forEach(n => { answers[n] = arr.length ? arr.join(',') : undefined; if(!arr.length) delete answers[n]; });
+  saveProgress();
+  refreshAllQItemStates();
+  renderQMap();
+  renderSheetGrid();
+}
+
+function setAnswer(n, value){
+  if(value === '' || value == null){ delete answers[n]; }
+  else { answers[n] = value; }
+  saveProgress();
+  refreshQItemStateByN(n);
+  renderQMap();
+}
+
+function refreshQItemStateByN(n){
+  const el = document.getElementById('anchor-'+n);
+  if(el) refreshQItemState(el, n);
+}
+function refreshAllQItemStates(){
+  document.querySelectorAll('.qitem').forEach(el=>{
+    const n = el.id.replace('anchor-','');
+    refreshQItemState(el, n);
+  });
+}
+function refreshQItemState(el, n){
+  el.classList.toggle('answered', !!answers[n]);
+  el.classList.toggle('flagged', !!flags[n]);
+  const flagBtn = el.querySelector('.qflag-btn');
+  if(flagBtn) flagBtn.classList.toggle('on', !!flags[n]);
+}
+
+function toggleFlag(n){
+  flags[n] = !flags[n];
+  if(!flags[n]) delete flags[n];
+  saveProgress();
+  refreshQItemStateByN(n);
+  renderQMap();
+}
+
+/* ---------- Question Map (sidebar) ---------- */
+function renderQMap(){
+  const map = document.getElementById('qmap');
+  map.innerHTML = '';
+  let answeredCount = 0;
+  for(let n=1; n<=TOTAL_QUESTIONS; n++){
+    const cell = document.createElement('div');
+    cell.className = 'qmap-cell';
+    cell.textContent = n;
+    const isAnswered = !!answers[n];
+    if(isAnswered){ cell.classList.add('answered'); answeredCount++; }
+    if(flags[n]) cell.classList.add('flagged');
+    cell.addEventListener('click', ()=> goToQuestion(n));
+    map.appendChild(cell);
+  }
+  document.getElementById('sb-map-progress').textContent = answeredCount + '/' + TOTAL_QUESTIONS;
+}
+
+function goToQuestion(n){
+  const groupIdx = QUESTION_GROUPS.findIndex(g => g.questions.some(q=>q.n===n));
+  if(groupIdx === -1) return;
+  const targetTab = QUESTION_GROUPS[groupIdx].passageIndex;
+  if(targetTab !== currentTab) switchTab(targetTab);
+  setTimeout(()=>{
+    const el = document.getElementById('anchor-'+n);
+    if(el){
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+      el.style.boxShadow = '0 0 0 2px var(--gold)';
+      setTimeout(()=> el.style.boxShadow='', 900);
     }
-    if(timeLeft % 15 === 0) saveProgress();
+  }, targetTab !== currentTab ? 80 : 0);
+  closeFlagsPanel();
+}
+
+/* ============================================================
+   4. TIMER
+   ============================================================ */
+function startTimer(){
+  updateTimerDisplay();
+  timerInterval = setInterval(()=>{
+    remainingSeconds--;
+    if(remainingSeconds <= 0){
+      remainingSeconds = 0;
+      clearInterval(timerInterval);
+      updateTimerDisplay();
+      autoSubmit();
+      return;
+    }
+    updateTimerDisplay();
+    saveProgress();
   }, 1000);
 }
 
 function updateTimerDisplay(){
-  const m = Math.floor(timeLeft/60);
-  const s = timeLeft % 60;
-  document.getElementById('timer').textContent =
-    String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-}
-
-/* ================== ANSWER TRACKING ================== */
-function getAnswers(){
-  const answers = {};
-  for(let i=1;i<=40;i++){
-    const radios = document.querySelectorAll(`input[name="q${i}"]:checked`);
-    if(radios.length){
-      answers[i] = radios[0].value;
-    } else {
-      const text = document.querySelector(`.text-input[data-q="${i}"]`);
-      if(text && text.value.trim()){
-        answers[i] = text.value.trim();
-      } else {
-        answers[i] = "";
-      }
-    }
-  }
-  return answers;
-}
-
-function updateQuestionState(qnum){
-  const answers = getAnswers();
-  const answered = answers[qnum] && answers[qnum] !== "";
-  const gridBtn = document.querySelector(`.qgrid button[data-qnum="${qnum}"]`);
-  if(gridBtn){
-    gridBtn.classList.toggle('answered', !!answered);
-  }
-  updateAnsweredCount();
-  saveProgress();
-}
-
-function updateAnsweredCount(){
-  const answers = getAnswers();
-  let count = 0;
-  for(let i=1;i<=40;i++) if(answers[i] && answers[i] !== "") count++;
-  document.getElementById('answeredCount').textContent = count;
-}
-
-document.querySelectorAll('.ans-input').forEach(input=>{
-  input.addEventListener('input', ()=>updateQuestionState(input.dataset.q));
-  input.addEventListener('change', ()=>updateQuestionState(input.dataset.q));
-});
-
-/* ================== FLAG SYSTEM ================== */
-document.querySelectorAll('.q-flag').forEach(btn=>{
-  btn.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    const qnum = btn.dataset.flag;
-    if(flaggedQuestions.has(qnum)){
-      flaggedQuestions.delete(qnum);
-      btn.classList.remove('flagged');
-    } else {
-      flaggedQuestions.add(qnum);
-      btn.classList.add('flagged');
-    }
-    updateGridFlag(qnum);
-    saveProgress();
-  });
-});
-
-function updateGridFlag(qnum){
-  const gridBtn = document.querySelector(`.qgrid button[data-qnum="${qnum}"]`);
-  if(gridBtn) gridBtn.classList.toggle('flagged', flaggedQuestions.has(qnum));
-}
-
-document.getElementById('flagListBtn').addEventListener('click', ()=>{
-  const content = document.getElementById('flagListContent');
-  if(flaggedQuestions.size === 0){
-    content.innerHTML = '<div class="empty">Chưa có câu nào được đánh dấu.</div>';
-  } else {
-    content.innerHTML = '';
-    Array.from(flaggedQuestions).map(Number).sort((a,b)=>a-b).forEach(qn=>{
-      const div = document.createElement('div');
-      div.className = 'flag-item';
-      div.innerHTML = `<span>Câu ${qn}</span><span>→</span>`;
-      div.addEventListener('click', ()=>{
-        closeFlagModal();
-        goToQuestion(qn);
-      });
-      content.appendChild(div);
-    });
-  }
-  document.getElementById('flagModal').classList.add('show');
-});
-
-function closeFlagModal(){
-  document.getElementById('flagModal').classList.remove('show');
-}
-
-/* ================== QUESTION GRID ================== */
-function buildGrids(){
-  const ranges = [
-    {grid:'grid-p1', start:1, end:13, tab:1},
-    {grid:'grid-p2', start:14, end:26, tab:2},
-    {grid:'grid-p3', start:27, end:40, tab:3}
-  ];
-  ranges.forEach(r=>{
-    const grid = document.getElementById(r.grid);
-    grid.innerHTML = '';
-    for(let i=r.start;i<=r.end;i++){
-      const btn = document.createElement('button');
-      btn.textContent = i;
-      btn.dataset.qnum = i;
-      btn.addEventListener('click', ()=>goToQuestion(i, r.tab));
-      grid.appendChild(btn);
-    }
-  });
-  updateAnsweredCount();
-  refreshGridStates();
-}
-
-function goToQuestion(qnum, tab=null){
-  if(!tab){
-    if(qnum<=13) tab=1;
-    else if(qnum<=26) tab=2;
-    else tab=3;
-  }
-  preserveScroll = false;
-  switchTab(tab, qnum);
-}
-
-function refreshGridStates(){
-  const answers = getAnswers();
-  for(let i=1;i<=40;i++){
-    const gridBtn = document.querySelector(`.qgrid button[data-qnum="${i}"]`);
-    if(!gridBtn) continue;
-    gridBtn.classList.toggle('answered', !!(answers[i] && answers[i]!==""));
-    gridBtn.classList.toggle('flagged', flaggedQuestions.has(String(i)));
-  }
-}
-
-/* ================== HIGHLIGHT SYSTEM ================== */
-const hlPopup = document.getElementById('hlPopup');
-let savedRange = null;
-
-document.querySelectorAll('.passage p, .q-text, .radio-option, .q-instructions, .q-section-title').forEach(el=>{
-  el.addEventListener('mouseup', (e)=>{
-    setTimeout(()=>{
-      const selection = window.getSelection();
-      if(selection.rangeCount > 0 && !selection.isCollapsed){
-        const range = selection.getRangeAt(0);
-        const anchorNode = range.commonAncestorContainer;
-        const anchorEl = anchorNode.nodeType === Node.TEXT_NODE ? anchorNode.parentNode : anchorNode;
-        if(el.contains(anchorEl)){
-          savedRange = range.cloneRange();
-          showHlPopup(e.pageX, e.pageY);
-        }
-      }
-    }, 10);
-  });
-});
-
-document.addEventListener('mousedown', (e)=>{
-  if(!hlPopup.contains(e.target)){
-    hlPopup.style.display = 'none';
-  }
-});
-
-function showHlPopup(x, y){
-  hlPopup.style.display = 'flex';
-  hlPopup.style.left = (x - 60) + 'px';
-  hlPopup.style.top = (y - 50) + 'px';
-}
-
-function applyHighlight(colorClass){
-  if(!savedRange) return;
-  hlPopup.style.display = 'none';
-
-  const range = savedRange;
-  const startNode = range.startContainer;
-  const endNode = range.endContainer;
-
-  if(startNode === endNode && startNode.nodeType === Node.TEXT_NODE){
-    wrapTextRange(startNode, range.startOffset, range.endOffset, colorClass);
-  } else {
-    const container = range.commonAncestorContainer.nodeType === Node.TEXT_NODE
-      ? range.commonAncestorContainer.parentNode
-      : range.commonAncestorContainer;
-
-    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
-    const nodesToWrap = [];
-    let node;
-    let started = false;
-    while(node = walker.nextNode()){
-      if(node === startNode) started = true;
-      if(started && range.intersectsNode(node)){
-        nodesToWrap.push(node);
-      }
-      if(node === endNode) break;
-    }
-
-    nodesToWrap.forEach(n=>{
-      let startOff = (n === startNode) ? range.startOffset : 0;
-      let endOff = (n === endNode) ? range.endOffset : n.textContent.length;
-      wrapTextRange(n, startOff, endOff, colorClass);
-    });
-  }
-
-  window.getSelection().removeAllRanges();
-  savedRange = null;
-  saveProgress();
-}
-
-function wrapTextRange(textNode, startOffset, endOffset, colorClass){
-  if(startOffset === endOffset) return;
-  const text = textNode.textContent;
-  const before = text.slice(0, startOffset);
-  const middle = text.slice(startOffset, endOffset);
-  const after = text.slice(endOffset);
-
-  const span = document.createElement('span');
-  span.className = 'hl-' + colorClass.replace('hl-','');
-  span.classList.add('hl-mark');
-  span.textContent = middle;
-  span.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    removeHighlight(span);
-  });
-
-  const parent = textNode.parentNode;
-  const frag = document.createDocumentFragment();
-  if(before) frag.appendChild(document.createTextNode(before));
-  frag.appendChild(span);
-  if(after) frag.appendChild(document.createTextNode(after));
-  parent.replaceChild(frag, textNode);
-}
-
-function removeHighlight(span){
-  const parent = span.parentNode;
-  const textNode = document.createTextNode(span.textContent);
-  parent.replaceChild(textNode, span);
-  parent.normalize();
-  saveProgress();
-}
-
-function clearHighlightAtSelection(){
-  if(savedRange){
-    const container = savedRange.commonAncestorContainer.nodeType === Node.TEXT_NODE
-      ? savedRange.commonAncestorContainer.parentNode
-      : savedRange.commonAncestorContainer;
-    const marks = container.querySelectorAll ? container.querySelectorAll('.hl-mark') : [];
-    marks.forEach(m=>{
-      if(savedRange.intersectsNode(m)){
-        removeHighlight(m);
-      }
-    });
-  }
-  hlPopup.style.display = 'none';
-  window.getSelection().removeAllRanges();
-  savedRange = null;
-  saveProgress();
-}
-
-/* ================== LOCAL STORAGE ================== */
-const STORAGE_KEY = 'gedu_reading_test3_progress';
-
-function saveProgress(){
-  try{
-    const answers = getAnswers();
-    const data = {
-      studentInfo,
-      answers,
-      flags: Array.from(flaggedQuestions),
-      timeLeft,
-      isSubmitted
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }catch(e){console.error('save error', e);}
-}
-
-function loadProgress(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return false;
-    const data = JSON.parse(raw);
-    if(data.answers){
-      for(let i=1;i<=40;i++){
-        const val = data.answers[i];
-        if(!val) continue;
-        const radio = document.querySelector(`input[name="q${i}"][value="${val}"]`);
-        if(radio) radio.checked = true;
-        else {
-          const text = document.querySelector(`.text-input[data-q="${i}"]`);
-          if(text) text.value = val;
-        }
-      }
-    }
-    if(data.flags){
-      data.flags.forEach(f=>{
-        flaggedQuestions.add(f);
-        const btn = document.querySelector(`.q-flag[data-flag="${f}"]`);
-        if(btn) btn.classList.add('flagged');
-      });
-    }
-    if(typeof data.timeLeft === 'number' && data.timeLeft > 0) timeLeft = data.timeLeft;
-    return !!data.isSubmitted;
-  }catch(e){
-    console.error('load error', e);
-    return false;
-  }
-}
-
-/* ================== SUBMIT FLOW ================== */
-document.getElementById('submitBtn').addEventListener('click', ()=>{
-  try{
-    document.getElementById('confirmModal').classList.add('show');
-  }catch(e){
-    alert('Lỗi khi mở hộp xác nhận: ' + e.message);
-  }
-});
-
-function closeConfirmModal(){
-  document.getElementById('confirmModal').classList.remove('show');
-}
-
-function doSubmit(){
-  try{
-    closeConfirmModal();
-    if(isSubmitted && computedResult){
-      showResultScreen(computedResult.correctCount, computedResult.band);
-      return;
-    }
-    finalizeSubmission(false);
-  }catch(e){
-    alert('Đã xảy ra lỗi khi nộp bài: ' + e.message + '\nVui lòng chụp màn hình lỗi này và gửi cho giáo viên.');
-    console.error(e);
-  }
+  const m = Math.floor(remainingSeconds/60).toString().padStart(2,'0');
+  const s = (remainingSeconds%60).toString().padStart(2,'0');
+  const el = document.getElementById('sb-timer');
+  el.textContent = m+':'+s;
+  el.classList.toggle('warn', remainingSeconds <= 600 && remainingSeconds > 0);
 }
 
 function autoSubmit(){
-  finalizeSubmission(true);
+  document.getElementById('overlay-submit').classList.remove('show');
+  showToast('Hết giờ — hệ thống tự động nộp bài...');
+  doSubmit(true);
 }
 
-let computedResult = null;
+/* ============================================================
+   5. HIGHLIGHT (4 màu, free-range, không ngắt dòng)
+   ============================================================ */
+let hlActiveColor = null;
+const hlToolbar = document.getElementById('hl-toolbar');
 
-function finalizeSubmission(isAuto){
-  if(isSubmitted) return;
+document.querySelectorAll('.hl-swatch').forEach(sw=>{
+  sw.addEventListener('mousedown', e=> e.preventDefault()); // giữ selection
+  sw.addEventListener('click', ()=> applyHighlight(sw.dataset.c));
+});
+document.getElementById('hl-erase').addEventListener('mousedown', e=> e.preventDefault());
+document.getElementById('hl-erase').addEventListener('click', removeHighlight);
+
+function tryShowToolbarFromSelection(){
+  if(isReviewMode) return;
+  const sel = window.getSelection();
+  if(!sel || sel.isCollapsed || sel.rangeCount===0){ hideToolbar(); return; }
+  const range = sel.getRangeAt(0);
+  const container = document.getElementById('split-container');
+  if(!container.contains(range.commonAncestorContainer)){ hideToolbar(); return; }
+  const rect = range.getBoundingClientRect();
+  if(rect.width===0 && rect.height===0){ hideToolbar(); return; }
+  showToolbarAt(rect);
+}
+
+// Bắt mouseup ở mức document (không chỉ split-container) để không bỏ lỡ
+// trường hợp học sinh kéo chọn rồi thả chuột hơi lệch ra ngoài khung.
+document.addEventListener('mouseup', (e)=>{
+  // bỏ qua nếu vừa click vào chính toolbar (tránh đóng ngay khi đang chọn màu)
+  if(hlToolbar.contains(e.target)) return;
+  setTimeout(tryShowToolbarFromSelection, 5);
+});
+// Hỗ trợ thiết bị cảm ứng (tablet/laptop màn cảm ứng)
+document.addEventListener('touchend', (e)=>{
+  if(hlToolbar.contains(e.target)) return;
+  setTimeout(tryShowToolbarFromSelection, 60);
+});
+
+function showToolbarAt(rect){
+  hlToolbar.classList.add('show');
+  // hl-toolbar dùng position:fixed -> tọa độ phải lấy trực tiếp từ
+  // getBoundingClientRect() (viewport-relative), KHÔNG cộng scrollX/scrollY.
+  const toolbarHeight = 40;
+  const toolbarWidth = 160;
+  let top = rect.top - toolbarHeight - 8;
+  if(top < 8) top = rect.bottom + 8; // nếu sát mép trên, hiện toolbar bên dưới vùng chọn thay vì bị che/lệch
+  let left = rect.left + rect.width/2 - toolbarWidth/2;
+  left = Math.max(8, Math.min(left, window.innerWidth - toolbarWidth - 8));
+  top = Math.min(top, window.innerHeight - toolbarHeight - 8);
+  hlToolbar.style.top = top + 'px';
+  hlToolbar.style.left = left + 'px';
+}
+function hideToolbar(){ hlToolbar.classList.remove('show'); }
+
+function applyHighlight(color){
+  const sel = window.getSelection();
+  if(!sel || sel.rangeCount===0) return;
+  const range = sel.getRangeAt(0);
+  if(range.collapsed) return;
+
+  // Nếu vùng chọn đã nằm gọn trong 1 mark cùng màu -> coi như "click lại để tắt"
+  const ancestor = range.commonAncestorContainer;
+  const parentMark = ancestor.nodeType===1 ? ancestor.closest?.('mark') : ancestor.parentElement?.closest?.('mark');
+  if(parentMark && parentMark.classList.contains('hl-'+color) && sel.toString() === parentMark.textContent){
+    unwrapMark(parentMark);
+    sel.removeAllRanges();
+    hideToolbar();
+    saveHighlights();
+    return;
+  }
+
+  wrapRangeWithMark(range, color);
+  sel.removeAllRanges();
+  hideToolbar();
+  saveHighlights();
+}
+
+function removeHighlight(){
+  const sel = window.getSelection();
+  if(!sel || sel.rangeCount===0) return;
+  const range = sel.getRangeAt(0);
+  const container = range.commonAncestorContainer;
+  const marks = (container.nodeType===1 ? container : container.parentElement).querySelectorAll?.('mark') || [];
+  // tắt mọi mark giao với selection
+  const allMarks = document.querySelectorAll('#split-container mark');
+  allMarks.forEach(m=>{
+    if(sel.containsNode(m, true) || range.intersectsNode?.(m)){
+      unwrapMark(m);
+    }
+  });
+  sel.removeAllRanges();
+  hideToolbar();
+  saveHighlights();
+}
+
+function unwrapMark(mark){
+  const parent = mark.parentNode;
+  while(mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+  parent.removeChild(mark);
+  parent.normalize();
+}
+
+/* Wrap selection an toàn dùng splitText + insertBefore/appendChild
+   (tránh lỗi cắt text giữa từ do TreeWalker boundary handling) */
+function wrapRangeWithMark(range, color){
+  const startNode = range.startContainer;
+  const endNode = range.endContainer;
+
+  // Trường hợp đơn giản: selection nằm trong 1 text node
+  if(startNode === endNode && startNode.nodeType === 3){
+    // QUAN TRỌNG: Range là "live" — gọi splitText() trên node mà range đang
+    // trỏ vào sẽ khiến trình duyệt tự động cập nhật lại range.startOffset/
+    // endOffset theo cấu trúc DOM mới. Vì vậy phải chụp lại (snapshot) 2 giá
+    // trị offset thành biến thường NGAY TỪ ĐẦU, không được đọc range.xxx sau
+    // khi đã gọi splitText (đây chính là nguyên nhân gây lỗi highlight bị cắt
+    // chỉ còn vài ký tự thay vì toàn bộ vùng đã bôi đen).
+    const startOffset = range.startOffset;
+    const endOffset = range.endOffset;
+    const text = startNode;
+    const after = text.splitText(startOffset);
+    after.splitText(endOffset - startOffset);
+    const mark = document.createElement('mark');
+    mark.className = 'hl-' + color;
+    text.parentNode.insertBefore(mark, after);
+    mark.appendChild(after);
+    return;
+  }
+
+  // Trường hợp selection trải nhiều node: dùng TreeWalker thu thập
+  // các text node nằm trong range, rồi wrap từng đoạn giao nhau.
+  const root = range.commonAncestorContainer.nodeType === 1
+    ? range.commonAncestorContainer
+    : range.commonAncestorContainer.parentNode;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node){
+      return range.intersectsNode(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+  const nodes = [];
+  let n;
+  while((n = walker.nextNode())) nodes.push(n);
+
+  // Snapshot toàn bộ offset cần thiết TRƯỚC khi gọi bất kỳ splitText() nào,
+  // vì range là live và sẽ tự cập nhật offset theo DOM mới ngay khi node
+  // bị tách — đọc range.startOffset/endOffset giữa chừng vòng lặp là không an toàn.
+  const rangeStartContainer = range.startContainer;
+  const rangeEndContainer = range.endContainer;
+  const rangeStartOffset = range.startOffset;
+  const rangeEndOffset = range.endOffset;
+
+  const segments = nodes.map(node=>{
+    const start = (node === rangeStartContainer) ? rangeStartOffset : 0;
+    const end = (node === rangeEndContainer) ? rangeEndOffset : node.length;
+    return { node, start, end };
+  });
+
+  segments.forEach(({node, start, end})=>{
+    if(start >= end) return;
+    let target = node;
+    if(end < node.length){ target.splitText(end); }
+    if(start > 0){ target = target.splitText(start); }
+    const mark = document.createElement('mark');
+    mark.className = 'hl-' + color;
+    target.parentNode.insertBefore(mark, target);
+    mark.appendChild(target);
+  });
+}
+
+function saveHighlights(){
+  const passageHtml = document.getElementById('panel-passage').querySelector('.passage-body')?.innerHTML || '';
+  const questionsHtml = document.getElementById('panel-questions').innerHTML;
+  // Lưu highlight theo từng tab riêng để không lẫn giữa các passage
+  let store = JSON.parse(localStorage.getItem(LS_PREFIX+'highlights') || '{}');
+  store[currentTab] = { passage: passageHtml, questionsSnapshotTime: Date.now() };
+  // Ghi chú: ta KHÔNG lưu lại toàn bộ questionsHtml vì nó chứa input/value động;
+  // thay vào đó lưu riêng các mark trong câu hỏi bằng cách quét outerHTML của mark.
+  // Đơn giản & ổn định hơn: lưu toàn bộ outerHTML của các phần tử có thể chứa mark.
+  store[currentTab].marksPassage = extractMarksMap(document.getElementById('panel-passage'));
+  store[currentTab].marksQuestions = extractMarksMap(document.getElementById('panel-questions'));
+  localStorage.setItem(LS_PREFIX+'highlights', JSON.stringify(store));
+}
+
+function extractMarksMap(container){
+  // Lưu danh sách {path, color, text} đơn giản hoá: dùng cách lưu toàn bộ
+  // innerHTML tĩnh phần passage (an toàn vì passage không có input).
+  // Với panel câu hỏi (có input), ta chỉ lưu mark nằm trong .qtext (text tĩnh).
+  const result = [];
+  container.querySelectorAll('mark').forEach((m, idx)=>{
+    result.push({ idx, color: m.className.replace('hl-',''), text: m.textContent });
+  });
+  return result;
+}
+
+/* Khôi phục highlight: đơn giản hoá — vì passage HTML tĩnh, ta lưu/khôi phục
+   trực tiếp bằng cách re-render passage rồi áp lại mark theo text match
+   tuần tự (best-effort). Đây là phương án ổn định cho nội dung tĩnh. */
+function restoreHighlights(){
+  const store = JSON.parse(localStorage.getItem(LS_PREFIX+'highlights') || '{}');
+  const data = store[currentTab];
+  if(!data) return;
+  // Re-apply trên passage (text tĩnh, không có input nên an toàn để khôi phục theo thứ tự xuất hiện)
+  reapplyMarksByOrder(document.getElementById('panel-passage'), data.marksPassage || []);
+  reapplyMarksByOrder(document.getElementById('panel-questions'), data.marksQuestions || []);
+}
+
+function reapplyMarksByOrder(container, marksList){
+  marksList.forEach(item=>{
+    const range = findTextRange(container, item.text);
+    if(range){ wrapRangeWithMark(range, item.color); }
+  });
+}
+
+function findTextRange(container, searchText){
+  if(!searchText) return null;
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
+  let node;
+  while((node = walker.nextNode())){
+    const idx = node.textContent.indexOf(searchText);
+    if(idx !== -1){
+      const range = document.createRange();
+      range.setStart(node, idx);
+      range.setEnd(node, idx + searchText.length);
+      return range;
+    }
+  }
+  return null;
+}
+
+/* ============================================================
+   ⚠️ 6. COPY PROTECTION — KHÓA, KHÔNG ĐƯỢC XÓA/SỬA/BỎ QUA
+   ------------------------------------------------------------
+   AI STUDIO / BẤT KỲ CÔNG CỤ MERGE NÀO: đây là tính năng vận
+   hành bắt buộc của G.EDU — ngăn học sinh copy đáp án từ passage
+   dán sang phần trả lời. TUYỆT ĐỐI không được xóa, comment lại,
+   rút gọn, hay bỏ sót khối này khi xử lý/merge nội dung đề thi.
+   Nếu cần thêm nội dung đề thi, chỉ sửa các biến ở mục "0. CONFIG",
+   "1. PASSAGES & QUESTIONS DATA" và "2. ĐÁP ÁN ĐÚNG" — KHÔNG đụng
+   vào khối COPY PROTECTION này.
+
+   Cơ chế tự bảo vệ: toàn bộ logic nằm trong hàm initCopyProtection()
+   được gọi lại ở NHIỀU điểm chốt (lúc tải trang, lúc vào màn thi,
+   mỗi lần chuyển tab) + có watchdog setInterval tự kiểm tra và tự
+   gắn lại listener nếu phát hiện bị thiếu — phòng trường hợp công
+   cụ merge bên ngoài vô tình xóa mất đoạn code này.
+   ============================================================ */
+function initCopyProtection(){
+  const container = document.getElementById('split-container');
+  if(!container) return;
+  if(container.dataset.copyProtected === '1') return; // đã gắn rồi, tránh gắn trùng
+
+  ['copy','cut','contextmenu'].forEach(evt=>{
+    container.addEventListener(evt, copyProtectionBlockHandler);
+  });
+  document.addEventListener('keydown', copyProtectionKeydownHandler);
+
+  container.dataset.copyProtected = '1';
+}
+
+function copyProtectionBlockHandler(e){
+  const tag = e.target.tagName;
+  if(tag==='INPUT' || tag==='SELECT' || tag==='TEXTAREA') return; // cho phép thao tác bình thường trong field
+  e.preventDefault();
+}
+
+function copyProtectionKeydownHandler(e){
+  const tag = e.target.tagName;
+  if(tag==='INPUT' || tag==='SELECT' || tag==='TEXTAREA') return;
+  const container = document.getElementById('split-container');
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='c'){
+    if(container && container.contains(e.target)) e.preventDefault();
+  }
+}
+
+initCopyProtection();
+
+// Watchdog: kiểm tra định kỳ mỗi 3 giây, nếu vì lý do gì đó cờ
+// dataset.copyProtected bị mất (vd DOM bị render/thay thế lại) thì
+// tự động gắn lại listener ngay lập tức, không cần reload trang.
+setInterval(()=>{
+  const container = document.getElementById('split-container');
+  if(container && container.dataset.copyProtected !== '1'){
+    console.warn('[G.EDU LOCK] Phát hiện tính năng khóa copy bị mất — đã tự động kích hoạt lại.');
+    initCopyProtection();
+  }
+}, 3000);
+
+/* ============================================================
+   7. LOCALSTORAGE — SAVE / RESTORE (2 scenario)
+   ============================================================ */
+function saveProgress(){
+  const data = {
+    name: studentInfo.name,
+    class: studentInfo.class,
+    answers, flags,
+    remainingSeconds,
+    isSubmitted,
+    lastPayload,
+    savedAt: Date.now()
+  };
+  localStorage.setItem(LS_PREFIX+'progress', JSON.stringify(data));
+  // Lưu thêm con trỏ "bài làm gần nhất trên máy này" để có thể tự động khôi phục
+  // ngay khi mở lại trang, không bắt buộc học sinh phải gõ lại Họ tên + Lớp.
+  localStorage.setItem(LS_PREFIX+'lastStudent', JSON.stringify({ name: studentInfo.name, class: studentInfo.class }));
+}
+
+function loadProgressFor(name, cls){
+  const raw = localStorage.getItem(LS_PREFIX+'progress');
+  if(!raw) return null;
   try{
-    clearInterval(timerInterval);
-    isSubmitted = true;
-
-    const answers = getAnswers();
-    let correctCount = 0;
-    const details = {};
-    for(let i=1;i<=40;i++){
-      const studentAns = (answers[i]||"").toString().trim();
-      const correctAns = (ANSWER_KEY[i]||"").toString().trim();
-      const isCorrect = studentAns.toLowerCase() === correctAns.toLowerCase() && studentAns !== "";
-      if(isCorrect) correctCount++;
-      details[i] = {
-        student: studentAns,
-        correct: correctAns,
-        status: studentAns === "" ? "blank" : (isCorrect ? "correct" : "wrong")
-      };
-    }
-
-    const band = scoreToBand(correctCount);
-    computedResult = {correctCount, band, details};
-
-    saveProgress();
-    sendToSheet(answers, correctCount, band);
-    showResultScreen(correctCount, band);
-  }catch(err){
-    console.error('Submission error:', err);
-    alert('Lỗi xử lý nộp bài: ' + err.message + '\nKết quả có thể không chính xác. Vui lòng chụp màn hình và báo giáo viên.');
-    try{
-      if(!computedResult){
-        computedResult = {correctCount:0, band:0, details:{}};
-        for(let i=1;i<=40;i++) computedResult.details[i] = {student:"", correct:"", status:"blank"};
-      }
-      showResultScreen(computedResult.correctCount, computedResult.band);
-    }catch(e2){
-      console.error('Failed to show result screen:', e2);
-    }
-  }
+    const data = JSON.parse(raw);
+    if(data.name === name && data.class === cls) return data;
+  }catch(e){}
+  return null;
 }
 
-function scoreToBand(score){
-  if(score >= 39) return 9.0;
-  if(score >= 37) return 8.5;
-  if(score >= 35) return 8.0;
-  if(score >= 33) return 7.5;
-  if(score >= 30) return 7.0;
-  if(score >= 27) return 6.5;
-  if(score >= 23) return 6.0;
-  if(score >= 19) return 5.5;
-  if(score >= 15) return 5.0;
-  if(score >= 13) return 4.5;
-  if(score >= 10) return 4.0;
-  if(score >= 8) return 3.5;
-  if(score >= 6) return 3.0;
-  if(score >= 4) return 2.5;
-  return 2.0;
-}
-
-function showResultScreen(score, band){
-  document.getElementById('resultName').textContent = studentInfo.name;
-  document.getElementById('resultScore').textContent = score + '/40';
-  document.getElementById('resultBand').textContent = band.toFixed(1);
-  document.getElementById('testScreen').classList.add('hidden');
-  document.getElementById('resultScreen').classList.remove('hidden');
-}
-
-/* ================== ANSWER SHEET PANEL ================== */
-function renderAnswerSheet(){
-  if(!computedResult) return;
-
-  document.getElementById('asSub').textContent =
-    `${studentInfo.name} — ${studentInfo.class} — ${TEST_NAME.toUpperCase()} — ${new Date().toLocaleDateString('vi-VN')}`;
-
-  // Count answered questions
-  let answeredCount = 0;
-  for(let i=1;i<=40;i++){
-    if(computedResult.details[i] && computedResult.details[i].student !== "") answeredCount++;
-  }
-  document.getElementById('asScore').textContent = answeredCount + '/40';
-
-  const cols = [
-    document.getElementById('asCol1'),
-    document.getElementById('asCol2'),
-    document.getElementById('asCol3'),
-    document.getElementById('asCol4')
-  ];
-  cols.forEach(c => c.innerHTML = '');
-
-  for(let i=1;i<=40;i++){
-    const d = computedResult.details[i];
-    let displayAns = d.student || '—';
-
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${i}</td><td>${escapeHtml(displayAns)}</td>`;
-
-    const colIndex = Math.floor((i-1) / 10);
-    cols[colIndex].appendChild(tr);
-  }
-}
-
-document.getElementById('answerSheetBtn').addEventListener('click', ()=>{
-  renderAnswerSheet();
-  document.getElementById('answerSheetOverlay').classList.add('show');
+/* ============================================================
+   8. SUBMIT FLOW
+   ============================================================ */
+document.getElementById('btn-submit').addEventListener('click', ()=>{
+  const answeredCount = Object.keys(answers).filter(k=>!k.includes('-')).length;
+  document.getElementById('modal-answered-count').textContent = answeredCount;
+  const unansweredEl = document.getElementById('modal-unanswered-warn');
+  const missing = TOTAL_QUESTIONS - answeredCount;
+  unansweredEl.innerHTML = missing > 0 ? `Còn <b>${missing}</b> câu chưa trả lời.` : '';
+  verifyLockedNotices();
+  document.getElementById('overlay-submit').classList.add('show');
+});
+document.getElementById('btn-cancel-submit').addEventListener('click', ()=>{
+  document.getElementById('overlay-submit').classList.remove('show');
+});
+document.getElementById('btn-confirm-submit').addEventListener('click', ()=>{
+  document.getElementById('overlay-submit').classList.remove('show');
+  doSubmit(false);
 });
 
-document.getElementById('answerSheetCloseBtn').addEventListener('click', ()=>{
-  document.getElementById('answerSheetOverlay').classList.remove('show');
-});
-
-/* ================== ANSWER NORMALIZATION ================== */
-function normalizeAnswersForSubmission(answers){
-  const normalized = {};
-  for(const key in answers){
-    let val = answers[key];
-    if(typeof val === 'string' && val.trim().toUpperCase() === 'NOT GIVEN'){
-      val = 'not given';
-    }
-    normalized[key] = val;
+function gradeAnswers(){
+  let correctCount = 0;
+  for(let n=1; n<=TOTAL_QUESTIONS; n++){
+    const correct = (CORRECT_ANSWERS[n] || '').toString().trim().toLowerCase();
+    const given = (answers[n] || '').toString().trim().toLowerCase();
+    if(correct && given && correct === given) correctCount++;
   }
-  return normalized;
+  return correctCount;
 }
 
-/* ================== SHEET SUBMISSION ================== */
-function sendToSheet(answers, correctCount, band){
+function normalizeAnswersForSubmission(){
+  // chuyển answers (có thể chứa key dạng "19-20" mảng) thành object phẳng numeric keys
+  const out = {};
+  for(let n=1; n<=TOTAL_QUESTIONS; n++){
+    out[n] = answers[n] || '';
+  }
+  return out;
+}
+
+function doSubmit(isAuto){
+  if(isSubmitted) return;
+  isSubmitted = true;
+  if(timerInterval) clearInterval(timerInterval);
+
+  const correctCount = gradeAnswers();
+  const payload = {
+    test_name: TEST_NAME,
+    name: studentInfo.name,
+    cls: studentInfo.class,
+    totalScore: correctCount,
+    timestamp: new Date().toISOString(),
+    answers: normalizeAnswersForSubmission()
+  };
+  lastPayload = payload;
+  saveProgress();
+  sendToSheet(payload);
+  showResultScreen(correctCount);
+}
+
+/* ---------- GAS submission (GET, fetch primary + Image fallback) ---------- */
+function sendToSheet(payload){
   const queryParams = new URLSearchParams();
-  queryParams.append('test_name', TEST_NAME);
-  queryParams.append('name', studentInfo.name);
-  queryParams.append('cls', studentInfo.class);
-  queryParams.append('totalScore', correctCount);
-  queryParams.append('bandScore', band);
-  queryParams.append('timestamp', new Date().toISOString());
-
-  const normalizedAnswers = normalizeAnswersForSubmission(answers);
-  queryParams.append('answers', JSON.stringify(normalizedAnswers));
-
+  queryParams.append('test_name', payload.test_name);
+  queryParams.append('name', payload.name);
+  queryParams.append('cls', payload.cls);
+  queryParams.append('totalScore', payload.totalScore);
+  queryParams.append('timestamp', payload.timestamp);
+  queryParams.append('answers', JSON.stringify(payload.answers));
   const finalUrl = `${GAS_URL}?${queryParams.toString()}`;
 
-  // Chỉ dùng một phương thức để tránh ghi 2 lần lên sheet
-  fetch(finalUrl, { method: 'GET', mode: 'no-cors' })
-    .then(() => console.log("Đã gửi dữ liệu qua Fetch GET"))
-    .catch((err) => {
-      console.error("Lỗi Fetch GET, dùng Image Beacon:", err);
-      // Fallback: chỉ kích hoạt khi Fetch thất bại
-      try {
-        const img = new Image();
-        img.src = finalUrl;
-      } catch (e2) {
-        console.error("Lỗi Image Beacon:", e2);
-      }
+  fetch(finalUrl, { method:'GET', mode:'no-cors', keepalive:true })
+    .then(()=> console.log('Đã gửi dữ liệu qua Fetch GET'))
+    .catch((err)=>{
+      console.error('Lỗi Fetch GET, fallback Image beacon:', err);
+      try{ const img = new Image(); img.src = finalUrl; }catch(e){ console.error('Lỗi Image beacon:', e); }
     });
 }
 
-/* ================== REVIEW MODE ================== */
-document.getElementById('reviewBtn').addEventListener('click', ()=>{
-  document.getElementById('resultScreen').classList.add('hidden');
-  document.getElementById('testScreen').classList.remove('hidden');
-  enterReviewMode();
-});
-
-function enterReviewMode(){
-  document.getElementById('reviewBanner').classList.remove('hidden');
-  document.getElementById('submitBtn').classList.add('hidden');
-  document.getElementById('reviewBackBtn').classList.remove('hidden');
-  document.getElementById('timer').textContent = '✓ Đã nộp';
-  document.getElementById('timer').classList.add('submitted');
-  document.getElementById('timer').classList.remove('warning');
-
-  document.querySelectorAll('.ans-input').forEach(input=>{
-    input.disabled = true;
-  });
-
-  document.querySelectorAll('.ans-badge').forEach(b=>b.remove());
-
-  if(computedResult){
-    for(let i=1;i<=40;i++){
-      const d = computedResult.details[i];
-      const block = document.getElementById('qb-'+i);
-      if(!block) continue;
-      const badge = document.createElement('div');
-      if(d.status === 'correct'){
-        badge.className = 'ans-badge ans-correct';
-        badge.innerHTML = `✓ Đáp án của bạn: <b>${escapeHtml(d.student)}</b>`;
-      } else if(d.status === 'wrong'){
-        badge.className = 'ans-badge ans-wrong';
-        badge.innerHTML = `✗ Đáp án của bạn: <b>${escapeHtml(d.student)}</b>`;
-      } else {
-        badge.className = 'ans-badge ans-blank';
-        badge.innerHTML = `— Bạn đã bỏ trống câu này`;
-      }
-      block.appendChild(badge);
-    }
-  }
+/* ============================================================
+   9. RESULT / ANSWER SHEET / REVIEW SCREENS
+   ============================================================ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
-document.getElementById('reviewBackBtn').addEventListener('click', ()=>{
-  document.getElementById('testScreen').classList.add('hidden');
-  document.getElementById('resultScreen').classList.remove('hidden');
+function showResultScreen(correctCount){
+  document.getElementById('result-score').textContent = correctCount + '/' + TOTAL_QUESTIONS;
+  document.getElementById('result-band').textContent = computeBandScore(correctCount);
+  document.getElementById('result-name').textContent = studentInfo.name;
+  document.getElementById('result-test-name').textContent = TEST_LABEL;
+  document.getElementById('sheet-name').textContent = studentInfo.name;
+  document.getElementById('sheet-class').textContent = studentInfo.class;
+  showScreen('screen-result');
+  verifyLockedNotices();
+}
+
+/* Band Score ước tính theo thang quy đổi IELTS Academic Reading chuẩn (40 câu).
+   TODO[AI STUDIO]: có thể tinh chỉnh bảng quy đổi nếu đề có thang điểm riêng. */
+function computeBandScore(correct){
+  // Bảng quy đổi IELTS Academic Reading chuẩn (40 câu)
+  const table = [
+    [39,40,9.0],[37,38,8.5],[35,36,8.0],[33,34,7.5],[30,32,7.0],
+    [27,29,6.5],[23,26,6.0],[20,22,5.5],[16,19,5.0],[13,15,4.5],
+    [10,12,4.0],[7,9,3.5],[5,6,3.0],[3,4,2.5]
+  ];
+  for(const [min,max,band] of table){
+    if(correct >= min && correct <= max) return band.toFixed(1);
+  }
+  return correct <= 2 ? '2.0' : '—';
+}
+
+document.getElementById('btn-go-sheet').addEventListener('click', ()=>{
+  renderSheetGrid();
+  showScreen('screen-sheet');
+  verifyLockedNotices();
 });
+
+function renderSheetGrid(){
+  const grid = document.getElementById('sheet-grid');
+  grid.innerHTML = '';
+  for(let n=1; n<=TOTAL_QUESTIONS; n++){
+    const cell = document.createElement('div');
+    cell.className = 'sheet-cell';
+    const val = answers[n];
+    cell.innerHTML = `<div class="n">Câu ${n}</div><div class="v ${val?'':'empty'}">${val ? escapeHtml(val) : 'Bỏ trống'}</div>`;
+    grid.appendChild(cell);
+  }
+}
 
 function escapeHtml(str){
   const div = document.createElement('div');
@@ -1695,42 +1761,222 @@ function escapeHtml(str){
   return div.innerHTML;
 }
 
-/* ================== HEADING DROPDOWNS ================== */
-const HEADING_OPTIONS = {
-  'i': 'Global resistance to lean manufacturing',
-  'ii': 'The historical context',
-  'iii': 'Procedures for controlling quality',
-  'iv': 'The pros and cons of different production systems',
-  'v': 'The impact on profits',
-  'vi': 'Procedures for controlling supply',
-  'vii': 'The origin of the term',
-  'viii': 'A crucial difference in levels of quality',
-  'ix': 'Working conditions',
-  'x': 'Interdependent strategies for controlling expenditure'
-};
+document.getElementById('btn-go-review').addEventListener('click', ()=>{
+  enterReviewMode();
+});
 
-function populateHeadingSelects(){
-  document.querySelectorAll('.heading-select').forEach(select=>{
-    select.innerHTML = '';
-    const placeholder = document.createElement('option');
-    placeholder.value = '';
-    placeholder.textContent = '-- Chọn đáp án --';
-    placeholder.disabled = true;
-    placeholder.selected = true;
-    select.appendChild(placeholder);
-
-    Object.entries(HEADING_OPTIONS).forEach(([label, content])=>{
-      const opt = document.createElement('option');
-      opt.value = label;
-      opt.textContent = `${label} - ${content}`;
-      select.appendChild(opt);
-    });
-  });
+function enterReviewMode(){
+  isReviewMode = true;
+  document.getElementById('review-banner').classList.add('show');
+  document.getElementById('split-container').classList.add('locked-select');
+  document.getElementById('btn-submit').style.display = 'none';
+  renderPassage();
+  renderQuestions();
+  restoreHighlights();
+  showScreen('screen-exam');
 }
 
-/* ================== INIT ================== */
-populateHeadingSelects();
-checkLoginFields();
+document.getElementById('btn-back-to-result').addEventListener('click', ()=>{
+  showScreen('screen-result');
+});
+
+/* ============================================================
+   10. FLAGGED QUESTIONS PANEL
+   ============================================================ */
+document.getElementById('btn-open-flags').addEventListener('click', renderFlagsPanel);
+document.getElementById('btn-close-flags').addEventListener('click', closeFlagsPanel);
+function closeFlagsPanel(){ document.getElementById('overlay-flags').classList.remove('show'); }
+
+function renderFlagsPanel(){
+  const body = document.getElementById('flagpanel-body');
+  const flaggedNs = Object.keys(flags).filter(n=>flags[n]).map(Number).sort((a,b)=>a-b);
+  if(flaggedNs.length === 0){
+    body.innerHTML = `<div class="flagpanel-empty">${LOCKED_NOTICES['flagpanel-empty']}</div>`;
+  } else {
+    body.innerHTML = '';
+    flaggedNs.forEach(n=>{
+      const row = document.createElement('div');
+      row.className = 'flagitem';
+      const ans = answers[n];
+      row.innerHTML = `
+        <div class="flagitem-left">
+          <div class="flagitem-num">${n}</div>
+          <div class="flagitem-ans ${ans?'':'empty'}">${ans ? 'Đã trả lời: '+escapeHtml(ans) : 'Chưa trả lời'}</div>
+        </div>
+        <div class="flagitem-go">Đi tới →</div>`;
+      row.addEventListener('click', ()=> goToQuestion(n));
+      body.appendChild(row);
+    });
+  }
+  document.getElementById('overlay-flags').classList.add('show');
+}
+
+/* ============================================================
+   11. RESIZER (split panel)
+   ============================================================ */
+const resizer = document.getElementById('resizer');
+const splitContainer = document.getElementById('split-container');
+const panelLeft = document.getElementById('panel-passage');
+const panelRight = document.getElementById('panel-questions');
+let isResizing = false;
+
+resizer.addEventListener('mousedown', (e)=>{
+  isResizing = true;
+  resizer.classList.add('active');
+  document.body.style.userSelect = 'none';
+});
+document.addEventListener('mousemove', (e)=>{
+  if(!isResizing) return;
+  const containerRect = splitContainer.getBoundingClientRect();
+  let leftWidthPct = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+  leftWidthPct = Math.max(25, Math.min(75, leftWidthPct));
+  panelLeft.style.width = leftWidthPct + '%';
+  panelRight.style.width = (100 - leftWidthPct) + '%';
+  localStorage.setItem(LS_PREFIX+'splitpos', leftWidthPct);
+});
+document.addEventListener('mouseup', ()=>{
+  if(isResizing){
+    isResizing = false;
+    resizer.classList.remove('active');
+    document.body.style.userSelect = '';
+  }
+});
+function restoreSplitPos(){
+  const saved = localStorage.getItem(LS_PREFIX+'splitpos');
+  if(saved){
+    panelLeft.style.width = saved + '%';
+    panelRight.style.width = (100 - parseFloat(saved)) + '%';
+  }
+}
+
+/* ============================================================
+   12. TOAST
+   ============================================================ */
+let toastTimer = null;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove('show'), 3200);
+}
+
+/* ============================================================
+   13. LOGIN / BOOTSTRAP
+   ============================================================ */
+document.getElementById('btn-start').addEventListener('click', attemptLogin);
+document.getElementById('input-class').addEventListener('keydown', (e)=>{ if(e.key==='Enter') attemptLogin(); });
+
+function attemptLogin(){
+  const nameInp = document.getElementById('input-name');
+  const classInp = document.getElementById('input-class');
+  const name = nameInp.value.trim().toUpperCase();
+  const cls = classInp.value.trim().toUpperCase();
+  const errEl = document.getElementById('login-error');
+
+  if(!name || !cls){
+    errEl.textContent = 'Vui lòng nhập đầy đủ Họ tên và Lớp.';
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+  studentInfo = { name, class: cls };
+
+  document.getElementById('sb-student-name').textContent = name;
+  document.getElementById('sb-student-class').textContent = cls;
+
+  const existing = loadProgressFor(name, cls);
+  if(existing && existing.isSubmitted){
+    // Scenario 2: đã nộp -> khôi phục thẳng kết quả
+    answers = existing.answers || {};
+    flags = existing.flags || {};
+    isSubmitted = true;
+    lastPayload = existing.lastPayload;
+    bootstrapExamUI(false);
+    const correctCount = existing.lastPayload ? existing.lastPayload.totalScore : gradeAnswers();
+    showResultScreen(correctCount);
+    return;
+  }
+
+  if(existing && !existing.isSubmitted){
+    // Scenario 1: chưa nộp -> khôi phục bài làm dở
+    answers = existing.answers || {};
+    flags = existing.flags || {};
+    remainingSeconds = typeof existing.remainingSeconds === 'number' ? existing.remainingSeconds : DURATION_MIN*60;
+    showToast('Đã khôi phục bài làm trước đó.');
+  } else {
+    answers = {}; flags = {};
+    remainingSeconds = DURATION_MIN * 60;
+  }
+
+  bootstrapExamUI(true);
+}
+
+function bootstrapExamUI(startTimerNow){
+  showScreen('screen-exam');
+  renderTabs();
+  renderPassage();
+  renderQuestions();
+  renderQMap();
+  restoreSplitPos();
+  restoreHighlights();
+  if(startTimerNow) startTimer();
+  saveProgress();
+  verifyLockedNotices();
+  initCopyProtection();
+}
+
+/* ============================================================
+   14. AUTO-RESTORE KHI MỞ LẠI TRANG (không cần nhập lại Tên/Lớp)
+   ------------------------------------------------------------
+   Nếu trên máy này đã từng có một lượt làm bài (đã nộp hoặc
+   đang làm dở) được lưu trong localStorage, tự động khôi phục
+   thẳng màn hình tương ứng ngay khi trang vừa tải xong, bỏ qua
+   bước yêu cầu học sinh gõ lại Họ tên + Lớp ở màn login.
+   ============================================================ */
+function autoRestoreOnLoad(){
+  const lastRaw = localStorage.getItem(LS_PREFIX+'lastStudent');
+  if(!lastRaw) return false; // chưa từng làm bài này trên máy -> hiện màn login bình thường
+
+  let last;
+  try{ last = JSON.parse(lastRaw); }catch(e){ return false; }
+  if(!last || !last.name || !last.class) return false;
+
+  const existing = loadProgressFor(last.name, last.class);
+  if(!existing) return false;
+
+  studentInfo = { name: last.name, class: last.class };
+  document.getElementById('sb-student-name').textContent = last.name;
+  document.getElementById('sb-student-class').textContent = last.class;
+
+  if(existing.isSubmitted){
+    // Đã nộp trước đó -> khôi phục thẳng màn Kết quả, không bắt làm lại.
+    answers = existing.answers || {};
+    flags = existing.flags || {};
+    isSubmitted = true;
+    lastPayload = existing.lastPayload;
+    bootstrapExamUI(false);
+    const correctCount = existing.lastPayload ? existing.lastPayload.totalScore : gradeAnswers();
+    showResultScreen(correctCount);
+    return true;
+  }
+
+  // Đang làm dở -> khôi phục bài làm, tiếp tục đếm giờ từ thời điểm đã lưu.
+  answers = existing.answers || {};
+  flags = existing.flags || {};
+  remainingSeconds = typeof existing.remainingSeconds === 'number' ? existing.remainingSeconds : DURATION_MIN*60;
+  bootstrapExamUI(true);
+  showToast('Đã khôi phục bài làm trước đó.');
+  return true;
+}
+
+if(!autoRestoreOnLoad()){
+  showScreen('screen-login');
+}
+
+/* fix tỉ lệ màn hình: đảm bảo nút Nộp bài luôn trong viewport bằng flex column
+   + media query (max-height:720px) đã xử lý ở CSS. Không cần JS bổ sung trừ khi
+   cần test thực tế trên thiết bị cụ thể. */
 </script>
 </body>
 </html>
