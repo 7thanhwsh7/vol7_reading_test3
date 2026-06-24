@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>G.EDU — IELTS Reading Test 3</title>
+<title>G.EDU — IELTS Reading Test [SỐ TEST]</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -136,86 +136,109 @@ input, select, textarea{ font-family: inherit; }
 }
 
 /* ============================================================
-   2. EXAM SCREEN — LAYOUT
+   2. EXAM SCREEN — LAYOUT (TOP BAR + 2 PANELS)
    ============================================================ */
 #screen-exam{ display:none; height:100%; width:100%; }
 #screen-exam.active{ display:flex; }
 
 .exam-shell{
-  display:flex; width:100%; height:100%;
+  display:flex; flex-direction:column; width:100%; height:100%;
 }
 
-/* ---- Sidebar ---- */
-.sidebar{
-  width: var(--sidebar-w); min-width:var(--sidebar-w);
-  background: var(--navy); color:#fff;
-  display:flex; flex-direction:column;
-  height:100%;
+/* ---- Top Bar ---- */
+.topbar{
+  background: var(--navy); color:#fff; flex-shrink:0;
+  display:flex; align-items:center; gap:0;
+  height:52px; border-bottom:2px solid rgba(212,175,55,0.3);
+  padding:0; overflow:hidden;
 }
-.sb-brand{
-  padding:22px 22px 16px; border-bottom:1px solid rgba(255,255,255,0.08);
+.tb-brand{
+  display:flex; align-items:center; gap:10px;
+  padding:0 16px; border-right:1px solid rgba(255,255,255,0.1);
+  flex-shrink:0; height:100%;
 }
-.sb-brand-logo{
-  font-family: var(--font-display); font-weight:700; font-size:21px; color: var(--gold); letter-spacing:1.5px;
+.tb-brand-logo{
+  font-family: var(--font-display); font-weight:700; font-size:17px;
+  color: var(--gold); letter-spacing:1.5px; line-height:1;
 }
-.sb-brand-sub{ font-size:10.5px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-top:3px; }
+.tb-brand-sub{
+  font-size:9.5px; letter-spacing:1.5px; text-transform:uppercase;
+  color:rgba(255,255,255,0.4); margin-top:3px;
+}
+.tb-student{
+  padding:0 14px; border-right:1px solid rgba(255,255,255,0.1);
+  font-size:11.5px; color:rgba(255,255,255,0.7); flex-shrink:0;
+  white-space:nowrap; height:100%; display:flex; align-items:center; gap:4px;
+}
+.tb-student b{ color:#fff; font-weight:600; }
 
-.sb-student{
-  padding:14px 22px; border-bottom:1px solid rgba(255,255,255,0.08);
-  font-size:12.5px; color:rgba(255,255,255,0.75); line-height:1.7;
+/* Question Map nằm ngang inline */
+.tb-qmap-wrap{
+  flex:1; padding:0 12px; height:100%; display:flex; align-items:center; gap:10px;
+  overflow:hidden; min-width:0;
 }
-.sb-student b{ color:#fff; font-weight:600; }
-
-.sb-timer-wrap{ padding:16px 22px; border-bottom:1px solid rgba(255,255,255,0.08); }
-.sb-timer-label{ font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:6px; }
-.sb-timer{
-  font-family: var(--font-display); font-weight:700; font-size:30px; color:#fff; letter-spacing:1px;
-  font-variant-numeric: tabular-nums;
-}
-.sb-timer.warn{ color: var(--flag); animation: pulseWarn 1s infinite; }
-@keyframes pulseWarn{ 0%,100%{opacity:1;} 50%{opacity:.55;} }
-
-.sb-map-wrap{ flex:1; overflow-y:auto; padding:16px 22px; }
-.sb-map-label{
-  font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.45);
-  margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;
+.tb-qmap-label{
+  font-size:9px; letter-spacing:1px; text-transform:uppercase;
+  color:rgba(255,255,255,0.35); white-space:nowrap; flex-shrink:0;
 }
 .qmap{
-  display:grid; grid-template-columns: repeat(5, 1fr); gap:7px;
+  display:flex; flex-wrap:nowrap; gap:3px; overflow-x:auto; flex:1;
+  scrollbar-width:none; /* Firefox */
 }
+.qmap::-webkit-scrollbar{ display:none; }
 .qmap-cell{
-  aspect-ratio:1; display:flex; align-items:center; justify-content:center;
-  border-radius:6px; border:1.5px solid rgba(255,255,255,0.18);
-  font-size:12px; font-weight:600; color:rgba(255,255,255,0.55);
-  background:rgba(255,255,255,0.03);
-  transition: all .15s;
+  flex-shrink:0; width:24px; height:24px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:4px; border:1px solid rgba(255,255,255,0.18);
+  font-size:9.5px; font-weight:600; color:rgba(255,255,255,0.5);
+  background:rgba(255,255,255,0.03); transition: all .12s; cursor:pointer;
 }
 .qmap-cell:hover{ border-color: var(--gold); color:#fff; }
 .qmap-cell.answered{ background: var(--gold); border-color:var(--gold); color: var(--navy); }
 .qmap-cell.flagged{ border-color: var(--flag); color: var(--flag); }
 .qmap-cell.answered.flagged{ background: var(--gold); border-color: var(--flag); color: var(--navy); position:relative; }
 .qmap-cell.answered.flagged::after{
-  content:""; position:absolute; top:-3px; right:-3px; width:8px; height:8px;
-  border-radius:50%; background: var(--flag); border:1.5px solid var(--navy);
+  content:""; position:absolute; top:-2px; right:-2px; width:5px; height:5px;
+  border-radius:50%; background: var(--flag); border:1px solid var(--navy);
 }
 .qmap-cell.current{ outline:2px solid #fff; outline-offset:1px; }
+.tb-map-progress{
+  font-size:10px; font-weight:700; color:rgba(255,255,255,0.5); white-space:nowrap; flex-shrink:0;
+}
 
-.sb-actions{ padding:16px 22px 20px; border-top:1px solid rgba(255,255,255,0.08); display:flex; flex-direction:column; gap:9px; }
+/* Timer + Actions */
+.tb-timer-wrap{
+  padding:0 14px; border-left:1px solid rgba(255,255,255,0.1);
+  border-right:1px solid rgba(255,255,255,0.1);
+  height:100%; display:flex; align-items:center; gap:6px; flex-shrink:0;
+}
+.tb-timer-label{ font-size:9px; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,0.4); }
+.sb-timer{
+  font-family: var(--font-display); font-weight:700; font-size:20px; color:#fff;
+  font-variant-numeric: tabular-nums; line-height:1; letter-spacing:1px;
+}
+.sb-timer.warn{ color: var(--flag); animation: pulseWarn 1s infinite; }
+@keyframes pulseWarn{ 0%,100%{opacity:1;} 50%{opacity:.55;} }
+
+.tb-actions{
+  display:flex; align-items:center; gap:8px; padding:0 14px; height:100%; flex-shrink:0;
+}
 .sb-btn{
-  width:100%; padding:11px; border-radius:8px; font-size:12.5px; font-weight:700;
-  letter-spacing:1px; text-transform:uppercase; transition: all .15s; text-align:center;
+  height:32px; padding:0 12px; border-radius:7px; font-size:11px; font-weight:700;
+  letter-spacing:0.8px; text-transform:uppercase; transition: all .15s;
+  white-space:nowrap; display:flex; align-items:center; gap:5px;
 }
 .sb-btn-flag{
   background:transparent; border:1.5px solid var(--flag); color: var(--flag);
 }
-.sb-btn-flag:hover{ background: rgba(225,112,85,0.12); }
+.sb-btn-flag:hover{ background: rgba(225,112,85,0.15); }
 .sb-btn-submit{
   background: transparent; border:1.5px solid var(--gold); color: var(--gold);
 }
 .sb-btn-submit:hover{ background: var(--gold); color: var(--navy); }
 
 /* ---- Main exam area ---- */
-.exam-main{ flex:1; display:flex; flex-direction:column; height:100%; min-width:0; }
+.exam-main{ flex:1; display:flex; flex-direction:column; min-height:0; overflow:hidden; }
 
 .tabs-bar{
   display:flex; gap:4px; padding:0 18px; background:#fff; border-bottom:2px solid var(--navy);
@@ -313,6 +336,65 @@ input, select, textarea{ font-family: inherit; }
 .ans-opt input{ margin-top:2px; accent-color: var(--gold); flex-shrink:0; }
 .ans-opt span{ font-size:13.5px; line-height:1.5; }
 .ans-opt.checked{ border-color: var(--gold); background:#fdfaf0; }
+
+/* === table-completion (Q1–7 style) === */
+.table-completion{ width:100%; border-collapse:collapse; font-size:13.5px; margin-top:4px; }
+.table-completion th{
+  background:var(--navy); color:var(--gold); font-weight:600; font-size:12.5px;
+  padding:8px 10px; text-align:left; border:1px solid #3a3020;
+}
+.table-completion td{
+  padding:8px 10px; border:1px solid var(--line); vertical-align:middle;
+  line-height:1.5; color:var(--ink); background:#fff;
+}
+.table-completion tr:nth-child(even) td{ background:#faf9f6; }
+.table-completion .tc-merged{ color:var(--ink-soft); font-style:italic; font-size:12.5px; }
+.tc-cell{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.tc-label{ font-size:13.5px; color:var(--ink); }
+.tc-inp{
+  flex:1; min-width:120px; max-width:200px; padding:6px 9px;
+  border:1.5px solid var(--gold-soft); border-radius:6px;
+  font-size:13.5px; font-weight:600; color:var(--navy); background:#fffdf5;
+}
+.tc-inp:focus{ outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(212,175,55,0.15); }
+.tc-qnum{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:22px; height:22px; border-radius:50%; background:var(--navy);
+  color:var(--gold); font-size:11px; font-weight:700; flex-shrink:0;
+}
+/* answered/flagged trên td của bảng */
+.table-completion td.answered{ background:#fffbea !important; }
+.table-completion td.flagged{ box-shadow: inset 3px 0 0 var(--flag); }
+
+/* === paragraph-grid (Q27–32 style) === */
+.pg-table{ width:100%; border-collapse:collapse; font-size:13px; margin-top:4px; }
+.pg-table th{
+  background:var(--navy); color:var(--gold); font-weight:700; font-size:12.5px;
+  padding:7px 10px; text-align:center; border:1px solid #3a3020; width:38px;
+}
+.pg-table th:first-child{ text-align:left; width:auto; }
+.pg-table td{
+  padding:7px 10px; border:1px solid var(--line); vertical-align:middle; background:#fff;
+}
+.pg-table tr:nth-child(even) td{ background:#faf9f6; }
+.pg-table td.pg-label{ font-size:13px; line-height:1.5; color:var(--ink); }
+.pg-table td.pg-cell{ text-align:center; }
+.pg-radio{ display:none; }
+.pg-radio-lbl{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:26px; height:26px; border-radius:50%; border:1.5px solid var(--line);
+  cursor:pointer; font-size:12.5px; font-weight:600; color:var(--ink-soft);
+  transition: all .15s;
+}
+.pg-radio-lbl:hover{ border-color:var(--gold-soft); background:#fdfaf0; color:var(--navy); }
+.pg-radio:checked + .pg-radio-lbl{
+  background:var(--navy); border-color:var(--navy); color:var(--gold);
+}
+.pg-qnum-cell{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:20px; height:20px; border-radius:50%; background:var(--navy);
+  color:var(--gold); font-size:10px; font-weight:700; margin-right:6px; flex-shrink:0;
+}
 
 /* highlight marks */
 .hl-yellow{ background: var(--hl-yellow); border-radius:2px; }
@@ -513,25 +595,20 @@ input, select, textarea{ font-family: inherit; }
    8. RESPONSIVE
    ============================================================ */
 @media (max-width: 1024px){
-  .sidebar{ width:230px; min-width:230px; }
   .panel-left, .panel-right{ padding:24px 22px; }
+  .tb-brand-sub, .tb-student{ display:none; } /* ẩn bớt trên màn hẹp */
 }
 @media (max-width: 860px){
-  .exam-shell{ flex-direction:column; }
-  .sidebar{ width:100%; min-width:0; flex-direction:row; flex-wrap:wrap; height:auto; }
   .split-container{ flex-direction:column; }
   .resizer{ display:none; }
   .panel-left, .panel-right{ width:100% !important; height:50%; }
   .sheet-grid{ grid-template-columns: repeat(5,1fr); }
+  .tb-qmap-wrap{ display:none; } /* ẩn qmap ngang trên mobile, vẫn mở được qua panel flag */
 }
-
-/* fit-to-screen safeguard: shrink sidebar font/padding on short viewports */
 @media (max-height: 720px){
-  .sb-brand{ padding:14px 22px 10px; }
-  .sb-student{ padding:8px 22px; }
-  .sb-timer-wrap{ padding:10px 22px; }
-  .sb-timer{ font-size:24px; }
-  .sb-actions{ padding:10px 22px 14px; }
+  .topbar{ height:44px; }
+  .sb-timer{ font-size:17px; }
+  .sb-btn{ height:28px; font-size:10px; padding:0 9px; }
 }
 </style>
 </head>
@@ -565,36 +642,35 @@ input, select, textarea{ font-family: inherit; }
 <div class="screen" id="screen-exam">
   <div class="exam-shell">
 
-    <!-- ---- Sidebar ---- -->
-    <aside class="sidebar">
-      <div class="sb-brand">
-        <div class="sb-brand-logo">G<span style="color:var(--gold)">.</span>EDU</div>
-        <div class="sb-brand-sub" id="sb-test-name">[TÊN BÀI TEST]</div>
+    <!-- ---- Top Bar ---- -->
+    <div class="topbar">
+      <div class="tb-brand">
+        <div>
+          <div class="tb-brand-logo">G<span style="color:var(--gold)">.</span>EDU</div>
+          <div class="tb-brand-sub" id="sb-test-name">[TÊN BÀI TEST]</div>
+        </div>
       </div>
 
-      <div class="sb-student">
-        <b id="sb-student-name">—</b><br>
-        Lớp: <span id="sb-student-class">—</span>
+      <div class="tb-student">
+        <b id="sb-student-name">—</b>&nbsp;·&nbsp;Lớp:&nbsp;<span id="sb-student-class">—</span>
       </div>
 
-      <div class="sb-timer-wrap">
-        <div class="sb-timer-label">Thời gian còn lại</div>
+      <div class="tb-qmap-wrap">
+        <div class="tb-qmap-label">MAP</div>
+        <div class="qmap" id="qmap"></div>
+        <div class="tb-map-progress" id="sb-map-progress">0/40</div>
+      </div>
+
+      <div class="tb-timer-wrap">
+        <div class="tb-timer-label">Còn lại</div>
         <div class="sb-timer" id="sb-timer">60:00</div>
       </div>
 
-      <div class="sb-map-wrap">
-        <div class="sb-map-label">
-          <span>Question Map</span>
-          <span id="sb-map-progress">0/40</span>
-        </div>
-        <div class="qmap" id="qmap"><!-- [JS GENERATED: 40 ô qmap-cell] --></div>
-      </div>
-
-      <div class="sb-actions">
-        <button class="sb-btn sb-btn-flag" id="btn-open-flags">🚩 Xem câu đánh dấu</button>
+      <div class="tb-actions">
+        <button class="sb-btn sb-btn-flag" id="btn-open-flags">🚩 Đánh dấu</button>
         <button class="sb-btn sb-btn-submit" id="btn-submit">Nộp bài</button>
       </div>
-    </aside>
+    </div>
 
     <!-- ---- Main ---- -->
     <main class="exam-main">
@@ -834,125 +910,293 @@ document.querySelectorAll('[data-locked-id]').forEach(el=>{
    PASSAGES: mảng 3 phần tử {title, meta, html} cho 3 tab.
 ------------------------------------------------------------- */
 const PASSAGES = [
-  { title: 'THE DEVELOPMENT OF PLASTICS', meta: 'Passage 1', html: `
-      <p>The first plastics were developed as a substitute for natural rubber. Chemically, rubber is a polymer-a compound containing large molecules that are formed by the bonding of many smaller, simpler units, repeated over and over again. The same bonding principle-polymerization-is the basis of the creation of a huge range of plastics by the chemical industry.</p>
-      <p>The first plastic was developed as a result of a competition in the USA. In the 1860s, $10,000 was offered to anybody who could replace ivory-supplies of which were declining-with something equally good as a material for making billiard balls. The prize was won by John Wesley Hyatt, with a material called celluloid. Celluloid was made by dissolving cellulose, a carbohydrate obtained from plants, in a solution of camphor dissolved in ethanol. This new material rapidly found other applications in the manufacture of everyday products such as knife handles and detachable collars and cuffs. But perhaps the best-known celluloid product was photographic film, without which the film industry could never have taken off at the end of the 19th century.</p>
-      <p>Celluloid can be repeatedly softened and reshaped by heat, and is known as a thermoplastic. In 1907, Leo Baekeland (1863-1944), a Belgian chemist working in the USA, invented a different kind of plastic, by causing phenol and formaldehyde to react together. Baekeland called it Bakelite, and it was the first of the thermosets-plastic that can be cast and moulded while hot, but cannot be softened by heat and reshaped once they have set. Bakelite was a good insulator, and was resistant to water and acid. With these properties it was soon being used in the manufacture of electrical switches as well as a variety of domestic items.</p>
-      <p>As the century went on, the range of newly developed plastic increased. Chemists began looking for other small molecules that could be strung together to make polymers. In the 1930s, chemists in Britain discovered that the gas ethylene would polymerize under heat and pressure to form a thermoplastic they called polythene. Polypropylene followed in the 1950s. Both are used to make bottles, pipes and plastic bags. A small change in the starting material-replacing a hydrogen atom in ethylene with a chlorine atom-produced rigid PVC (polyvinyl chloride), a fireproof plastic suitable for drains and gutters. By adding certain chemicals, a soft form of PVC can be produced, suitable as a substitute for rubber in items such as waterproof clothing. A closely related plastic is Teflon or PTFE (polytetrafluoroethylene). It produces very little friction, making it ideal for products such as non-stick frying pans.</p>
-      <p>Polystyrene, a hard, clear material like glass, was developed during the 1930s in Germany, and its applications included food containers and toys. Expanded polystyrene is rigid and is widely used in packaging and insulation. Polyurethane, developed in the same country, was commonly produced as a foam which was very useful in the production of insulating materials.</p>
-      <p>In the 1930s, the first of the man-made fibres was created-nylon. Its inventor was a chemist called Wallace Carothers (1896-1937), who worked for the Du Pont company in the USA. He found that under the right conditions two particular chemicals would form a polymer that could be pumped out through holes and then stretched to form long glossy threads that could be woven like silk. Its first use was to make parachutes for the US armed forces in World War II. In the postwar years, it completely replaced silk in the manufacture of stockings.</p>
-      <p>Many other synthetic fibres joined nylon, including Orion, Acrilan, and Terylene. Today most garments are made of a blend of natural fibres, such as cotton and wool, and man-made fibres that make fabrics easier to look after.</p>
-      <p>Despite its enormous usefulness, plastic has its drawbacks. In fact one of its great strengths-its indestructibility- is its greatest disadvantage. Beaches all over the world, even on the remotest island, are littered with plastic bottles that nothing can destroy. Nor is it very easy to recycle plastics, as different types of plastics, as different types of plastic are often found in the same items and call for different treatments.</p>
-      <p>Plastics can be made biodegradable by incorporating into their structure a material such as starch, which is attacked by bacteria and causes the plastic to fall apart. Other materials can be incorporated that gradually decay in sunlight-although bottles made of such materials have to be stored in the dark, to ensure they do not disintegrate before they have been used.</p>
-    ` },
-  { title: 'LEAN PRODUCTION INNOVATION – IN MANUFACTURING SYSTEMS', meta: 'Passage 2', html: `
-      <p>14 ___________________________</p>
-      <p>After the First World War, car makers Henry Ford and Arthur Sloan of General Motors moved world manufacturing from centuries of craft production into the age of mass production. Largely as a result of this, the United States soon dominated the world economy. After the Second World War, and approximately a hundred years after Japan opened up to the modern world, Eiji Toyoda and Taiichi Ohno pioneered the concept of lean production at the Toyota car company. And now, although superimposing the method on existing mass production systems causes pain and upheaval, manufacturers around the world are trying to embrace this innovative system.</p>
-      <p>15 ___________________________</p>
-      <p>Perhaps the best way to describe lean production is to compare it with the two other major manufacturing systems: craft production and mass production. The craft producer uses highly skilled workers and simple but flexible tools to make exactly what the customer asks for – one item at a time. A present day example of this method is the customised production of a few exotic sports cars. The concept of craft production remains very popular, but the problem with it is obvious. Goods produced by the craft method – as cars once exclusively were – cost too much for most of us to afford. So at the beginning of the twentieth century, mass production was developed as an alternative method. The mass producer uses narrowly skilled professionals to design products which are then made by unskilled or semi-skilled workers, using expensive, single-purpose machines. These churn out standardised products in very high volumes. Because the machinery costs so much, and is so intolerant of disruption, the mass producer keeps standard designs in production for as long as possible. The result is that the customer gets lower costs, but at the expense of variety, and by means of work methods which most employees find boring and dispiriting. By contrast, the lean production system combines the advantages of craft and mass production, while avoiding the high cost of the former and the rigidity of the latter. Towards this end, companies appoint teams of multi-skilled workers to all levels of the organisation , and use highly flexible and increasingly automated machines to produce goods in enormous volume and variety.</p>
-      <p>16 ___________________________</p>
-      <p>Lean production is so called because, compared with mass production, it uses less of everything – half the human effort in the factory, half the manufacturing space, half the investment in tools, and half the engineering hours to develop the new product. It also results in far fewer defects.</p>
-      <p>17 ___________________________</p>
-      <p>Perhaps the most striking contrast between mass and lean production systems lies in their production standards. Mass producers set a limited goal for themselves: 'good enough', which translates into an acceptable number of defects, a maximum acceptable number of inventories, and a narrow range of standardised products. Lean producers, on the other hand, are unwilling to compromise standards in any of these areas.</p>
-      <p>18 ___________________________</p>
-      <p>Although cost reduction is the primary objective of the lean production system, it must meet three other intermediate objectives in order to achieve this: quantity control, quality assurance and respect for humanity. Firstly, the system must be able to adapt to daily and monthly fluctuations in demand. Secondly, each separate process must supply only good units to the subsequent process. Thirdly, in as far as the system uses human resources to attain its cost objectives, respect for human needs must be cultivated. It should be emphasised that none of these three objectives can be achieved separately.</p>
-      <p>19 ___________________________</p>
-      <p>The continuous flow of lean manufacturing production relies on two practical mechanisms: just-in-time and autonomation. Just-in-time means, for example, that in the process of assembling the parts to build a car, components from the preceding process should arrive at the next part of the line at exactly the right time and in the correct quantities. If just-in-time is fully realised throughout the company, then superfluous inventories are completely eliminated from the factory, making stores or warehouses unnecessary. However, relying solely on a central planning approach to control schedules for all stages of the production process simultaneously is very difficult in the case of cars, which consist of thousands of parts. So the lean system looks at the production flow in reverse; in other words, employees go to the preceding process to withdraw the necessary quantity of units at the appropriate time. The preceding process must produce only sufficient quantities of units to replace those that have been withdrawn, and in turn withdraws the requisite number of components from the process that precedes it.</p>
-      <p>20 ___________________________</p>
-      <p>Autonomation is the automatic checking for abnormalities in the production process. In order to realise just-in-time perfectly, only units which are in perfect condition must be allowed to flow to the next process, and this flow must be regular and uninterrupted. In other words, quality control must coexist with just-in-time procedures throughout the system. Autonomation involves building in a mechanism to prevent the multiplication of defects in machines or product lines. For example, in Toyota factories almost all the machines have been fitted with stopping devices, and the concept of autonomation has been extended to manual production lines. If something abnormal happens there, the worker pushes a button to stop the whole line, and lights, which are hung so high in the factory that they are visible to everyone, indicate the position of the problem.</p>
-    ` },
-  { title: 'HOW DOES WATCHING SPORT INFLUENCE THE BRAIN?', meta: 'Passage 3', html: `
-      <p>[A] During the epoch when the poet Homer unveiled his grand epic, the ancient Greeks initiated a festival where men contended in a race of roughly 200 metres. The victor would be rewarded with a symbolic olive branch. This event, known as the Olympics, has transcended its humble origins to embody the human quest for progress. The captivating nature of these games raises an intriguing question: what exactly draws us in as spectators? Is it the thrill of competition, the beauty of human movement, or something happening within our brains?</p>
-      <p>[B] In 1996, three Italian neuroscientists-Giacomo Rizzolatti, Leonardo Fogassi, and Vittorio Gallese conducted research on the premotor cortex of monkeys and made a groundbreaking discovery. They revealed a cluster of cells that act as a repository for motor actions, similar to 'grammar of movement'. These cellular networks represent the 'sentences' of full-body motions that our brains meticulously retain and refine. Take the art of swinging a golf club as an example. For those who only watch the Masters Tournament on television, playing golf may appear deceptively effortless. However, for novices, smoothly manoeuvring the asymmetrical metal club presents a nearly impossible challenge. This is because novices rely on conscious effort, utilising brain regions adjacent to the premotor cortex. Experts, by contrast, instinctively execute perfectly balanced movements, as their actions are deeply ingrained and intertwined with neurons in the premotor cortex. Their swing occurs with the serenity of a refined autopilot, requiring no conscious control. This neural distinction between novices and experts provides insight into how long-term training can physically reshape the brain.</p>
-      <p>[C] These neurons in the premotor cortex not only help explain why some athletes seem to have exceptional skills, but they also exhibit a wondrous characteristic that prompted Rizzolatti, Fogassi, and Gallese to bestow upon them the exalted label of 'mirror neuron'. They point out that mirror neurons are activated when a primate performs a particular action, such as grasping or holding an object, or when it witnesses another individual performing a comparable action. Humans possess an even more intricate motor neuron system that reflects the external world in our brains, enabling us to internalise the behaviours of others. Nonetheless, these cells necessitate what scientists refer to as 'goal-orientated movements' to activate. If we stare at a photograph, a static image of a runner striding ahead, our mirror neurons remain utterly silent. It is solely when the runner is in action, be it in running, moving, or sprinting, that they are ignited. Movement, not stillness, is what speaks to our brains.</p>
-      <p>[D] Electrophysiological studies have shown that when we observe a golfer or a runner in action, our own premotor cortex mirror neurons respond as if we were participating in the activity. This neural mirroring was initially identified in 1954 by French physiologists Gastaut and Bert, who noticed specific alpha and mu brain wave patterns in humans. The mu signal plays a role in neural mirroring, remaining active during periods of bodily stillness but dissipating when we undertake active pursuits like playing a sport or changing TV channels. Notably, the mu signal also remains subdued while we observe someone else in action, such as on television, which alludes to the influence of mirror neurons. This suggests that our brains do not simply passively register what we see, but actively simulate it, engaging systems normally reserved for action.</p>
-      <p>[E] Rizzolatti, Fogassi, and Gallese have coined the term 'direct matching hypothesis' to delineate the concept of mirror neurons. They asserted that to comprehend the movements of sports stars, we need to align the visual representation of the observed action with our own motor representation of the same action. According to this theory, watching an Olympic athlete can evoke a resonance in the observer's motor system. The observer's 'motor knowledge' is harnessed to decipher the observed action. However, mirror neurons extend beyond being merely neural foundations for our sporting inclinations. They also enable observers to enhance their athletic abilities through the process of observation. It turns out that watching a remarkable golfer improves our own golfing skills, and witnessing a skilled sprinter actually bolsters our running speed. This ability to learn through observation is a vital skill. From language acquisition in infancy to understanding facial expressions, mimicking plays a fundamental role in our consciousness. The most accomplished athletes possess a premotor cortex capable of envisioning victorious movements, supplemented by the physical attributes required to translate those movements into reality. In this way, action and imagination coalesce to drive performance.</p>
-      <p>[F] However, how many among us watch sport in order to enhance our athletic abilities? Most spectators tune in for the emotional roller coaster, the human drama it encompasses. This emotional connection finds its roots in mirror neurons, which allow spectators to perceive athletes' victorious movements and to share in the emotion of their triumphs. This is because they are directly associated with the amygdala, a key area of the brain responsible for emotional processing. During the Olympics, mirror neurons in individuals around the world resonate in unison, and watching sport unifies people. The majority of us may never run a mile in under four minutes or hit a home run. Yet, as we gather around our televisions, we all briefly get a taste of the feeling of executing something flawlessly. In those fleeting moments, sport becomes more than entertainment—it becomes a shared human experience.</p>
-    ` }
+  {
+    title: "THE DEVELOPMENT OF PLASTICS",
+    meta: "Passage 1",
+    html: `<p>The first plastics were developed as a substitute for natural rubber. Chemically, rubber is a polymer-a compound containing large molecules that are formed by the bonding of many smaller, simpler units, repeated over and over again. The same bonding principle-polymerization-is the basis of the creation of a huge range of plastics by the chemical industry.</p><p>The first plastic was developed as a result of a competition in the USA. In the 1860s, $10,000 was offered to anybody who could replace ivory-supplies of which were declining-with something equally good as a material for making billiard balls. The prize was won by John Wesley Hyatt, with a material called celluloid. Celluloid was made by dissolving cellulose, a carbohydrate obtained from plants, in a solution of camphor dissolved in ethanol. This new material rapidly found other applications in the manufacture of everyday products such as knife handles and detachable collars and cuffs. But perhaps the best-known celluloid product was photographic film, without which the film industry could never have taken off at the end of the 19th century.</p><p>Celluloid can be repeatedly softened and reshaped by heat, and is known as a thermoplastic. In 1907, Leo Baekeland (1863-1944), a Belgian chemist working in the USA, invented a different kind of plastic, by causing phenol and formaldehyde to react together. Baekeland called it Bakelite, and it was the first of the thermosets-plastic that can be cast and moulded while hot, but cannot be softened by heat and reshaped once they have set. Bakelite was a good insulator, and was resistant to water and acid. With these properties it was soon being used in the manufacture of electrical switches as well as a variety of domestic items.</p><p>As the century went on, the range of newly developed plastic increased. Chemists began looking for other small molecules that could be strung together to make polymers. In the 1930s, chemists in Britain discovered that the gas ethylene would polymerize under heat and pressure to form a thermoplastic they called polythene. Polypropylene followed in the 1950s. Both are used to make bottles, pipes and plastic bags. A small change in the starting material-replacing a hydrogen atom in ethylene with a chlorine atom-produced rigid PVC (polyvinyl chloride), a fireproof plastic suitable for drains and gutters. By adding certain chemicals, a soft form of PVC can be produced, suitable as a substitute for rubber in items such as waterproof clothing. A closely related plastic is Teflon or PTFE (polytetrafluoroethylene). It produces very little friction, making it ideal for products such as non-stick frying pans.</p><p>Polystyrene, a hard, clear material like glass, was developed during the 1930s in Germany, and its applications included food containers and toys. Expanded polystyrene is rigid and is widely used in packaging and insulation. Polyurethane, developed in the same country, was commonly produced as a foam which was very useful in the production of insulating materials.</p><p>In the 1930s, the first of the man-made fibres was created-nylon. Its inventor was a chemist called Wallace Carothers (1896-1937), who worked for the Du Pont company in the USA. He found that under the right conditions two particular chemicals would form a polymer that could be pumped out through holes and then stretched to form long glossy threads that could be woven like silk. Its first use was to make parachutes for the US armed forces iin World War II. In the postwar years, it completely replaced silk in the manufacture of stockings.</p><p>Many other synthetic fibres joined nylon, including Orion, Acrilan, and Terylene. Today most garments are made of a blend of natural fibres, such as cotton and wool, and man-made fibres that make fabrics easier to look after.</p><p>Despite its enormous usefulness, plastic has its drawbacks. In fact, one of its great strengths-its indestructibility- is its greatest disadvantage. Beaches all over the world, even on the remotest island, are littered with plastic bottles that nothing can destroy. Nor is it very easy to recycle plastics, as different types of plastics, as different types of plastic are often found in the same items and call for different treatments.</p><p>Plastics can be made biodegradable by incorporating into their structure a material such as starch, which is attacked by bacteria and causes the plastic to fall apart. Other materials can be incorporated that gradually decay in sunlight-although bottles made of such materials have to be stored in the dark, to ensure they do not disintegrate before they have been used.</p>`
+  },
+  {
+    title: "LEAN PRODUCTION INNOVATION – IN MANUFACTURING SYSTEMS",
+    meta: "Passage 2",
+    html: `<h3>14 ______________________</h3><p>After the First World War, car makers Henry Ford and Arthur Sloan of General Motors moved world manufacturing from centuries of craft production into the age of mass production. Largely as a result of this, the United States soon dominated the world economy. After the Second World War, and approximately a hundred years after Japan opened up to the modern world, Eiji Toyoda and Taiichi Ohno pioneered the concept of lean production at the Toyota car company. And now, although superimposing the method on existing mass production systems causes pain and upheaval, manufacturers around the world are trying to embrace this innovative system.</p><h3>15 ______________________</h3><p>Perhaps the best way to describe lean production is to compare it with the two other major manufacturing systems: craft production and mass production. The craft producer uses highly skilled workers and simple but flexible tools to make exactly what the customer asks for – one item at a time. A present day example of this method is the customised production of a few exotic sports cars. The concept of craft production remains very popular, but the problem with it is obvious. Goods produced by the craft method – as cars once exclusively were – cost too much for most of us to afford. So at the beginning of the twentieth century, mass production was developed as an alternative method. The mass producer uses narrowly skilled professionals to design products which are then made by unskilled or semi-skilled workers, using expensive, single-purpose machines. These churn out standardised products in very high volumes. Because the machinery costs so much, and is so intolerant of disruption, the mass producer keeps standard designs in production for as long as possible. The result is that the customer gets lower costs, but at the expense of variety, and by means of work methods which most employees find boring and dispiriting. By contrast, the lean production system combines the advantages of craft and mass production, while avoiding the high cost of the former and the rigidity of the latter. Towards this end, companies appoint teams of multi-skilled workers to all levels of the organisation , and use highly flexible and increasingly automated machines to produce goods in enormous volume and variety.</p><h3>16 ______________________</h3><p>Lean production is so called because, compared with mass production, it uses less of everything – half the human effort in the factory, half the manufacturing space, half the investment in tools, and half the engineering hours to develop the new product. It also results in far fewer defects.</p><h3>17 ______________________</h3><p>Perhaps the most striking contrast between mass and lean production systems lies in their production standards. Mass producers set a limited goal for themselves: 'good enough', which translates into an acceptable number of defects, a maximum acceptable number of inventories, and a narrow range of standardised products. Lean producers, on the other hand, are unwilling to compromise standards in any of these areas.</p><h3>18 ______________________</h3><p>Although cost reduction is the primary objective of the lean production system, it must meet three other intermediate objectives in order to achieve this: quantity control, quality assurance and respect for humanity. Firstly, the system must be able to adapt to daily and monthly fluctuations in demand. Secondly, each separate process must supply only good units to the subsequent process. Thirdly, in as far as the system uses human resources to attain its cost objectives, respect for human needs must be cultivated. It should be emphasised that none of these three objectives can be achieved separately.</p><h3>19 ______________________</h3><p>The continuous flow of lean manufacturing production relies on two practical mechanisms: just-in-time and autonamation. Just-in-time means, for example, that in the process of assembling the parts to build a car, components from the preceding process should arrive at the next part of the line at exactly the right time and in the correct quantities. If just-in-time is fully realised throughout the company, then superfluous inventories are completely eliminated from the factory, making stores or warehouses unnecessary. However, relying solely on a central planning approach to control schedules for all stages of the production process simultaneously is very difficult in the case of cars, which consist of thousands of parts. So the lean system looks at the production flow in reverse; in other words, employees go to the preceding process to withdraw the necessary quantity of units at the appropriate time. The preceding process must produce only sufficient quantities of units to replace those that have been withdrawn, and in turn withdraws the requisite number of components from the process that precedes it.</p><h3>20 ______________________</h3><p>Autonamation is the automatic checking for abnormalities in the production process. In order to realise just-in-time perfectly, only units which are in perfect condition must be allowed to flow to the next process, and this flow must be regular and uninterrupted. In other words, quality control must coexist with just-in-time procedures throughout the system. Autonamation involves building in a mechanism to prevent the multiplication of defects in machines or product lines. For example, in Toyota factories almost all the machines have been fitted with stopping devices, and the concept of autonamation has been extended to manual production lines. If something abnormal happens there, the worker pushes a button to stop the whole line, and lights, which are hung so high in the factory that they are visible to everyone, indicate the position of the problem.</p>`
+  },
+  {
+    title: "HOW DOES WATCHING SPORT INFLUENCE THE BRAIN?",
+    meta: "Passage 3",
+    html: `<p><b>A</b> During the epoch when the poet Homer unveiled his grand epic, the ancient Greeks initiated a festival where men contended in a race of roughly 200 metres. The victor would be rewarded with a symbolic olive branch. This event, known as the Olympics, has transcended its humble origins to embody the human quest for progress. The captivating nature of these games raises an intriguing question: what exactly draws us in as spectators? Is it the thrill of competition, the beauty of human movement, or something happening within our brains?</p><p><b>B</b> In 1996, three Italian neuroscientists-Giacomo Rizzolatti, Leonardo Fogassi, and Vittorio Gallese conducted research on the premotor cortex of monkeys and made a groundbreaking discovery. They revealed a cluster of cells that act as a repository for motor actions, similar to 'grammar of movement'. These cellular networks represent the 'sentences' of full-body motions that our brains meticulously retain and refine. Take the art of swinging a golf club as an example. For those who only watch the Masters Tournament on television, playing golf may appear deceptively effortless. However, for novices, smoothly manoeuvring the asymmetrical metal club presents a nearly impossible challenge. This is because novices rely on conscious effort, utilising brain regions adjacent to the premotor cortex. Experts, by contrast, instinctively execute perfectly balanced movements, as their actions are deeply ingrained and intertwined with neurons in the premotor cortex. Their swing occurs with the serenity of a refined autopilot, requiring no conscious control. This neural distinction between novices and experts provides insight into how long-term training can physically reshape the brain.</p><p><b>C</b> These neurons in the premotor cortex not only help explain why some athletes seem to have exceptional skills, but they also exhibit a wondrous characteristic that prompted Rizzolatti, Fogassi, and Gallese to bestow upon them the exalted label of 'mirror neuron'. They point out that mirror neurons are activated when a primate performs a particular action, such as grasping or holding an object, or when it witnesses another individual performing a comparable action. Humans possess an even more intricate mirror neuron system that reflects the external world in our brains, enabling us to internalise the behaviours of others. Nonetheless, these cells necessitate what scientists refer to as 'goal-orientated movements' to activate. If we stare at a photograph, a static image of a runner striding ahead, our mirror neurons remain utterly silent. It is solely when the runner is in action, be it in running, moving, or sprinting, that they are ignited. Movement, not stillness, is what speaks to our brains.</p><p><b>D</b> Electrophysiological studies have shown that when we observe a golfer or a runner in action, our own premotor cortex mirror neurons respond as if we were participating in the activity. This neural mirroring was initially identified in 1954 by French physiologists Gastaut and Bert, who noticed specific alpha and mu brain wave patterns in humans.</p><p>The mu signal plays a role in neural mirroring, remaining active during periods of bodily stillness but dissipating when we undertake active pursuits like playing a sport or changing TV channels. Notably, the mu signal also remains subdued while we observe someone else in action, such as on television, which alludes to the influence of mirror neurons. This suggests that our brains do not simply passively register what we see, but actively simulate it, engaging systems normally reserved for action.</p><p><b>E</b> Rizzolatti, Fogassi, and Gallese have coined the term 'direct matching hypothesis' to delineate the concept of mirror neurons. They asserted that to comprehend the movements of sports stars, we need to align the visual representation of the observed action with our own motor representation of the same action. According to this theory, watching an Olympic athlete can evoke a resonance in the observer's motor system. The observer's 'motor knowledge' is harnessed to decipher the observed action. However, mirror neurons extend beyond being merely neural foundations for our sporting inclinations. They also enable observers to enhance their athletic abilities through the process of observation. It turns out that watching a remarkable golfer improves our own golfing skills, and witnessing a skilled sprinter actually bolsters our running speed.</p><p>This ability to learn through observation is a vital skill. From language acquisition in infancy to understanding facial expressions, mimicking plays a fundamental role in our consciousness. The most accomplished athletes possess a premotor cortex capable of envisioning victorious movements, supplemented by the physical attributes required to translate those movements into reality. In this way, action and imagination coalesce to drive performance.</p><p><b>F</b> However, how many among us watch sport in order to enhance our athletic abilities? Most spectators tune in for the emotional roller coaster, the human drama it encompasses. This emotional connection finds its roots in mirror neurons, which allow spectators to perceive athletes' victorious movements and to share in the emotion of their triumphs.</p><p>This is because they are directly associated with the amygdala, a key area of the brain responsible for emotional processing. During the Olympics, mirror neurons in individuals around the world resonate in unison, and watching sport unifies people. The majority of us may never run a mile in under four minutes or hit a home run. Yet, as we gather around our televisions, we all briefly get a taste of the feeling of executing something flawlessly. In those fleeting moments, sport becomes more than entertainment—it becomes a shared human experience.</p>`
+  }
 ];
 
-
+/* Mỗi nhóm câu hỏi gắn với 1 passage (passageIndex 0/1/2) và có
+   instructionsHtml hiển thị phía trên nhóm. */
 const QUESTION_GROUPS = [
   {
     passageIndex: 0,
-    instructionsHtml: '<b>Questions 1–7</b><br>Complete the notes below. Write <b>ONE WORD ONLY</b> for each answer.',
+    instructionsHtml: '<b>Questions 1–7</b><br>Complete the table below. Write <b>NO MORE THAN TWO WORDS</b> from the passage for each answer.',
+    tableLayout: {
+      caption: 'Early types of plastic',
+      headers: ['Name', 'Date', 'Country of origin', 'Properties', 'Common uses'],
+      rows: [
+        ['Celluloid', '1860s', 'USA', 'Can be soften and reshaped by heat', ['billiard balls (original use); cutlery; clothing;', {q:1}]],
+        [{q:2}, '1907', 'USA', 'Can\'t be softened after setting; good insulator; resistant to water and acid', [{q:3}, 'Household object']],
+        ['Polythene', '1930s', {q:4}, 'Can be softened and reshaped by heat', 'bottles; pipes; plastic bags'],
+        ['Polypropylene', '1950s', '', '', 'bottles; pipes; plastic bags'],
+        ['Rigid PVC', '', '', ['Is ', {q:5}], 'external piping'],
+        ['Soft PVC', '', '', '', 'outdoor clothing'],
+        ['Polystyrene', '1930s', 'Germany', ['Resembles ', {q:6}], 'food containers; toys'],
+        ['Polyurethane', '', 'Germany', ['Usually manufactured as a ', {q:7}], 'insulation'],
+      ]
+    },
     questions: [
-      { n:1, type:'text', text:'Celluloid Common uses: billiard balls (original use); cutlery; clothing; [1]' },
-      { n:2, type:'text', text:'Name of plastic (1907, USA): [2]' },
-      { n:3, type:'text', text:'Common uses of Bakelite: [3] Household object' },
-      { n:4, type:'text', text:'Country of origin of Polythene (1930s): [4]' },
-      { n:5, type:'text', text:'Property of Rigid PVC: Is [5]' },
-      { n:6, type:'text', text:'Property of Polystyrene: Resembles [6]' },
-      { n:7, type:'text', text:'Property of Polyurethane: Usually manufactured as a [7]' }
+      { n: 1, type: 'text', text: 'Common use of Celluloid' },
+      { n: 2, type: 'text', text: 'Name of plastic invented 1907' },
+      { n: 3, type: 'text', text: 'Common use of Q2 plastic' },
+      { n: 4, type: 'text', text: 'Country of origin of Polythene' },
+      { n: 5, type: 'text', text: 'Property of Rigid PVC' },
+      { n: 6, type: 'text', text: 'Polystyrene resembles' },
+      { n: 7, type: 'text', text: 'Polyurethane manufactured as' }
     ]
   },
   {
     passageIndex: 0,
-    instructionsHtml: '<b>Questions 8–13</b><br>Do the following statements agree with the information given in the passage? Write <b>TRUE</b> if the statement agrees with the information, <b>FALSE</b> if the statement contradicts the information, or <b>NOT GIVEN</b> if there is no information on this.',
+    instructionsHtml: '<b>Questions 8–13</b><br>Choose <b>TRUE</b> if the statement agrees with the information given in the text, choose <b>FALSE</b> if the statement contradicts the information, or choose <b>NOT GIVEN</b> if there is no information on this.',
     questions: [
-      { n:8, type:'radio', text:'The chemical structure of rubber is very different to that of plastics.', options:[{key:'TRUE', label:''}, {key:'FALSE', label:''}, {key:'NOT GIVEN', label:''}] },
-      { n:9, type:'radio', text:'John Wesley Hyatt was an industrial chemist.', options:[{key:'TRUE', label:''}, {key:'FALSE', label:''}, {key:'NOT GIVEN', label:''}] },
-      { n:10, type:'radio', text:'Celluloid and Bakelite react in the same way to heat.', options:[{key:'TRUE', label:''}, {key:'FALSE', label:''}, {key:'NOT GIVEN', label:''}] },
-      { n:11, type:'radio', text:'If an object is made of several plastics, these prove hard to break down and reuse.', options:[{key:'TRUE', label:''}, {key:'FALSE', label:''}, {key:'NOT GIVEN', label:''}] },
-      { n:12, type:'radio', text:'Adding starch to plastic makes it more durable.', options:[{key:'TRUE', label:''}, {key:'FALSE', label:''}, {key:'NOT GIVEN', label:''}] },
-      { n:13, type:'radio', text:'Containers which are designed to decompose need particular storage conditions.', options:[{key:'TRUE', label:''}, {key:'FALSE', label:''}, {key:'NOT GIVEN', label:''}] }
+      {
+        n: 8, type: 'radio', text: 'The chemical structure of rubber is very different to that of plastics.',
+        options: [ { key: 'TRUE', label: 'TRUE' }, { key: 'FALSE', label: 'FALSE' }, { key: 'NOT GIVEN', label: 'NOT GIVEN' } ]
+      },
+      {
+        n: 9, type: 'radio', text: 'John Wesley Hyatt was an industrial chemist.',
+        options: [ { key: 'TRUE', label: 'TRUE' }, { key: 'FALSE', label: 'FALSE' }, { key: 'NOT GIVEN', label: 'NOT GIVEN' } ]
+      },
+      {
+        n: 10, type: 'radio', text: 'Celluloid and Bakelite react in the same way to heat.',
+        options: [ { key: 'TRUE', label: 'TRUE' }, { key: 'FALSE', label: 'FALSE' }, { key: 'NOT GIVEN', label: 'NOT GIVEN' } ]
+      },
+      {
+        n: 11, type: 'radio', text: 'If an object is made of several plastics, these prove hard to break down and reuse.',
+        options: [ { key: 'TRUE', label: 'TRUE' }, { key: 'FALSE', label: 'FALSE' }, { key: 'NOT GIVEN', label: 'NOT GIVEN' } ]
+      },
+      {
+        n: 12, type: 'radio', text: 'Adding starch to plastic makes it more durable.',
+        options: [ { key: 'TRUE', label: 'TRUE' }, { key: 'FALSE', label: 'FALSE' }, { key: 'NOT GIVEN', label: 'NOT GIVEN' } ]
+      },
+      {
+        n: 13, type: 'radio', text: 'Containers which are designed to decompose need particular storage conditions.',
+        options: [ { key: 'TRUE', label: 'TRUE' }, { key: 'FALSE', label: 'FALSE' }, { key: 'NOT GIVEN', label: 'NOT GIVEN' } ]
+      }
     ]
   },
   {
     passageIndex: 1,
-    instructionsHtml: '<b>Questions 14–20</b><br>The passage has seven paragraphs, numbered 14–20. Choose the correct heading for each paragraph from the list of headings below.',
+    instructionsHtml: '<b>Questions 14–20</b><br>Choose the correct heading for each paragraph from the list of headings below. Write the correct number, <b>i-x</b>.',
     questions: [
-      { n:14, type:'select', text:'Choose the correct heading for paragraph 14', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] },
-      { n:15, type:'select', text:'Choose the correct heading for paragraph 15', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] },
-      { n:16, type:'select', text:'Choose the correct heading for paragraph 16', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] },
-      { n:17, type:'select', text:'Choose the correct heading for paragraph 17', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] },
-      { n:18, type:'select', text:'Choose the correct heading for paragraph 18', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] },
-      { n:19, type:'select', text:'Choose the correct heading for paragraph 19', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] },
-      { n:20, type:'select', text:'Choose the correct heading for paragraph 20', options:[{key:'i', label:'Global resistance to lean manufacturing'}, {key:'ii', label:'The historical context'}, {key:'iii', label:'Procedures for controlling quality'}, {key:'iv', label:'The pros and cons of different production systems'}, {key:'v', label:'The impact on profits'}, {key:'vi', label:'Procedures for controlling supply'}, {key:'vii', label:'The origin of the term'}, {key:'viii', label:'A crucial difference in levels of quality'}, {key:'ix', label:'Working conditions'}, {key:'x', label:'Interdependent strategies for controlling expenditure'}] }
+      {
+        n: 14, type: 'select', text: 'Paragraph 14 heading:',
+        options: [
+          { key: 'i', label: 'i Global resistance to lean manufacturing' },
+          { key: 'ii', label: 'ii The historical context' },
+          { key: 'iii', label: 'iii Procedures for controlling quality' },
+          { key: 'iv', label: 'iv The pros and cons of different production systems' },
+          { key: 'v', label: 'v The impact on profits' },
+          { key: 'vi', label: 'vi Procedures for controlling supply' },
+          { key: 'vii', label: 'vii The origin of the term' },
+          { key: 'viii', label: 'viii A crucial difference in levels of quality' },
+          { key: 'ix', label: 'ix Working conditions' },
+          { key: 'x', label: 'x Interdependent strategies for controlling expenditure' }
+        ]
+      },
+      {
+        n: 15, type: 'select', text: 'Paragraph 15 heading:',
+        options: [
+          { key: 'i', label: 'i Global resistance to lean manufacturing' },
+          { key: 'ii', label: 'ii The historical context' },
+          { key: 'iii', label: 'iii Procedures for controlling quality' },
+          { key: 'iv', label: 'iv The pros and cons of different production systems' },
+          { key: 'v', label: 'v The impact on profits' },
+          { key: 'vi', label: 'vi Procedures for controlling supply' },
+          { key: 'vii', label: 'vii The origin of the term' },
+          { key: 'viii', label: 'viii A crucial difference in levels of quality' },
+          { key: 'ix', label: 'ix Working conditions' },
+          { key: 'x', label: 'x Interdependent strategies for controlling expenditure' }
+        ]
+      },
+      {
+        n: 16, type: 'select', text: 'Paragraph 16 heading:',
+        options: [
+          { key: 'i', label: 'i Global resistance to lean manufacturing' },
+          { key: 'ii', label: 'ii The historical context' },
+          { key: 'iii', label: 'iii Procedures for controlling quality' },
+          { key: 'iv', label: 'iv The pros and cons of different production systems' },
+          { key: 'v', label: 'v The impact on profits' },
+          { key: 'vi', label: 'vi Procedures for controlling supply' },
+          { key: 'vii', label: 'vii The origin of the term' },
+          { key: 'viii', label: 'viii A crucial difference in levels of quality' },
+          { key: 'ix', label: 'ix Working conditions' },
+          { key: 'x', label: 'x Interdependent strategies for controlling expenditure' }
+        ]
+      },
+      {
+        n: 17, type: 'select', text: 'Paragraph 17 heading:',
+        options: [
+          { key: 'i', label: 'i Global resistance to lean manufacturing' },
+          { key: 'ii', label: 'ii The historical context' },
+          { key: 'iii', label: 'iii Procedures for controlling quality' },
+          { key: 'iv', label: 'iv The pros and cons of different production systems' },
+          { key: 'v', label: 'v The impact on profits' },
+          { key: 'vi', label: 'vi Procedures for controlling supply' },
+          { key: 'vii', label: 'vii The origin of the term' },
+          { key: 'viii', label: 'viii A crucial difference in levels of quality' },
+          { key: 'ix', label: 'ix Working conditions' },
+          { key: 'x', label: 'x Interdependent strategies for controlling expenditure' }
+        ]
+      },
+      {
+        n: 18, type: 'select', text: 'Paragraph 18 heading:',
+        options: [
+          { key: 'i', label: 'i Global resistance to lean manufacturing' },
+          { key: 'ii', label: 'ii The historical context' },
+          { key: 'iii', label: 'iii Procedures for controlling quality' },
+          { key: 'iv', label: 'iv The pros and cons of different production systems' },
+          { key: 'v', label: 'v The impact on profits' },
+          { key: 'vi', label: 'vi Procedures for controlling supply' },
+          { key: 'vii', label: 'vii The origin of the term' },
+          { key: 'viii', label: 'viii A crucial difference in levels of quality' },
+          { key: 'ix', label: 'ix Working conditions' },
+          { key: 'x', label: 'x Interdependent strategies for controlling expenditure' }
+        ]
+      },
+      {
+        n: 19, type: 'select', text: 'Paragraph 19 heading:',
+        options: [
+          { key: 'i', label: 'i Global resistance to lean manufacturing' },
+          { key: 'ii', label: 'ii The historical context' },
+          { key: 'iii', label: 'iii Procedures for controlling quality' },
+          { key: 'iv', label: 'iv The pros and cons of different production systems' },
+          { key: 'v', label: 'v The impact on profits' },
+          { key: 'vi', label: 'vi Procedures for controlling supply' },
+          { key: 'vii', label: 'vii The origin of the term' },
+          { key: 'viii', label: 'viii A crucial difference in levels of quality' },
+          { key: 'ix', label: 'ix Working conditions' },
+          { key: 'x', label: 'x Interdependent strategies for controlling expenditure' }
+        ]
+      },
+      {
+        n: 20, type: 'select', text: 'Paragraph 20 heading:',
+        options: [
+          { key: 'i', label: 'i Global resistance to lean manufacturing' },
+          { key: 'ii', label: 'ii The historical context' },
+          { key: 'iii', label: 'iii Procedures for controlling quality' },
+          { key: 'iv', label: 'iv The pros and cons of different production systems' },
+          { key: 'v', label: 'v The impact on profits' },
+          { key: 'vi', label: 'vi Procedures for controlling supply' },
+          { key: 'vii', label: 'vii The origin of the term' },
+          { key: 'viii', label: 'viii A crucial difference in levels of quality' },
+          { key: 'ix', label: 'ix Working conditions' },
+          { key: 'x', label: 'x Interdependent strategies for controlling expenditure' }
+        ]
+      }
     ]
   },
   {
     passageIndex: 1,
-    instructionsHtml: '<b>Questions 21–26</b><br>Complete the sentences below. Write <b>ONE WORD ONLY</b> for each answer.',
+    instructionsHtml: '<b>Questions 21–26</b><br>Complete the sentences below. Write <b>NO MORE THAN THREE WORDS</b> from the passage for each answer.',
     questions: [
-      { n:21, type:'text', text:'A small number of unusual cars are still produced by the [21] method.' },
-      { n:22, type:'text', text:'Lean production requires staff who are [22]' },
-      { n:23, type:'text', text:'Lean production employs fewer people, and uses less [23], equipment and time.' },
-      { n:24, type:'text', text:'Storage facilities are not needed if a procedure known as [24] is implemented in the lean production method.' },
-      { n:25, type:'text', text:'Autonomation is a procedure for spotting any [25] in the products on a production line.' },
-      { n:26, type:'text', text:'At Toyota factories, [26] are suspended above manual production lines in order to show where production has to be halted.' }
+      { n: 21, type: 'text', text: 'A small number of unusual cars are still produced by the ________ method.' },
+      { n: 22, type: 'text', text: 'Lean production requires staff who are ________.' },
+      { n: 23, type: 'text', text: 'Lean production employs fewer people, and uses less ________, equipment and time.' },
+      { n: 24, type: 'text', text: 'Storage facilities are not needed if a procedure known as ________ is implemented in the lean production method.' },
+      { n: 25, type: 'text', text: 'Autonamation is a procedure for spotting any ________ in the products on a production line.' },
+      { n: 26, type: 'text', text: 'At Toyota factories, ________ are suspended above manual production lines in order to show where production has to be halted.' }
     ]
   },
   {
     passageIndex: 2,
-    instructionsHtml: '<b>Questions 27–32</b><br>The passage has six paragraphs, A–F. Which paragraph contains the following information? Choose the correct letter, A–F.',
+    instructionsHtml: '<b>Questions 27–32</b><br>Reading Passage 3 has six paragraphs, <b>A–F</b>.<br>Which paragraph contains the following information?<br>Choose the correct letter, <b>A–F</b>, in boxes 27–32.<br><i>NB You may use any letter more than once.</i>',
     questions: [
-      { n:27, type:'select', text:'reasons why watching sport can bring emotional satisfaction', options:[{key:'A', label:''}, {key:'B', label:''}, {key:'C', label:''}, {key:'D', label:''}, {key:'E', label:''}, {key:'F', label:''}] },
-      { n:28, type:'select', text:'an explanation of why beginners struggle with sports tasks', options:[{key:'A', label:''}, {key:'B', label:''}, {key:'C', label:''}, {key:'D', label:''}, {key:'E', label:''}, {key:'F', label:''}] },
-      { n:29, type:'select', text:'a factor that can work alongside mirroring in sports competitions to maintain peak performance', options:[{key:'A', label:''}, {key:'B', label:''}, {key:'C', label:''}, {key:'D', label:''}, {key:'E', label:''}, {key:'F', label:''}] },
-      { n:30, type:'select', text:'a comparison between the mirror neurons of human beings and primates', options:[{key:'A', label:''}, {key:'B', label:''}, {key:'C', label:''}, {key:'D', label:''}, {key:'E', label:''}, {key:'F', label:''}] },
-      { n:31, type:'select', text:'mention of integrating visual and motor processes to understand athletic movements', options:[{key:'A', label:''}, {key:'B', label:''}, {key:'C', label:''}, {key:'D', label:''}, {key:'E', label:''}, {key:'F', label:''}] },
-      { n:32, type:'select', text:'reference to the first discovery of brain activity associated with mirror neurons', options:[{key:'A', label:''}, {key:'B', label:''}, {key:'C', label:''}, {key:'D', label:''}, {key:'E', label:''}, {key:'F', label:''}] }
+      {
+        n: 27, type: 'paragraph-grid', text: 'reasons why watching sport can bring emotional satisfaction',
+        options: [ {key:'A'}, {key:'B'}, {key:'C'}, {key:'D'}, {key:'E'}, {key:'F'} ]
+      },
+      {
+        n: 28, type: 'paragraph-grid', text: 'an explanation of why beginners struggle with sports tasks',
+        options: [ {key:'A'}, {key:'B'}, {key:'C'}, {key:'D'}, {key:'E'}, {key:'F'} ]
+      },
+      {
+        n: 29, type: 'paragraph-grid', text: 'a factor that can work alongside mirroring in sports competitions to maintain peak performance',
+        options: [ {key:'A'}, {key:'B'}, {key:'C'}, {key:'D'}, {key:'E'}, {key:'F'} ]
+      },
+      {
+        n: 30, type: 'paragraph-grid', text: 'a comparison between the mirror neurons of human beings and primates',
+        options: [ {key:'A'}, {key:'B'}, {key:'C'}, {key:'D'}, {key:'E'}, {key:'F'} ]
+      },
+      {
+        n: 31, type: 'paragraph-grid', text: 'mention of integrating visual and motor processes to understand athletic movements',
+        options: [ {key:'A'}, {key:'B'}, {key:'C'}, {key:'D'}, {key:'E'}, {key:'F'} ]
+      },
+      {
+        n: 32, type: 'paragraph-grid', text: 'reference to the first discovery of brain activity associated with mirror neurons',
+        options: [ {key:'A'}, {key:'B'}, {key:'C'}, {key:'D'}, {key:'E'}, {key:'F'} ]
+      }
     ]
   },
   {
     passageIndex: 2,
-    instructionsHtml: '<b>Questions 33–35</b><br>Choose the correct letter, A, B, C or D.',
+    instructionsHtml: '<b>Questions 33–35</b><br>Choose the correct letter, <b>A, B, C or D</b>.',
     questions: [
-      { n:33, type:'radio', text:'What point does the writer make about professional athletes in Paragraph B?', options:[{key:'A', label:'They meticulously plan each phase of their movements.'}, {key:'B', label:'They engage in regular practice to retain and refine their skills.'}, {key:'C', label:'They actively consider and analyse the actions of their peers.'}, {key:'D', label:'They perform their actions without conscious contemplation.'}] },
-      { n:34, type:'radio', text:'In this passage, the writer mentions the example of a remarkable golfer to illustrate', options:[{key:'A', label:'the critical role of imitation in the formation of consciousness.'}, {key:'B', label:'the improvement of sporting ability through watching sport.'}, {key:'C', label:'the stimulation of a resonance in the observer\'s motor system.'}, {key:'D', label:'the motivation of the observer\'s interest and love for golf.'}] },
-      { n:35, type:'radio', text:'The principal motivation for watching sport mentioned by the writer is', options:[{key:'A', label:'to improve our physical ability by analyzing the athletes\' technical strategies'}, {key:'B', label:'to unite viewers from different nations.'}, {key:'C', label:'to experience intense positive emotions by immersing oneself in sport.'}, {key:'D', label:'to become a sports professional.'}] }
+      {
+        n: 33, type: 'radio', text: 'What point does the writer make about professional athletes in Paragraph B?',
+        options: [
+          { key: 'A', label: 'They meticulously plan each phase of their movements.' },
+          { key: 'B', label: 'They engage in regular practice to retain and refine their skills.' },
+          { key: 'C', label: 'They actively consider and analyse the actions of their peers.' },
+          { key: 'D', label: 'They perform their actions without conscious contemplation.' }
+        ]
+      },
+      {
+        n: 34, type: 'radio', text: 'In this passage, the writer mentions the example of a remarkable golfer to illustrate',
+        options: [
+          { key: 'A', label: 'the critical role of imitation in the formation of consciousness.' },
+          { key: 'B', label: 'the improvement of sporting ability through watching sport.' },
+          { key: 'C', label: 'the stimulation of a resonance in the observer\'s motor system.' },
+          { key: 'D', label: 'the motivation of the observer\'s interest and love for golf.' }
+        ]
+      },
+      {
+        n: 35, type: 'radio', text: 'the principal motivation for watching sport mentioned by the writer is',
+        options: [
+          { key: 'A', label: 'to improve our physical ability by analyzing the athletes\' technical strategies' },
+          { key: 'B', label: 'to unite viewers from different nations.' },
+          { key: 'C', label: 'to experience intense positive emotions by immersing oneself in sport.' },
+          { key: 'D', label: 'to become a sports professional.' }
+        ]
+      }
     ]
   },
   {
     passageIndex: 2,
-    instructionsHtml: '<b>Questions 36–40</b><br>Do the following statements agree with the claims of the writer? Write <b>YES</b> if the statement agrees with the claims of the writer, <b>NO</b> if the statement contradicts the claims of the writer, or <b>NOT GIVEN</b> if it is impossible to say what the writer thinks about this.',
+    instructionsHtml: '<b>Questions 36–40</b><br>Choose <b>YES</b> if the statement agrees with the claims of the writer, choose <b>NO</b> if the statement contradicts the claims of the writer, or <b>NOT GIVEN</b> if it is impossible to say what the writer thinks about this.',
     questions: [
-      { n:36, type:'radio', text:'The emergence of Homer\'s epic poetry occurred in the same historical period as the beginning of the Olympic Games.', options:[{key:'YES', label:''}, {key:'NO', label:''}, {key:'NOT GIVEN', label:''}] },
-      { n:37, type:'radio', text:'The Italian scientists concluded that the motor actions encoded within the premotor cortex have no discernible link to unrelated collections of neurons.', options:[{key:'YES', label:''}, {key:'NO', label:''}, {key:'NOT GIVEN', label:''}] },
-      { n:38, type:'radio', text:'Spectators can achieve flawless golf swings merely by watching the Masters Tournament without physical practice.', options:[{key:'YES', label:''}, {key:'NO', label:''}, {key:'NOT GIVEN', label:''}] },
-      { n:39, type:'radio', text:'Some neuroscientists believe that certain types of still images might activate mirror neurons under specific experimental conditions.', options:[{key:'YES', label:''}, {key:'NO', label:''}, {key:'NOT GIVEN', label:''}] },
-      { n:40, type:'radio', text:'The mu system is suppressed while we are dynamically involved in a particular activity.', options:[{key:'YES', label:''}, {key:'NO', label:''}, {key:'NOT GIVEN', label:''}] }
+      {
+        n: 36, type: 'radio', text: 'The emergence of Homer\'s epic poetry occurred in the same historical period as the beginning of the Olympic Games.',
+        options: [ { key: 'YES', label: 'YES' }, { key: 'NO', label: 'NO' }, { key: 'NOT GIVEN', label: 'NOT GIVEN' } ]
+      },
+      {
+        n: 37, type: 'radio', text: 'The Italian scientists concluded that the motor actions encoded within the premotor cortex have no discernible link to unrelated collections of neurons.',
+        options: [ { key: 'YES', label: 'YES' }, { key: 'NO', label: 'NO' }, { key: 'NOT GIVEN', label: 'NOT GIVEN' } ]
+      },
+      {
+        n: 38, type: 'radio', text: 'Spectators can achieve flawless golf swings merely by watching the Masters Tournament without physical practice.',
+        options: [ { key: 'YES', label: 'YES' }, { key: 'NO', label: 'NO' }, { key: 'NOT GIVEN', label: 'NOT GIVEN' } ]
+      },
+      {
+        n: 39, type: 'radio', text: 'Some neuroscientists believe that certain types of still images might activate mirror neurons under specific experimental conditions.',
+        options: [ { key: 'YES', label: 'YES' }, { key: 'NO', label: 'NO' }, { key: 'NOT GIVEN', label: 'NOT GIVEN' } ]
+      },
+      {
+        n: 40, type: 'radio', text: 'The mu system is suppressed while we are dynamically involved in a particular activity.',
+        options: [ { key: 'YES', label: 'YES' }, { key: 'NO', label: 'NO' }, { key: 'NOT GIVEN', label: 'NOT GIVEN' } ]
+      }
     ]
   }
 ];
@@ -962,19 +1206,19 @@ const QUESTION_GROUPS = [
    được so khi chấm). Với câu pair (vd 19-20): để 2 key riêng "19"
    và "20", mỗi key là 1 trong 2 đáp án đúng của cặp đó. */
 const CORRECT_ANSWERS = {
-  "1": "Photographic film",
-  "2": "Bakelite",
-  "3": "Electrical switches",
-  "4": "Britain",
-  "5": "Fireproof",
-  "6": "Glass",
-  "7": "Foam",
-  "8": "FALSE",
-  "9": "NOT GIVEN",
-  "10": "FALSE",
-  "11": "TRUE",
-  "12": "FALSE",
-  "13": "TRUE",
+  "1": "photographic film",
+  "2": "bakelite",
+  "3": "electrical switches",
+  "4": "britain",
+  "5": "fireproof",
+  "6": "glass",
+  "7": "foam",
+  "8": "false",
+  "9": "not given",
+  "10": "false",
+  "11": "true",
+  "12": "false",
+  "13": "true",
   "14": "ii",
   "15": "iv",
   "16": "vii",
@@ -982,26 +1226,26 @@ const CORRECT_ANSWERS = {
   "18": "x",
   "19": "vi",
   "20": "iii",
-  "21": "Craft",
-  "22": "Multi-skilled",
-  "23": "Manufacturing space",
-  "24": "Just-in-time",
-  "25": "Abnormalities",
-  "26": "Lights",
-  "27": "F",
-  "28": "B",
-  "29": "E",
-  "30": "C",
-  "31": "E",
-  "32": "D",
-  "33": "D",
-  "34": "B",
-  "35": "C",
-  "36": "YES",
-  "37": "NO",
-  "38": "NO",
-  "39": "NOT GIVEN",
-  "40": "YES"
+  "21": "craft",
+  "22": "multi-skilled",
+  "23": "manufacturing space",
+  "24": "just-in-time",
+  "25": "abnormalities",
+  "26": "lights",
+  "27": "f",
+  "28": "b",
+  "29": "e",
+  "30": "c",
+  "31": "e",
+  "32": "d",
+  "33": "d",
+  "34": "b",
+  "35": "c",
+  "36": "yes",
+  "37": "no",
+  "38": "no",
+  "39": "not given",
+  "40": "yes"
 };
 
 /* ============================================================
@@ -1030,10 +1274,13 @@ function renderTabs(){
 }
 
 function switchTab(i){
+  saveHighlights();
   currentTab = i;
   renderTabs();
   renderPassage();
   renderQuestions();
+  renderQMap();
+  restoreHighlights();
   initCopyProtection();
 }
 
@@ -1060,11 +1307,97 @@ function renderQuestions(){
     instr.innerHTML = group.instructionsHtml;
     gEl.appendChild(instr);
 
-    group.questions.forEach(q=>{
-      gEl.appendChild(renderQuestionItem(q));
-    });
+    if(group.tableLayout){
+      gEl.appendChild(renderTableGroup(group));
+    } else {
+      group.questions.forEach(q=>{
+        gEl.appendChild(renderQuestionItem(q));
+      });
+    }
     panel.appendChild(gEl);
   });
+}
+
+/* Render nhóm câu hỏi dạng bảng (Q1–7 style: tableLayout = {headers, rows}) */
+function renderTableGroup(group){
+  const tbl = group.tableLayout;
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'overflow-x:auto;';
+
+  const table = document.createElement('table');
+  table.className = 'table-completion';
+
+  /* Header row */
+  const thead = document.createElement('thead');
+  if(tbl.caption){
+    const capRow = document.createElement('tr');
+    const capTh = document.createElement('th');
+    capTh.colSpan = (tbl.headers||[]).length;
+    capTh.textContent = tbl.caption;
+    capTh.style.cssText = 'text-align:center; font-size:13.5px; letter-spacing:0.3px;';
+    capRow.appendChild(capTh);
+    thead.appendChild(capRow);
+  }
+  const hrow = document.createElement('tr');
+  (tbl.headers||[]).forEach(h=>{
+    const th = document.createElement('th');
+    th.innerHTML = h;
+    hrow.appendChild(th);
+  });
+  thead.appendChild(hrow);
+  table.appendChild(thead);
+
+  /* Helper: render một item vào td (string text hoặc {q:n} input) */
+  function renderCellItem(td, item){
+    if(typeof item === 'string'){
+      td.appendChild(document.createTextNode(item));
+    } else if(typeof item === 'object' && item.q){
+      if(!td.id) td.id = 'anchor-'+item.q;
+      const qn = document.createElement('span');
+      qn.className = 'tc-qnum'; qn.textContent = item.q;
+      td.appendChild(qn);
+      const inp = document.createElement('input');
+      inp.type = 'text'; inp.className = 'tc-inp';
+      inp.dataset.q = item.q; inp.placeholder = 'Câu trả lời...';
+      inp.value = answers[item.q] || '';
+      inp.disabled = isReviewMode;
+      inp.addEventListener('input', ()=> setAnswer(item.q, inp.value.trim()));
+      td.appendChild(inp);
+      const flagBtn = document.createElement('button');
+      flagBtn.className = 'qflag-btn'; flagBtn.dataset.q = item.q; flagBtn.textContent = '🚩';
+      flagBtn.addEventListener('click', ()=> toggleFlag(item.q));
+      td.appendChild(flagBtn);
+      setTimeout(()=>{ const el=document.getElementById('anchor-'+item.q); if(el) refreshQItemState(el, item.q); },0);
+    }
+  }
+
+  /* Body rows */
+  const tbody = document.createElement('tbody');
+  (tbl.rows||[]).forEach(row=>{
+    const tr = document.createElement('tr');
+    row.forEach(cell=>{
+      const td = document.createElement('td');
+      if(cell === null || cell === undefined){
+        td.innerHTML = '';
+      } else if(Array.isArray(cell)){
+        /* mixed cell: ['text', {q:n}, 'text', ...] */
+        td.className = 'tc-cell';
+        cell.forEach(item=> renderCellItem(td, item));
+      } else if(typeof cell === 'object' && cell.q){
+        /* single input cell */
+        td.className = 'tc-cell';
+        renderCellItem(td, cell);
+      } else {
+        /* static text */
+        td.innerHTML = String(cell);
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  wrapper.appendChild(table);
+  return wrapper;
 }
 
 function renderQuestionItem(q){
@@ -1122,7 +1455,7 @@ function renderAnswerInput(q){
     sel.appendChild(blank);
     (q.options||[]).forEach(o=>{
       const opt = document.createElement('option');
-      opt.value = o.key; opt.textContent = o.key + (o.label ? ' — '+o.label : '');
+      opt.value = o.key; opt.textContent = (o.label && o.label.startsWith(o.key)) ? o.label : o.key + (o.label ? ' — '+o.label : '');
       sel.appendChild(opt);
     });
     sel.value = answers[q.n] || '';
@@ -1145,7 +1478,7 @@ function renderAnswerInput(q){
         lbl.classList.add('checked');
       });
       const span = document.createElement('span');
-      span.textContent = o.key + '. ' + o.label;
+      span.textContent = (o.key === o.label) ? o.label : o.key + '. ' + o.label;
       lbl.appendChild(inp); lbl.appendChild(span);
       wrap.appendChild(lbl);
     });
@@ -1165,9 +1498,29 @@ function renderAnswerInput(q){
       inp.disabled = isReviewMode;
       inp.addEventListener('change', ()=> handlePairToggle(pairKey, q, wrap));
       const span = document.createElement('span');
-      span.textContent = o.key + '. ' + o.label;
+      span.textContent = (o.key === o.label) ? o.label : o.key + '. ' + o.label;
       lbl.appendChild(inp); lbl.appendChild(span);
       wrap.appendChild(lbl);
+    });
+    return wrap;
+  }
+  /* paragraph-grid: radio A–F hiển thị dạng lưới ngang (Q27–32 style) */
+  if(q.type === 'paragraph-grid'){
+    const cols = (q.options||[]).map(o=>o.key);
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px;';
+    cols.forEach(key=>{
+      const uid = 'pg_q'+q.n+'_'+key;
+      const inp = document.createElement('input');
+      inp.type = 'radio'; inp.name = 'q'+q.n; inp.value = key;
+      inp.id = uid; inp.className = 'pg-radio';
+      inp.checked = answers[q.n]===key;
+      inp.disabled = isReviewMode;
+      const lbl = document.createElement('label');
+      lbl.htmlFor = uid; lbl.className = 'pg-radio-lbl';
+      lbl.textContent = key;
+      inp.addEventListener('change', ()=>{ setAnswer(q.n, key); });
+      wrap.appendChild(inp); wrap.appendChild(lbl);
     });
     return wrap;
   }
@@ -1202,8 +1555,18 @@ function handlePairToggle(pairKey, q, wrapEl){
     const cb = el.querySelector('input');
     el.classList.toggle('checked', cb.checked);
   });
-  // map cả 2 số câu n riêng lẻ cho qmap/flag hiển thị tiến độ
-  ns.forEach(n => { answers[n] = arr.length ? arr.join(',') : undefined; if(!arr.length) delete answers[n]; });
+  // QUAN TRỌNG: mỗi câu trong cặp (vd 19 & 20) phải lưu ĐÚNG 1 đáp án
+  // riêng của nó — KHÔNG được gán chung 1 chuỗi nối "A,C" vào cả 2 câu,
+  // vì như vậy gradeAnswers() sẽ luôn chấm sai (so sánh "A,C" với đáp án
+  // đúng "A" sẽ không bao giờ khớp) và dữ liệu gửi lên Sheet cũng sai.
+  // Quy ước: arr[0] -> câu có số nhỏ hơn (ns[0]), arr[1] -> câu số lớn hơn (ns[1]).
+  // Thứ tự trong arr theo đúng thứ tự học sinh tick chọn trên UI; để đảm bảo
+  // ổn định, ta sắp xếp lại theo alphabet của key đáp án (A,B,C...) trước khi gán.
+  const sortedArr = [...arr].sort();
+  ns.forEach((n, idx)=>{
+    if(sortedArr[idx]){ answers[n] = sortedArr[idx]; }
+    else { delete answers[n]; }
+  });
   saveProgress();
   refreshAllQItemStates();
   renderQMap();
@@ -1247,18 +1610,25 @@ function toggleFlag(n){
 function renderQMap(){
   const map = document.getElementById('qmap');
   map.innerHTML = '';
-  let answeredCount = 0;
-  for(let n=1; n<=TOTAL_QUESTIONS; n++){
+
+  // Chỉ hiển thị các câu thuộc passage đang xem
+  const currentGroups = QUESTION_GROUPS.filter(g => g.passageIndex === currentTab);
+  const currentNs = currentGroups.flatMap(g => g.questions.map(q => q.n));
+
+  let answeredInPassage = 0;
+  currentNs.forEach(n => {
     const cell = document.createElement('div');
     cell.className = 'qmap-cell';
     cell.textContent = n;
-    const isAnswered = !!answers[n];
-    if(isAnswered){ cell.classList.add('answered'); answeredCount++; }
+    if(answers[n]){ cell.classList.add('answered'); answeredInPassage++; }
     if(flags[n]) cell.classList.add('flagged');
     cell.addEventListener('click', ()=> goToQuestion(n));
     map.appendChild(cell);
-  }
-  document.getElementById('sb-map-progress').textContent = answeredCount + '/' + TOTAL_QUESTIONS;
+  });
+
+  // Progress: câu đã làm trong passage này / tổng câu passage này
+  document.getElementById('sb-map-progress').textContent =
+    answeredInPassage + '/' + currentNs.length;
 }
 
 function goToQuestion(n){
@@ -1610,9 +1980,6 @@ function saveProgress(){
     savedAt: Date.now()
   };
   localStorage.setItem(LS_PREFIX+'progress', JSON.stringify(data));
-  // Lưu thêm con trỏ "bài làm gần nhất trên máy này" để có thể tự động khôi phục
-  // ngay khi mở lại trang, không bắt buộc học sinh phải gõ lại Họ tên + Lớp.
-  localStorage.setItem(LS_PREFIX+'lastStudent', JSON.stringify({ name: studentInfo.name, class: studentInfo.class }));
 }
 
 function loadProgressFor(name, cls){
@@ -1926,53 +2293,14 @@ function bootstrapExamUI(startTimerNow){
   initCopyProtection();
 }
 
-/* ============================================================
-   14. AUTO-RESTORE KHI MỞ LẠI TRANG (không cần nhập lại Tên/Lớp)
-   ------------------------------------------------------------
-   Nếu trên máy này đã từng có một lượt làm bài (đã nộp hoặc
-   đang làm dở) được lưu trong localStorage, tự động khôi phục
-   thẳng màn hình tương ứng ngay khi trang vừa tải xong, bỏ qua
-   bước yêu cầu học sinh gõ lại Họ tên + Lớp ở màn login.
-   ============================================================ */
-function autoRestoreOnLoad(){
-  const lastRaw = localStorage.getItem(LS_PREFIX+'lastStudent');
-  if(!lastRaw) return false; // chưa từng làm bài này trên máy -> hiện màn login bình thường
-
-  let last;
-  try{ last = JSON.parse(lastRaw); }catch(e){ return false; }
-  if(!last || !last.name || !last.class) return false;
-
-  const existing = loadProgressFor(last.name, last.class);
-  if(!existing) return false;
-
-  studentInfo = { name: last.name, class: last.class };
-  document.getElementById('sb-student-name').textContent = last.name;
-  document.getElementById('sb-student-class').textContent = last.class;
-
-  if(existing.isSubmitted){
-    // Đã nộp trước đó -> khôi phục thẳng màn Kết quả, không bắt làm lại.
-    answers = existing.answers || {};
-    flags = existing.flags || {};
-    isSubmitted = true;
-    lastPayload = existing.lastPayload;
-    bootstrapExamUI(false);
-    const correctCount = existing.lastPayload ? existing.lastPayload.totalScore : gradeAnswers();
-    showResultScreen(correctCount);
-    return true;
+/* Lưu thời gian còn lại ngay khi học sinh đóng tab / reload trang —
+   tránh mất vài giây do setInterval chưa kịp save ở giây cuối cùng.
+   Dùng synchronous localStorage.setItem trong beforeunload là an toàn. */
+window.addEventListener('beforeunload', ()=>{
+  if(!isSubmitted && studentInfo.name){
+    saveProgress();
   }
-
-  // Đang làm dở -> khôi phục bài làm, tiếp tục đếm giờ từ thời điểm đã lưu.
-  answers = existing.answers || {};
-  flags = existing.flags || {};
-  remainingSeconds = typeof existing.remainingSeconds === 'number' ? existing.remainingSeconds : DURATION_MIN*60;
-  bootstrapExamUI(true);
-  showToast('Đã khôi phục bài làm trước đó.');
-  return true;
-}
-
-if(!autoRestoreOnLoad()){
-  showScreen('screen-login');
-}
+});
 
 /* fix tỉ lệ màn hình: đảm bảo nút Nộp bài luôn trong viewport bằng flex column
    + media query (max-height:720px) đã xử lý ở CSS. Không cần JS bổ sung trừ khi
